@@ -1,0 +1,48 @@
+#sortable ul
+{
+	-webkit-padding-start: 0;
+	padding-left: 0;
+	margin-top: 0.75em;
+}
+
+#sortable ul ul
+{
+	margin-left: 1em;
+}
+
+#sortable ul li,
+#sortable ul li a
+{
+    cursor: move;
+}
+
+#sortable ul li
+{
+	overflow: auto;
+	margin-left: 0;
+	display: block;
+}
+
+#sortable .sortable
+{
+	list-style: none;
+	font-weight: 800;
+	margin-bottom: 0.75em;
+}
+
+#sortable .sortable.single,
+#sortable ul ul a
+{
+	font-weight: 400;
+}
+
+#sortable ul ul a
+{
+	color: #5B80B2;
+	margin-bottom: 0;
+}
+
+.sortable a:hover
+{
+	color: #003366;
+}

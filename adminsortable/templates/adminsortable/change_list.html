@@ -1,0 +1,53 @@
+{% extends 'admin/change_list.html' %}
+{% load adminmedia admin_list i18n adminsortable_tags %}
+
+{% block extrastyle %}
+	<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
+	<link rel="stylesheet" href="{{ STATIC_URL }}adminsortable/css/admin.sortable.css" />
+{% endblock %}
+
+{% block extrahead %}
+	{% include 'adminsortable/shared/javascript_includes.html' %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+      <a href="../../../">
+        {% trans "Home" %}
+      </a>
+       &rsaquo;
+       <a href="../../">
+         {{ app_label|capfirst }}
+      </a>
+      &rsaquo;
+      Reorder
+    </div>
+{% endblock %}
+
+{% block content_title %}
+	<h1>Drag and drop {% if sort_type %}{{ sort_type }} {% endif %}{{ opts.verbose_name_plural|capfirst }} to change their order.</h1>
+	{% if sortable_by_class.is_sortable %}
+	<p>You may also drag and drop {{ sortable_by_class_display_name }} to change thier order.</p>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	<div id="content-main">
+		{% block object-tools %}
+	        <ul class="object-tools">
+	            <li>
+					<a href="../../">Return to {{ opts.verbose_name_plural|capfirst }}</a>
+				</li>
+	        </ul>
+	    {% endblock %}
+		{% if objects %}
+		<div id="sortable">
+			{% if group_expression %}
+				{% render_nested_sortable_objects objects group_expression %}
+			{% else %}
+			     {% render_sortable_objects objects %}
+			{% endif %}
+		</div>
+		{% endif %}
+	</div>
+{% endblock %}

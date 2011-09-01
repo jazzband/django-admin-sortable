@@ -1,0 +1,19 @@
+{% load django_template_additions adminsortable_tags %}
+{% dynamic_regroup objects by group_expression as regrouped_objects %}
+{% if regrouped_objects %}
+
+	<ul {% if sortable_by_class_is_sortable %}class="sortable"{% endif %}>
+	{% for regrouped_object in regrouped_objects %}
+		<li>
+			{% with object=regrouped_object.grouper %}
+			    {% render_object_rep object %}
+			{% endwith %}
+			{% if regrouped_object.list %}
+				<ul {% if regrouped_object.grouper.is_sortable %}class="sortable"{% endif %}>
+					{% render_list_items regrouped_object.list %}
+				</ul>
+			{% endif %}
+		</li>
+	{% endfor %}
+	</ul>
+{% endif %}

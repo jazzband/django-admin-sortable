@@ -1,0 +1,4 @@
+<form>
+    <input name="pk" type="hidden" value="{{ object.pk }}" />
+</form>
+<a href="{% url admin:admin_do_sorting object.model_type_id %}" class="admin_sorting_url">{{ object }}</a>

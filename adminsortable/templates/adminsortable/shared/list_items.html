@@ -1,0 +1,6 @@
+{% load adminsortable_tags %}
+{% for object in list_objects %}
+	<li>
+	    {% render_object_rep object %}
+	</li>
+{% endfor %}
