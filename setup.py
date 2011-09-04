@@ -8,7 +8,7 @@ except:
 setup(
     name='django-admin-sortable',
     version=__import__('adminsortable').__version__,
-    description='Drag and drop sorting for models and tabular inline models in Django admin',
+    description='Drag and drop sorting for models and inline models in Django admin',
     long_description=README,
     author='Brandon Taylor',
     author_email='btaylorweb@gmail.com',
