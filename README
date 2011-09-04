@@ -15,6 +15,7 @@ Installation
 location you server static files from.
 3. Add ``adminsortable`` to your INSTALLED_APPS.
 4. Have a look at the included sample_project to see working examples.
+The login credentials for admin are: admin/admin
 
 When a model is sortable, a tool-area link will be added that says "Change Order".
 Click this link, and you will be taken to the custom view where you can drag-and-drop
