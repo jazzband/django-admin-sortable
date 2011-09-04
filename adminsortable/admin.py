@@ -146,20 +146,3 @@ class SortableTabularInline(SortableInlineBase, TabularInline):
 class SortableStackedInline(SortableInlineBase, StackedInline):
     """Custom template that enables sorting for stacked inlines"""
     template = 'adminsortable/edit_inline/stacked.html'
-
-
-#class SortableTabularInline(TabularInline):
-#    """Custom template that enables sorting for tabular inlines"""
-#    def __init__(self, *args, **kwargs):
-#        super(SortableTabularInline, self).__init__(*args, **kwargs)
-#
-#        if not issubclass(self.model, Sortable):
-#            raise Warning(u'Models that inherit SortableTabluarInline must inherit from Sortable')
-#
-#        """
-#        This property is referenced by tabular.html's <h2> to show a message on whether or
-#        not the inlines are sortable. It is exposed in: inline_admin_formset.opts
-#        """
-#        self.is_sortable = self.model.is_sortable()
-#
-#    template = 'adminsortable/edit_inline/tabular.html'
