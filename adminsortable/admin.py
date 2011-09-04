@@ -25,8 +25,12 @@ class SortableAdmin(ModelAdmin):
         self.has_sortable_tabular_inlines = False
         self.has_sortable_stacked_inlines = False
         for klass in self.inlines:
-            if issubclass(klass, SortableTabularInline) and klass.model.is_sortable(): self.has_sortable_tabular_inlines = True
-            if issubclass(klass, SortableStackedInline) and klass.model.is_sortable(): self.has_sortable_stacked_inlines = True
+            if issubclass(klass, SortableTabularInline):
+                if klass.model.is_sortable():
+                    self.has_sortable_tabular_inlines = True
+            if issubclass(klass, SortableStackedInline):
+                if klass.model.is_sortable():
+                    self.has_sortable_stacked_inlines = True
 
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
