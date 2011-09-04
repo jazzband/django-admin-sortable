@@ -1,7 +1,8 @@
 import json
 from django.conf import settings
 from django.conf.urls.defaults import patterns, url
-from django.contrib.admin import ModelAdmin, TabularInline
+from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
+from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -22,9 +23,10 @@ class SortableAdmin(ModelAdmin):
     def __init__(self, *args, **kwargs):
         super(SortableAdmin, self).__init__(*args, **kwargs)
         self.has_sortable_tabular_inlines = False
+        self.has_sortable_stacked_inlines = False
         for klass in self.inlines:
-            if issubclass(klass, SortableTabularInline):
-                self.has_sortable_tabular_inlines = True
+            if issubclass(klass, SortableTabularInline) and klass.model.is_sortable(): self.has_sortable_tabular_inlines = True
+            if issubclass(klass, SortableStackedInline) and klass.model.is_sortable(): self.has_sortable_stacked_inlines = True
 
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
@@ -90,10 +92,12 @@ class SortableAdmin(ModelAdmin):
         return super(SortableAdmin, self).changelist_view(request, extra_context=extra_context)
 
     def change_view(self, request, object_id, extra_context=None):
-        has_sortable_tabular_inlines = self.has_sortable_tabular_inlines
-        if has_sortable_tabular_inlines:
+        if self.has_sortable_tabular_inlines or self.has_sortable_stacked_inlines:
             self.change_form_template = 'adminsortable/change_form.html'
-            extra_context = {'has_sortable_tabular_inlines' : self.has_sortable_tabular_inlines}
+            extra_context = {
+                'has_sortable_tabular_inlines' : self.has_sortable_tabular_inlines,
+                'has_sortable_stacked_inlines' : self.has_sortable_stacked_inlines
+            }
         return super(SortableAdmin, self).change_view(request, object_id, extra_context=extra_context)
 
     @csrf_exempt
@@ -124,18 +128,38 @@ class SortableAdmin(ModelAdmin):
                             mimetype='application/json')
 
 
-class SortableTabularInline(TabularInline):
-    """Custom template that enables sorting for tabular inlines"""
+class SortableInlineBase(InlineModelAdmin):
     def __init__(self, *args, **kwargs):
-        super(SortableTabularInline, self).__init__(*args, **kwargs)
+        super(SortableInlineBase, self).__init__(*args, **kwargs)
 
         if not issubclass(self.model, Sortable):
-            raise Warning(u'Models that inherit SortableTabluarInline must inherit from Sortable')
+            raise Warning(u'Models that are specified in SortableTabluarInline and SortableStackedInline must inherit from Sortable')
 
-        """
-        This property is referenced by tabular.html's <h2> to show a message on whether or
-        not the inlines are sortable. It is exposed in: inline_admin_formset.opts
-        """
         self.is_sortable = self.model.is_sortable()
 
+
+class SortableTabularInline(SortableInlineBase, TabularInline):
+    """Custom template that enables sorting for tabular inlines"""
     template = 'adminsortable/edit_inline/tabular.html'
+
+
+class SortableStackedInline(SortableInlineBase, StackedInline):
+    """Custom template that enables sorting for stacked inlines"""
+    template = 'adminsortable/edit_inline/stacked.html'
+
+
+#class SortableTabularInline(TabularInline):
+#    """Custom template that enables sorting for tabular inlines"""
+#    def __init__(self, *args, **kwargs):
+#        super(SortableTabularInline, self).__init__(*args, **kwargs)
+#
+#        if not issubclass(self.model, Sortable):
+#            raise Warning(u'Models that inherit SortableTabluarInline must inherit from Sortable')
+#
+#        """
+#        This property is referenced by tabular.html's <h2> to show a message on whether or
+#        not the inlines are sortable. It is exposed in: inline_admin_formset.opts
+#        """
+#        self.is_sortable = self.model.is_sortable()
+#
+#    template = 'adminsortable/edit_inline/tabular.html'

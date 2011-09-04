@@ -37,8 +37,11 @@ class Project(SimpleModel, Sortable):
     description = models.TextField()
 
 
-#registered as an inline on project
+#registered as a tabular inline on project
 class Credit(Sortable):
+    class Meta(Sortable.Meta):
+        pass
+
     project = models.ForeignKey(Project)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -46,3 +49,14 @@ class Credit(Sortable):
     def __unicode__(self):
         return '%s %s' % (self.first_name, self.last_name)
 
+
+#registered as a stacked inline on project
+class Note(Sortable):
+    class Meta(Sortable.Meta):
+        pass
+
+    project = models.ForeignKey(Project)
+    text = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.text
