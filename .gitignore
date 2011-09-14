@@ -2,3 +2,5 @@
 dist
 django_admin_sortable.egg-info
 .pydevproject
+*.pyc
+*.pyo
