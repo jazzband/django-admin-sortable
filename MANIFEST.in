@@ -1,0 +1,3 @@
+recursive-include adminsortable/static *
+rescursive-include adminsortable/templates *
+prune sample_project

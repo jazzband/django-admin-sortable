@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 try:
-    README = open('README.rst').read()
+    README = open('README').read()
 except:
     README = None
 
@@ -10,6 +10,7 @@ setup(
     version=__import__('adminsortable').__version__,
     description='Drag and drop sorting for models and inline models in Django admin',
     long_description=README,
+    license='APL',
     author='Brandon Taylor',
     author_email='btaylorweb@gmail.com',
     url='http://btaylorweb.com/',
