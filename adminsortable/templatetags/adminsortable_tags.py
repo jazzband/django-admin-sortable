@@ -24,5 +24,4 @@ def render_list_items(context, list_objects):
 
 @register.inclusion_tag('adminsortable/shared/object_rep.html', takes_context=True)
 def render_object_rep(context, object):
-    print object
     return {'object' : object}
