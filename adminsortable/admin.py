@@ -113,16 +113,18 @@ class SortableAdmin(ModelAdmin):
 
         if request.is_ajax() and request.method == 'POST':
             try:
-                indexes = request.POST.get('indexes', []).split(',')
+                indexes = map(str, request.POST.get('indexes', []).split(','))
                 klass = ContentType.objects.get(id=model_type_id).model_class()
-                objects_dict = dict([(obj.pk, obj) for obj in klass.objects.filter(pk__in=indexes)])
-                min_index = min(objects_dict.values(), key=lambda x: getattr(x, 'order'))
-                min_index = getattr(min_index, 'order') or 0
+                objects_dict = dict([(str(obj.pk), obj) for obj in klass.objects.filter(pk__in=indexes)])
+                lowest_ordered_object = min(objects_dict.values(), key=lambda x: getattr(x, 'order'))
+                min_index = getattr(lowest_ordered_object, 'order') or 0
+
                 for index in indexes:
-                    obj = objects_dict[int(index)]
+                    obj = objects_dict.get(index)
                     setattr(obj, 'order', min_index)
                     obj.save()
                     min_index += 1
+
                 response = {'objects_sorted' : True}
             except (IndexError, klass.DoesNotExist, AttributeError):
                 pass
