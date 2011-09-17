@@ -143,6 +143,7 @@ that allows you to drag and drop objects into any order via jQueryUI.
 SortableTabularInline and SortableStackedInline
 - Allows ordering of objects that are sorted on a Foreign Key, and adds ordering
 to the foreign key object if it also inherits from Sortable.
+- Supports non-integer primary keys.
 
 Future
 ------
