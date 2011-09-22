@@ -2,11 +2,13 @@
 {% load adminmedia admin_list i18n adminsortable_tags %}
 
 {% block extrastyle %}
+	{{ block.super }}
 	<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
 	<link rel="stylesheet" href="{{ STATIC_URL }}adminsortable/css/admin.sortable.css" />
 {% endblock %}
 
 {% block extrahead %}
+	{{ block.super }}
 	{% include 'adminsortable/shared/javascript_includes.html' %}
 {% endblock %}
 
