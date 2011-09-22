@@ -27,9 +27,17 @@
 {% endblock %}
 
 {% block content_title %}
-	<h1>Drag and drop {% if sort_type %}{{ sort_type }} {% endif %}{{ opts.verbose_name_plural|capfirst }} to change their order.</h1>
+	<h1>
+	{% if sort_type %}
+	{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ sort_type }} {{ model }} to change their order.{% endblocktrans %}
+	{% else %}
+	{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ model }} to change their order.{% endblocktrans %}
+	{% endif %}
+	</h1>
 	{% if sortable_by_class.is_sortable %}
-	<p>You may also drag and drop {{ sortable_by_class_display_name }} to change thier order.</p>
+	<p>
+	{% blocktrans %}You may also drag and drop {{ sortable_by_class_display_name }} to change thier order.{% endblocktrans %}
+	</p>
 	{% endif %}
 {% endblock %}
 
@@ -38,14 +46,16 @@
 		{% block object-tools %}
 	        <ul class="object-tools">
 	            <li>
-					<a href="../../">Return to {{ opts.verbose_name_plural|capfirst }}</a>
-				</li>
+                        <a href="../../">
+                        {% blocktrans with opts.verbose_name_plural|capfirst as model %}Return to {{ model }}{% endblocktrans %}
+                        </a>
+                    </li>
 	        </ul>
 	    {% endblock %}
 		{% if objects %}
 		<div id="sortable">
 			{% if group_expression %}
-				{% render_nested_sortable_objects objects group_expression %}
+                            {% render_nested_sortable_objects objects group_expression %}
 			{% else %}
 			     {% render_sortable_objects objects %}
 			{% endif %}
