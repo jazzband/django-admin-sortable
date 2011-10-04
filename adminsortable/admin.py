@@ -126,7 +126,7 @@ class SortableAdmin(ModelAdmin):
                     min_index += 1
 
                 response = {'objects_sorted' : True}
-            except (IndexError, klass.DoesNotExist, AttributeError):
+            except (Key, IndexError, klass.DoesNotExist, AttributeError):
                 pass
         else:
             response = {'objects_sorted' : False}
