@@ -34,7 +34,7 @@ class SortableTestCase(TestCase):
         self.user.save()
 
     def create_category(self, title='Category 1'):
-        category = Category.objects.create(title=title)
+        category, _ = Category.objects.get_or_create(title=title)
         return category
 
     def test_new_user_is_authenticated(self):

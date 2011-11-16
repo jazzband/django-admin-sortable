@@ -22,7 +22,7 @@ jQuery(function($){
                     data: { indexes : indexes.join(',') },
                     success: function()
                     {
-                        ui.effect('highlight');
+                        ui.item.effect('highlight', {}, 1000);
                     }
                 });
             }
