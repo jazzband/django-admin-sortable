@@ -36,9 +36,8 @@ class Sortable(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             try:
-                max_order = self.__class__.objects.aggregate(models.Max('order'))['order__max'] + 1
+                self.order = self.__class__.objects.aggregate(models.Max('order'))['order__max'] + 1
             except TypeError, IndexError:
-                max_order = 1
-            self.order = max_order
+                pass
 
         super(Sortable, self).save(*args, **kwargs)
