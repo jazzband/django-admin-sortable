@@ -24,9 +24,10 @@ class Sortable(models.Model):
     @classmethod
     def is_sortable(cls):
         try:
-            return True if cls.objects.order_by('-order')[:1][0].order > 1 else False
-        except IndexError:
-            return False
+            max_order = cls.objects.aggregate(models.Max('order'))['order__max']
+        except TypeError, IndexError:
+            max_order = 0
+        return True if max_order > 1 else False
 
     @classmethod
     def model_type_id(cls):
@@ -35,9 +36,8 @@ class Sortable(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             try:
-                #increment the order field by adding one to the last value of order
-                self.order = self.__class__.objects.order_by('-order')[:1][0].order + 1
-            except IndexError:
-                #order defaults to 1
+                self.order = self.__class__.objects.aggregate(models.Max('order'))['order__max'] + 1
+            except TypeError, IndexError:
                 pass
+
         super(Sortable, self).save(*args, **kwargs)
