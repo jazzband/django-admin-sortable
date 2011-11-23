@@ -1,12 +1,9 @@
 import httplib
 import json
 
-from django.contrib.auth.forms import authenticate, UserCreationForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.middleware import csrf
 from django.db import models
-from django.template.defaultfilters import urlencode
 from django.test import TestCase
 from django.test.client import Client, RequestFactory
 
@@ -82,6 +79,9 @@ class SortableTestCase(TestCase):
 
     def get_category_indexes(self, *categories):
         return {'indexes' : ','.join([str(c.id) for c in categories])}
+
+    def test_sortable_by_backwards_compatibility(self):
+        pass
 
     def test_adminsortable_changelist_templates(self):
         logged_in = self.client.login(username=self.user.username, password=self.user_raw_password)

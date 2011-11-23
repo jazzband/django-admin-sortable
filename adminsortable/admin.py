@@ -53,13 +53,18 @@ class SortableAdmin(ModelAdmin):
         has_perm = request.user.has_perm(opts.app_label + '.' + opts.get_change_permission())
         objects = self.model.objects.all()
 
-        """
-        Determine if we need to regroup objects relative to a foreign key specified on the
-        model class that is extending Sortable.
-        """
+        #Determine if we need to regroup objects relative to a foreign key specified on the
+        # model class that is extending Sortable.
         sortable_by = getattr(self.model, 'sortable_by', None)
         if sortable_by:
-            sortable_by_class, sortable_by_expression = sortable_by()
+            #backwards compatibility for < 1.1.1, where sortable_by was a classmethod instead of a property
+            try:
+                sortable_by_class, sortable_by_expression = sortable_by()
+            except ValueError:
+                sortable_by_class = self.model.sortable_by
+                sortable_by_expression = sortable_by_class.__name__.lower()
+
+            print sortable_by_expression
             sortable_by_class_display_name = sortable_by_class._meta.verbose_name_plural
             sortable_by_class_is_sortable = sortable_by_class.is_sortable()
         else:

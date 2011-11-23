@@ -69,7 +69,7 @@ def dynamic_regroup(parser, token):
     """
     expression = lastbits_reversed[2][::-1]
     var_name = lastbits_reversed[0][::-1]
-
+    print expression
     """
     We also need to hand the parser to the node in order to convert the value
     for `expression` to a FilterExpression.
