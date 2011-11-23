@@ -80,9 +80,6 @@ class SortableTestCase(TestCase):
     def get_category_indexes(self, *categories):
         return {'indexes' : ','.join([str(c.id) for c in categories])}
 
-    def test_sortable_by_backwards_compatibility(self):
-        pass
-
     def test_adminsortable_changelist_templates(self):
         logged_in = self.client.login(username=self.user.username, password=self.user_raw_password)
         self.assertTrue(logged_in, 'User is not logged in')

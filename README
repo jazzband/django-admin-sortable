@@ -46,8 +46,9 @@ have an inner Meta class that inherits from ``Sortable.Meta``
 
 
 For models that you want sortable relative to a ``ForeignKey`` field, you need to
-specify an ``@classmethod`` that returns a double: the foreign key class, and the
-name of the foreign key property as defined on your model, as a string.
+specify a property: ``sortable_by`` that is equal to the class defined as your ForeignKey field.
+If you're upgrading from a version < 1.2, you do not need to redefine sortable_by.
+1.2 is backwards compatible to 1.0.
 
     #admin.py
     class Category(models.Model):
@@ -63,9 +64,7 @@ name of the foreign key property as defined on your model, as a string.
         def __unicode__(self):
             return self.title
         
-        @classmethod
-        def sortable_by(cls):
-            return Category, 'category'
+        sortable_by = Category
 
 
 Sortable has one field: `order` and adds a default ordering value set to `order`.
@@ -132,7 +131,16 @@ Status
 =============
 admin-sortable is currently used in production.
 
-Feautures
+
+What's new in 1.2
+=============
+- Refactored ``sortable_by`` to be a property rather than a classmethod, which is much less work to implement.
+- Fixed an issue with ordering which could result in sortable change list view objects not being grouped properly.
+- Refactored the ORM calls to determine if an object is sortable, and what the next order should be, to return
+scalar values and to not hydrate any objects whatsoever. This potentially decreases memory usage by exponential
+factors.
+
+Features
 =============
 Current
 ---------

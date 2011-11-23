@@ -29,20 +29,20 @@ class Project(SimpleModel, Sortable):
     class Meta(Sortable.Meta):
         pass
 
-#    @classmethod
-#    def sortable_by(cls):
-#        return Category, 'category'
+    #deprecated: shown for backward compatibility only. Reference class "Sample" for proper
+    # designation of `sortable_by` as a property
+    @classmethod
+    def sortable_by(cls):
+        return Category, 'category'
 
     category = models.ForeignKey(Category)
     description = models.TextField()
-
-    sortable_by = Category
 
 
 #a model that is sortable relative to a foreign key that is also sortable
 class Sample(SimpleModel, Sortable):
     class Meta(Sortable.Meta):
-        pass
+        ordering = Sortable.Meta.ordering + ['category']
 
     category = models.ForeignKey(Category)
     description = models.TextField()
