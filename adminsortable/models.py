@@ -14,8 +14,12 @@ class Sortable(models.Model):
     `model_type_id` returns the ContentType.id for the Model that inherits Sortable
 
     `save` the override of save increments the last/highest value of order by 1
+
+    Override `sortable_by` method to make your model be sortable by a foreign key field.
+    Set `sortable_by` to the class specified in the foreign key relationship.
     """
     order = models.PositiveIntegerField(editable=False, default=1, db_index=True)
+    sortable_by = None
 
     class Meta:
         abstract = True

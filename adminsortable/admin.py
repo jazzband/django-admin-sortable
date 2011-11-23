@@ -53,18 +53,28 @@ class SortableAdmin(ModelAdmin):
         has_perm = request.user.has_perm(opts.app_label + '.' + opts.get_change_permission())
         objects = self.model.objects.all()
 
-        """
-        Determine if we need to regroup objects relative to a foreign key specified on the
-        model class that is extending Sortable.
-        """
+        #Determine if we need to regroup objects relative to a foreign key specified on the
+        # model class that is extending Sortable.
         sortable_by = getattr(self.model, 'sortable_by', None)
         if sortable_by:
-            sortable_by_class, sortable_by_expression = sortable_by()
+            #backwards compatibility for < 1.1.1, where sortable_by was a classmethod instead of a property
+            try:
+                sortable_by_class, sortable_by_expression = sortable_by()
+            except TypeError, ValueError:
+                sortable_by_class = self.model.sortable_by
+                sortable_by_expression = sortable_by_class.__name__.lower()
+
             sortable_by_class_display_name = sortable_by_class._meta.verbose_name_plural
             sortable_by_class_is_sortable = sortable_by_class.is_sortable()
+
+            # Order the objects by the property they are sortable by, then by the order, otherwise the regroup
+            # template tag will not show the objects correctly as
+            # shown in https://docs.djangoproject.com/en/1.3/ref/templates/builtins/#regroup
+            objects = objects.order_by(sortable_by_expression, 'order')
+
         else:
-            sortable_by_class = sortable_by_expression = sortable_by_class_display_name = \
-                sortable_by_class_is_sortable = None
+            sortable_by_class = sortable_by_expression = sortable_by_class_display_name =\
+            sortable_by_class_is_sortable = None
 
         try:
             verbose_name_plural = opts.verbose_name_plural.__unicode__()
@@ -110,7 +120,6 @@ class SortableAdmin(ModelAdmin):
         This view sets the ordering of the objects for the model type and primary keys
         passed in. It must be an Ajax POST.
         """
-
         if request.is_ajax() and request.method == 'POST':
             try:
                 indexes = map(str, request.POST.get('indexes', []).split(','))
@@ -131,7 +140,7 @@ class SortableAdmin(ModelAdmin):
         else:
             response = {'objects_sorted' : False}
         return HttpResponse(json.dumps(response, ensure_ascii=False),
-                            mimetype='application/json')
+            mimetype='application/json')
 
 
 class SortableInlineBase(InlineModelAdmin):
@@ -139,7 +148,8 @@ class SortableInlineBase(InlineModelAdmin):
         super(SortableInlineBase, self).__init__(*args, **kwargs)
 
         if not issubclass(self.model, Sortable):
-            raise Warning(u'Models that are specified in SortableTabluarInline and SortableStackedInline must inherit from Sortable')
+            raise Warning(u'Models that are specified in SortableTabluarInline and SortableStackedInline '
+                          'must inherit from Sortable')
 
         self.is_sortable = self.model.is_sortable()
 

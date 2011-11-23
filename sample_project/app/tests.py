@@ -1,12 +1,9 @@
 import httplib
 import json
 
-from django.contrib.auth.forms import authenticate, UserCreationForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.middleware import csrf
 from django.db import models
-from django.template.defaultfilters import urlencode
 from django.test import TestCase
 from django.test.client import Client, RequestFactory
 

@@ -25,11 +25,9 @@ class DynamicRegroupNode(template.Node):
         # List of dictionaries in the format:
         # {'grouper': 'key', 'list': [list of contents]}.
 
-        """
-        Try to resolve the filter expression from the template context.
-        If the variable doesn't exist, accept the value that passed to the
-        template tag and convert it to a string
-        """
+        #Try to resolve the filter expression from the template context.
+        #If the variable doesn't exist, accept the value that passed to the
+        #template tag and convert it to a string
         try:
             exp = self.expression.resolve(context)
         except template.VariableDoesNotExist:
@@ -47,6 +45,15 @@ class DynamicRegroupNode(template.Node):
 
 @register.tag
 def dynamic_regroup(parser, token):
+    """
+    Django expects the value of `expression` to be an attribute available on
+    your objects. The value you pass to the template tag gets converted into a
+    FilterExpression object from the literal.
+
+    Sometimes we need the attribute to group on to be dynamic. So, instead
+    of converting the value to a FilterExpression here, we're going to pass the
+    value as-is and convert it in the Node.
+    """
     firstbits = token.contents.split(None, 3)
     if len(firstbits) != 4:
         raise TemplateSyntaxError("'regroup' tag takes five arguments")
@@ -58,20 +65,8 @@ def dynamic_regroup(parser, token):
         raise TemplateSyntaxError("next-to-last argument to 'regroup' tag must"
                                   " be 'as'")
 
-    """
-    Django expects the value of `expression` to be an attribute available on
-    your objects. The value you pass to the template tag gets converted into a
-    FilterExpression object from the literal.
-    
-    Sometimes we need the attribute to group on to be dynamic. So, instead
-    of converting the value to a FilterExpression here, we're going to pass the
-    value as-is and convert it in the Node.
-    """
     expression = lastbits_reversed[2][::-1]
     var_name = lastbits_reversed[0][::-1]
-
-    """
-    We also need to hand the parser to the node in order to convert the value
-    for `expression` to a FilterExpression.
-    """
+    #We also need to hand the parser to the node in order to convert the value
+    #for `expression` to a FilterExpression.
     return DynamicRegroupNode(target, parser, expression, var_name)
