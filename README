@@ -132,13 +132,10 @@ Status
 admin-sortable is currently used in production.
 
 
-What's new in 1.2
+What's new in 1.3
 =============
-- Refactored ``sortable_by`` to be a property rather than a classmethod, which is much less work to implement.
-- Fixed an issue with ordering which could result in sortable change list view objects not being grouped properly.
-- Refactored the ORM calls to determine if an object is sortable, and what the next order should be, to return
-scalar values and to not hydrate any objects whatsoever. This potentially decreases memory usage by exponential
-factors.
+- Refactored ``sortable_by`` to subclass ForeignKey rather than a property or classmethod.
+  No more extra property hackishness.
 
 Features
 =============
@@ -156,7 +153,6 @@ to the foreign key object if it also inherits from Sortable.
 Future
 ------
 - Support for foreign keys that are self referential
-- Support for ForeignKeys that have not been previously defined
 - More unit tests
 
 Requirements
