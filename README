@@ -45,26 +45,23 @@ have an inner Meta class that inherits from ``Sortable.Meta``
             return self.title
 
 
-For models that you want sortable relative to a ``ForeignKey`` field, you need to
-specify a property: ``sortable_by`` that is equal to the class defined as your ForeignKey field.
-If you're upgrading from a version < 1.2, you do not need to redefine sortable_by.
-1.2 is backwards compatible to 1.0.
+It is also possible to order objects relative to another object that is a ForeignKey:
 
-    #admin.py
+    from adminsortable.fields import SortableForeignKey
+
+    #models.py
     class Category(models.Model):
         title = models.CharField(max_length=50)
         ...
     
-    class MySortableClass(Sortable):
+    class Project(Sortable):
         class Meta(Sortable.Meta)
         
-        category = models.ForeignKey(Category)
+        category = SortableForeignKey(Category)
         title = models.CharField(max_length=50)
         
         def __unicode__(self):
             return self.title
-        
-        sortable_by = Category
 
 
 Sortable has one field: `order` and adds a default ordering value set to `order`.
