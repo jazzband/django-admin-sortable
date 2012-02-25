@@ -1,6 +1,16 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from adminsortable.fields import SortableForeignKey
+
+
+class MultipleSortableForeignKeyException(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
 
 class Sortable(models.Model):
     """
@@ -18,7 +28,10 @@ class Sortable(models.Model):
     Override `sortable_by` method to make your model be sortable by a foreign key field.
     Set `sortable_by` to the class specified in the foreign key relationship.
     """
+
     order = models.PositiveIntegerField(editable=False, default=1, db_index=True)
+
+    #legacy support
     sortable_by = None
 
     class Meta:
@@ -36,6 +49,17 @@ class Sortable(models.Model):
     @classmethod
     def model_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
+
+    def __init__(self, *args, **kwargs):
+        super(Sortable, self).__init__(*args, **kwargs)
+
+        #Validate that model only contains at most one SortableForeignKey
+        sortable_foreign_keys = []
+        for field in self._meta.fields:
+            if isinstance(field, SortableForeignKey):
+                sortable_foreign_keys.append(field)
+        if len(sortable_foreign_keys) > 1:
+            raise MultipleSortableForeignKeyException(u'%s may only have one SortableForeignKey' % self)
 
     def save(self, *args, **kwargs):
         if not self.id:

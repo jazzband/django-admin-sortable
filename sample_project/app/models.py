@@ -1,5 +1,6 @@
 from django.db import models
 
+from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
 
 
@@ -25,34 +26,16 @@ class Category(SimpleModel, Sortable):
 
 
 #a model that is sortable relative to a foreign key that is also sortable
+#uses SortableForeignKey field. Works with versions 1.3+
 class Project(SimpleModel, Sortable):
     class Meta(Sortable.Meta):
         pass
 
-    #deprecated: shown for backward compatibility only. Reference class "Sample" for proper
-    # designation of `sortable_by` as a property
-    @classmethod
-    def sortable_by(cls):
-        return Category, 'category'
-
-    category = models.ForeignKey(Category)
+    category = SortableForeignKey(Category)
     description = models.TextField()
 
 
-#a model that is sortable relative to a foreign key that is also sortable
-class Sample(SimpleModel, Sortable):
-    class Meta(Sortable.Meta):
-        ordering = Sortable.Meta.ordering + ['category']
-
-    category = models.ForeignKey(Category)
-    description = models.TextField()
-
-    #field to define which foreign key the model is sortable by.
-    #works with versions > 1.1.1
-    sortable_by = Category
-
-
-#registered as a tabular inline on project
+#registered as a tabular inline on `Project`
 class Credit(Sortable):
     class Meta(Sortable.Meta):
         pass
@@ -65,7 +48,7 @@ class Credit(Sortable):
         return '%s %s' % (self.first_name, self.last_name)
 
 
-#registered as a stacked inline on project
+#registered as a stacked inline on `Project`
 class Note(Sortable):
     class Meta(Sortable.Meta):
         pass

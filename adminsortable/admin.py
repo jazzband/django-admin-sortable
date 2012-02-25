@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 from django.views.decorators.csrf import csrf_exempt
 
+from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
 
 STATIC_URL = settings.STATIC_URL
@@ -20,8 +21,17 @@ class SortableAdmin(ModelAdmin):
     class Meta:
         abstract = True
 
+    def _get_sortable_foreign_key(self):
+        sortable_foreign_key = None
+        for field in self.model._meta.fields:
+            if isinstance(field, SortableForeignKey):
+                sortable_foreign_key = field
+                break
+        return sortable_foreign_key
+
     def __init__(self, *args, **kwargs):
         super(SortableAdmin, self).__init__(*args, **kwargs)
+
         self.has_sortable_tabular_inlines = False
         self.has_sortable_stacked_inlines = False
         for klass in self.inlines:
@@ -55,11 +65,16 @@ class SortableAdmin(ModelAdmin):
 
         #Determine if we need to regroup objects relative to a foreign key specified on the
         # model class that is extending Sortable.
-        sortable_by = getattr(self.model, 'sortable_by', None)
-        if sortable_by:
+        #Legacy support for 'sortable_by' defined as a model property
+        sortable_by_property = getattr(self.model, 'sortable_by', None)
+
+        #`sortable_by` defined as a SortableForeignKey
+        sortable_by_fk = self._get_sortable_foreign_key()
+
+        if sortable_by_property:
             #backwards compatibility for < 1.1.1, where sortable_by was a classmethod instead of a property
             try:
-                sortable_by_class, sortable_by_expression = sortable_by()
+                sortable_by_class, sortable_by_expression = sortable_by_property()
             except TypeError, ValueError:
                 sortable_by_class = self.model.sortable_by
                 sortable_by_expression = sortable_by_class.__name__.lower()
@@ -67,14 +82,23 @@ class SortableAdmin(ModelAdmin):
             sortable_by_class_display_name = sortable_by_class._meta.verbose_name_plural
             sortable_by_class_is_sortable = sortable_by_class.is_sortable()
 
+        elif sortable_by_fk:
+            #get sortable by properties from the SortableForeignKey field - supported in 1.3+
+            sortable_by_class_display_name = sortable_by_fk.rel.to._meta.verbose_name_plural
+            sortable_by_class = sortable_by_fk.rel.to
+            sortable_by_expression = sortable_by_fk.name.lower()
+            sortable_by_class_is_sortable = sortable_by_class.is_sortable()
+
+        else:
+            #model is not sortable by another model
+            sortable_by_class = sortable_by_expression = sortable_by_class_display_name =\
+            sortable_by_class_is_sortable = None
+
+        if sortable_by_property or sortable_by_fk:
             # Order the objects by the property they are sortable by, then by the order, otherwise the regroup
             # template tag will not show the objects correctly as
             # shown in https://docs.djangoproject.com/en/1.3/ref/templates/builtins/#regroup
             objects = objects.order_by(sortable_by_expression, 'order')
-
-        else:
-            sortable_by_class = sortable_by_expression = sortable_by_class_display_name =\
-            sortable_by_class_is_sortable = None
 
         try:
             verbose_name_plural = opts.verbose_name_plural.__unicode__()

@@ -7,8 +7,14 @@ from django.db import models
 from django.test import TestCase
 from django.test.client import Client, RequestFactory
 
-from models import Sortable
-from app.models import Category
+from adminsortable.fields import SortableForeignKey
+from adminsortable.models import Sortable, MultipleSortableForeignKeyException
+from app.models import Category, Credit, Note
+
+
+class BadSortableModel(models.Model):
+    note = SortableForeignKey(Note)
+    credit = SortableForeignKey(Credit)
 
 
 class TestSortableModel(Sortable):
@@ -19,7 +25,6 @@ class TestSortableModel(Sortable):
 
 
 class SortableTestCase(TestCase):
-
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
