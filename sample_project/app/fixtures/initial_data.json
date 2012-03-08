@@ -1,0 +1,56 @@
+[
+    {
+        "pk": 1,
+        "model": "app.category",
+        "fields": {
+            "order": 1,
+            "title": "Test 1"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "app.category",
+        "fields": {
+            "order": 2,
+            "title": "Test 2"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "app.category",
+        "fields": {
+            "order": 3,
+            "title": "Test 3"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "app.project",
+        "fields": {
+            "category": 1,
+            "description": "Test",
+            "order": 1,
+            "title": "Test Project 1"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "app.project",
+        "fields": {
+            "category": 1,
+            "description": "Test",
+            "order": 2,
+            "title": "Test Project 2"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "app.project",
+        "fields": {
+            "category": 2,
+            "description": "Test",
+            "order": 3,
+            "title": "Test Project 3"
+        }
+    }
+]
