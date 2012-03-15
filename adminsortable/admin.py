@@ -108,7 +108,6 @@ class SortableAdmin(ModelAdmin):
         context = {
             'title' : 'Drag and drop %s to change display order' % capfirst(verbose_name_plural),
             'opts' : opts,
-            'root_path' : '/%s' % admin_site.root_path,
             'app_label' : opts.app_label,
             'has_perm' : has_perm,
             'objects' : objects,
