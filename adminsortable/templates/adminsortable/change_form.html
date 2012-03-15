@@ -19,7 +19,6 @@
 
 {% block extrastyle %}
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
     {% if has_sortable_tabular_inlines %}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}adminsortable/css/admin.sortable.tabular.inline.css" />
     {% endif %}
