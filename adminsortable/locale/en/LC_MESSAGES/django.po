@@ -23,7 +23,7 @@ msgstr ""
 #, python-format
 msgid ""
 "You may also drag and drop %(sortable_by_class_display_name)s to change "
-"thier order."
+"their order."
 msgstr ""
 
 #: templates/adminsortable/change_list.html:50

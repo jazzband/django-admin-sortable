@@ -108,7 +108,6 @@ class SortableAdmin(ModelAdmin):
         context = {
             'title' : 'Drag and drop %s to change display order' % capfirst(verbose_name_plural),
             'opts' : opts,
-            'root_path' : '/%s' % admin_site.root_path,
             'app_label' : opts.app_label,
             'has_perm' : has_perm,
             'objects' : objects,
@@ -149,14 +148,20 @@ class SortableAdmin(ModelAdmin):
                 indexes = map(str, request.POST.get('indexes', []).split(','))
                 klass = ContentType.objects.get(id=model_type_id).model_class()
                 objects_dict = dict([(str(obj.pk), obj) for obj in klass.objects.filter(pk__in=indexes)])
-                lowest_ordered_object = min(objects_dict.values(), key=lambda x: getattr(x, 'order'))
-                min_index = getattr(lowest_ordered_object, 'order') or 0
+                if '-order' in klass._meta.ordering: #desc order
+                    start_object = max(objects_dict.values(), key=lambda x: getattr(x, 'order'))
+                    start_index = getattr(start_object, 'order') or len(indexes)
+                    step = -1
+                else: #'order' is default, asc order
+                    start_object = min(objects_dict.values(), key=lambda x: getattr(x, 'order'))
+                    start_index = getattr(start_object, 'order') or 0
+                    step = 1
 
                 for index in indexes:
                     obj = objects_dict.get(index)
-                    setattr(obj, 'order', min_index)
+                    setattr(obj, 'order', start_index)
                     obj.save()
-                    min_index += 1
+                    start_index += step
 
                 response = {'objects_sorted' : True}
             except (Key, IndexError, klass.DoesNotExist, AttributeError):
