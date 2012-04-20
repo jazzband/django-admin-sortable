@@ -25,7 +25,7 @@ msgstr "Sleep %(model)s om de volgorde te veranderen"
 
 #: templates/adminsortable/change_list.html:39
 #, python-format
-msgid "You may also drag and drop %(sortable_by_class_display_name)s to change thier order."
+msgid "You may also drag and drop %(sortable_by_class_display_name)s to change their order."
 msgstr "U kunt ook %(sortable_by_class_display_name)s slepen om de volgorde te veranderen."
 
 #: templates/adminsortable/change_list.html:50
