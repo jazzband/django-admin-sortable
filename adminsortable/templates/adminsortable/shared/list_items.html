@@ -1,6 +1,12 @@
 {% load adminsortable_tags %}
-{% for object in list_objects %}
-	<li>
-	    {% render_object_rep object %}
-	</li>
-{% endfor %}
+{% with list_objects_length=list_objects|length %}
+    {% for object in list_objects %}
+        <li>
+            {% if list_objects_length > 1 %}
+                {% render_object_rep object %}
+            {% else %}
+                {{ object }}
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endwith %}

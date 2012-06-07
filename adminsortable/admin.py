@@ -59,7 +59,6 @@ class SortableAdmin(ModelAdmin):
         changed via drag-and-drop.
         """
         opts = self.model._meta
-        admin_site = self.admin_site
         has_perm = request.user.has_perm(opts.app_label + '.' + opts.get_change_permission())
         objects = self.model.objects.all()
 
@@ -87,7 +86,10 @@ class SortableAdmin(ModelAdmin):
             sortable_by_class_display_name = sortable_by_fk.rel.to._meta.verbose_name_plural
             sortable_by_class = sortable_by_fk.rel.to
             sortable_by_expression = sortable_by_fk.name.lower()
-            sortable_by_class_is_sortable = sortable_by_class.is_sortable()
+            try:
+                sortable_by_class_is_sortable = sortable_by_class.is_sortable()
+            except AttributeError:
+                sortable_by_class_is_sortable = False
 
         else:
             #model is not sortable by another model

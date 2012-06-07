@@ -45,7 +45,8 @@ have an inner Meta class that inherits from ``Sortable.Meta``
             return self.title
 
 
-It is also possible to order objects relative to another object that is a ForeignKey:
+It is also possible to order objects relative to another object that is a ForeignKey,
+even if that model does not inherit from Sortable:
 
     from adminsortable.fields import SortableForeignKey
 
@@ -129,16 +130,16 @@ Status
 admin-sortable is currently used in production.
 
 
-What's new in 1.3
+What's new in 1.3.2
 =============
-- Refactored ``sortable_by`` to subclass ForeignKey rather than a property or classmethod.
-  No more extra property hackishness.
+- Fixed an issue that prevented sorting on classes that specified a SortableForeignKey
+class, where the SortableForeignKey model itself did not inherit from Sortable.
 
 Features
 =============
 Current
 ---------
-- Supports Django 1.3+
+- Supports Django 1.4+
 - Adds an admin view to any model that inherits from Sortable and SortableAdmin
 that allows you to drag and drop objects into any order via jQueryUI.
 - Adds drag and drop ordering to Tabular and Stacked Inline models that inherit from

@@ -8,7 +8,7 @@ from django.test import TestCase
 from django.test.client import Client, RequestFactory
 
 from adminsortable.fields import SortableForeignKey
-from adminsortable.models import Sortable, MultipleSortableForeignKeyException
+from adminsortable.models import Sortable
 from app.models import Category, Credit, Note
 
 
