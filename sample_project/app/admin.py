@@ -13,6 +13,7 @@ class CreditInline(SortableTabularInline):
 
 class NoteInline(SortableStackedInline):
     model = Note
+    extra = 0
 
 
 class ProjectAdmin(SortableAdmin):

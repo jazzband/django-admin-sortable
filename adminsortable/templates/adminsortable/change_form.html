@@ -5,22 +5,21 @@
 {% block extrahead %}
     {{ block.super }}
     {% url 'admin:jsi18n' as jsi18nurl %}
-    
+
     {% if has_sortable_tabular_inlines or has_sortable_stacked_inlines %}
-    {% include 'adminsortable/shared/javascript_includes.html' %}
+        {% include 'adminsortable/shared/javascript_includes.html' %}
     {% endif %}
     {% if has_sortable_tabular_inlines %}
-    <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/admin.sortable.tabular.inlines.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/admin.sortable.tabular.inlines.js"></script>
     {% endif %}
     {% if has_sortable_stacked_inlines %}
-    <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/jquery.effects.core.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/jquery.effects.core.js"></script>
     {% endif %}
 {% endblock %}
 
 {% block extrastyle %}
     {{ block.super }}
-    {% if has_sortable_tabular_inlines %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}adminsortable/css/admin.sortable.tabular.inline.css" />
+    {% if has_sortable_tabular_inlines or has_sortable_stacked_inlines %}
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}adminsortable/css/admin.sortable.inline.css" />
     {% endif %}
-    
 {% endblock %}
