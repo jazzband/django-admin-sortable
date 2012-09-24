@@ -1,4 +1,5 @@
 from django import template
+from django.core.urlresolvers import reverse
 
 register = template.Library()
 
@@ -33,3 +34,7 @@ def render_object_rep(context, obj, sortable_object_rep_template='adminsortable/
     tmpl = template.loader.get_template(sortable_object_rep_template)
     return tmpl.render(context)
 
+
+@register.simple_tag(takes_context=False)
+def get_do_sorting_url(obj):
+    return reverse('admin:%s_do_sorting' % obj._meta.app_label, kwargs={'model_type_id': obj.model_type_id() })

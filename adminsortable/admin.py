@@ -55,9 +55,9 @@ class SortableAdmin(ModelAdmin):
         admin_urls = patterns('',
             url(r'^sorting/do-sorting/(?P<model_type_id>\d+)/$',
                 self.admin_site.admin_view(self.do_sorting_view),
-                name='admin_do_sorting'), #this view changes the order
+                name=('%s_do_sorting' % self.model._meta.app_label)), #this view changes the order
             url(r'^sort/$', self.admin_site.admin_view(self.sort_view),
-                name='admin_sort'), #this view shows a link to the drag-and-drop view
+                name=('%s_sort' % self.model._meta.app_label)), #this view shows a link to the drag-and-drop view
         )
         return admin_urls + urls
 
