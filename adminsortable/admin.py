@@ -16,7 +16,15 @@ STATIC_URL = settings.STATIC_URL
 
 
 class SortableAdmin(ModelAdmin):
+    """
+
+    """
     ordering = ('order', 'id')
+
+    sortable_change_list_with_sort_link_template = 'adminsortable/change_list_with_sort_link.html'
+    sortable_change_form_template = 'adminsortable/change_form.html'
+    sortable_change_list_template = 'adminsortable/change_list.html'
+    sortable_javascript_includes_template = 'adminsortable/shared/javascript_includes.html'
 
     class Meta:
         abstract = True
@@ -47,9 +55,9 @@ class SortableAdmin(ModelAdmin):
         admin_urls = patterns('',
             url(r'^sorting/do-sorting/(?P<model_type_id>\d+)/$',
                 self.admin_site.admin_view(self.do_sorting_view),
-                name='admin_do_sorting'), #this view changes the order
+                name=('%s_do_sorting' % self.model._meta.app_label)), #this view changes the order
             url(r'^sort/$', self.admin_site.admin_view(self.sort_view),
-                name='admin_sort'), #this view shows a link to the drag-and-drop view
+                name=('%s_sort' % self.model._meta.app_label)), #this view shows a link to the drag-and-drop view
         )
         return admin_urls + urls
 
@@ -116,9 +124,10 @@ class SortableAdmin(ModelAdmin):
             'group_expression' : sortable_by_expression,
             'sortable_by_class' : sortable_by_class,
             'sortable_by_class_is_sortable' : sortable_by_class_is_sortable,
-            'sortable_by_class_display_name' : sortable_by_class_display_name
+            'sortable_by_class_display_name' : sortable_by_class_display_name,
+            'sortable_javascript_includes_template': self.sortable_javascript_includes_template
         }
-        return render(request, 'adminsortable/change_list.html', context)
+        return render(request, self.sortable_change_list_template, context)
 
     def changelist_view(self, request, extra_context=None):
         """
@@ -127,13 +136,14 @@ class SortableAdmin(ModelAdmin):
         block to take people to the view to change the sorting.
         """
         if self.model.is_sortable():
-            self.change_list_template = 'adminsortable/change_list_with_sort_link.html'
+            self.change_list_template = self.sortable_change_list_with_sort_link_template
         return super(SortableAdmin, self).changelist_view(request, extra_context=extra_context)
 
     def change_view(self, request, object_id, extra_context=None):
         if self.has_sortable_tabular_inlines or self.has_sortable_stacked_inlines:
-            self.change_form_template = 'adminsortable/change_form.html'
+            self.change_form_template = self.sortable_change_form_template
             extra_context = {
+                'sortable_javascript_includes_template': self.sortable_javascript_includes_template,
                 'has_sortable_tabular_inlines' : self.has_sortable_tabular_inlines,
                 'has_sortable_stacked_inlines' : self.has_sortable_stacked_inlines
             }
@@ -164,14 +174,12 @@ class SortableAdmin(ModelAdmin):
                     setattr(obj, 'order', start_index)
                     obj.save()
                     start_index += step
-
                 response = {'objects_sorted' : True}
-            except (Key, IndexError, klass.DoesNotExist, AttributeError):
+            except (KeyError, IndexError, klass.DoesNotExist, AttributeError):
                 pass
         else:
             response = {'objects_sorted' : False}
-        return HttpResponse(json.dumps(response, ensure_ascii=False),
-            mimetype='application/json')
+        return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
 
 
 class SortableInlineBase(InlineModelAdmin):
