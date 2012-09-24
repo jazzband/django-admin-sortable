@@ -124,7 +124,8 @@ class SortableAdmin(ModelAdmin):
             'group_expression' : sortable_by_expression,
             'sortable_by_class' : sortable_by_class,
             'sortable_by_class_is_sortable' : sortable_by_class_is_sortable,
-            'sortable_by_class_display_name' : sortable_by_class_display_name
+            'sortable_by_class_display_name' : sortable_by_class_display_name,
+            'sortable_javascript_includes_template': self.sortable_javascript_includes_template
         }
         return render(request, self.sortable_change_list_template, context)
 
@@ -173,9 +174,8 @@ class SortableAdmin(ModelAdmin):
                     setattr(obj, 'order', start_index)
                     obj.save()
                     start_index += step
-
                 response = {'objects_sorted' : True}
-            except (Key, IndexError, klass.DoesNotExist, AttributeError):
+            except (KeyError, IndexError, klass.DoesNotExist, AttributeError):
                 pass
         else:
             response = {'objects_sorted' : False}
