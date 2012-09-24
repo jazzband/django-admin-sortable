@@ -79,7 +79,7 @@ class SortableTestCase(TestCase):
         return category1, category2, category3
 
     def get_sorting_url(self):
-        return reverse('admin:admin_do_sorting', args=(),
+        return reverse('admin:app_do_sorting', args=(),
                       kwargs={'model_type_id' : Category.model_type_id()})
 
     def get_category_indexes(self, *categories):
@@ -89,7 +89,7 @@ class SortableTestCase(TestCase):
         logged_in = self.client.login(username=self.user.username, password=self.user_raw_password)
         self.assertTrue(logged_in, 'User is not logged in')
 
-        response = self.client.get(reverse('admin:admin_sort'))
+        response = self.client.get(reverse('admin:app_sort'))
         self.assertEqual(response.status_code, httplib.OK, u'Admin sort request failed.')
 
         #assert adminsortable change list templates are used
