@@ -42,7 +42,7 @@ class Sortable(models.Model):
     def is_sortable(cls):
         try:
             max_order = cls.objects.aggregate(models.Max('order'))['order__max']
-        except TypeError, IndexError:
+        except (TypeError, IndexError):
             max_order = 0
         return True if max_order > 1 else False
 
