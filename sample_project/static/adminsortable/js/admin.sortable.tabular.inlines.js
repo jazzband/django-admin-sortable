@@ -24,7 +24,8 @@ jQuery(function($){
                     data: { indexes : indexes.join(',') },
                     success: function()
                     {
-                        //re-stripe table
+                        //highlight sorted row, then re-stripe table
+                        ui.item.effect('highlight', {}, 1000);
                         tabular_inline_rows.removeClass('row1 row2');
                         $('.tabular table tbody tr:odd').addClass('row2');
                         $('.tabular table tbody tr:even').addClass('row1');

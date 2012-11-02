@@ -17,7 +17,8 @@ STATIC_URL = settings.STATIC_URL
 
 class SortableAdmin(ModelAdmin):
     """
-
+    Admin class to add template overrides and context objects to enable drag-and-drop
+    ordering.
     """
     ordering = ('order', 'id')
 
@@ -55,9 +56,9 @@ class SortableAdmin(ModelAdmin):
         admin_urls = patterns('',
             url(r'^sorting/do-sorting/(?P<model_type_id>\d+)/$',
                 self.admin_site.admin_view(self.do_sorting_view),
-                name=('%s_do_sorting' % self.model._meta.app_label)), #this view changes the order
+                name='{0}_do_sorting'.format(self.model._meta.app_label)),  # this view changes the order
             url(r'^sort/$', self.admin_site.admin_view(self.sort_view),
-                name=('%s_sort' % self.model._meta.app_label)), #this view shows a link to the drag-and-drop view
+                name='{0}_sort'.format(self.model._meta.app_label)),  # this view shows a link to the drag-and-drop view
         )
         return admin_urls + urls
 
@@ -67,22 +68,22 @@ class SortableAdmin(ModelAdmin):
         changed via drag-and-drop.
         """
         opts = self.model._meta
-        has_perm = request.user.has_perm(opts.app_label + '.' + opts.get_change_permission())
+        has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label, opts.get_change_permission()))
         objects = self.model.objects.all()
 
-        #Determine if we need to regroup objects relative to a foreign key specified on the
+        # Determine if we need to regroup objects relative to a foreign key specified on the
         # model class that is extending Sortable.
-        #Legacy support for 'sortable_by' defined as a model property
+        # Legacy support for 'sortable_by' defined as a model property
         sortable_by_property = getattr(self.model, 'sortable_by', None)
 
-        #`sortable_by` defined as a SortableForeignKey
+        # `sortable_by` defined as a SortableForeignKey
         sortable_by_fk = self._get_sortable_foreign_key()
 
         if sortable_by_property:
-            #backwards compatibility for < 1.1.1, where sortable_by was a classmethod instead of a property
+            # backwards compatibility for < 1.1.1, where sortable_by was a classmethod instead of a property
             try:
                 sortable_by_class, sortable_by_expression = sortable_by_property()
-            except TypeError, ValueError:
+            except (TypeError, ValueError):
                 sortable_by_class = self.model.sortable_by
                 sortable_by_expression = sortable_by_class.__name__.lower()
 
@@ -90,7 +91,7 @@ class SortableAdmin(ModelAdmin):
             sortable_by_class_is_sortable = sortable_by_class.is_sortable()
 
         elif sortable_by_fk:
-            #get sortable by properties from the SortableForeignKey field - supported in 1.3+
+            # get sortable by properties from the SortableForeignKey field - supported in 1.3+
             sortable_by_class_display_name = sortable_by_fk.rel.to._meta.verbose_name_plural
             sortable_by_class = sortable_by_fk.rel.to
             sortable_by_expression = sortable_by_fk.name.lower()
@@ -100,8 +101,8 @@ class SortableAdmin(ModelAdmin):
                 sortable_by_class_is_sortable = False
 
         else:
-            #model is not sortable by another model
-            sortable_by_class = sortable_by_expression = sortable_by_class_display_name =\
+            # model is not sortable by another model
+            sortable_by_class = sortable_by_expression = sortable_by_class_display_name = \
             sortable_by_class_is_sortable = None
 
         if sortable_by_property or sortable_by_fk:
@@ -116,15 +117,15 @@ class SortableAdmin(ModelAdmin):
             verbose_name_plural = opts.verbose_name_plural
 
         context = {
-            'title' : 'Drag and drop %s to change display order' % capfirst(verbose_name_plural),
-            'opts' : opts,
-            'app_label' : opts.app_label,
-            'has_perm' : has_perm,
-            'objects' : objects,
-            'group_expression' : sortable_by_expression,
-            'sortable_by_class' : sortable_by_class,
-            'sortable_by_class_is_sortable' : sortable_by_class_is_sortable,
-            'sortable_by_class_display_name' : sortable_by_class_display_name,
+            'title': 'Drag and drop %s to change display order' % capfirst(verbose_name_plural),
+            'opts': opts,
+            'app_label': opts.app_label,
+            'has_perm': has_perm,
+            'objects': objects,
+            'group_expression': sortable_by_expression,
+            'sortable_by_class': sortable_by_class,
+            'sortable_by_class_is_sortable': sortable_by_class_is_sortable,
+            'sortable_by_class_display_name': sortable_by_class_display_name,
             'sortable_javascript_includes_template': self.sortable_javascript_includes_template
         }
         return render(request, self.sortable_change_list_template, context)
@@ -144,8 +145,8 @@ class SortableAdmin(ModelAdmin):
             self.change_form_template = self.sortable_change_form_template
             extra_context = {
                 'sortable_javascript_includes_template': self.sortable_javascript_includes_template,
-                'has_sortable_tabular_inlines' : self.has_sortable_tabular_inlines,
-                'has_sortable_stacked_inlines' : self.has_sortable_stacked_inlines
+                'has_sortable_tabular_inlines': self.has_sortable_tabular_inlines,
+                'has_sortable_stacked_inlines': self.has_sortable_stacked_inlines
             }
         return super(SortableAdmin, self).change_view(request, object_id, extra_context=extra_context)
 
@@ -160,11 +161,11 @@ class SortableAdmin(ModelAdmin):
                 indexes = map(str, request.POST.get('indexes', []).split(','))
                 klass = ContentType.objects.get(id=model_type_id).model_class()
                 objects_dict = dict([(str(obj.pk), obj) for obj in klass.objects.filter(pk__in=indexes)])
-                if '-order' in klass._meta.ordering: #desc order
+                if '-order' in klass._meta.ordering:  # desc order
                     start_object = max(objects_dict.values(), key=lambda x: getattr(x, 'order'))
                     start_index = getattr(start_object, 'order') or len(indexes)
                     step = -1
-                else: #'order' is default, asc order
+                else:  # 'order' is default, asc order
                     start_object = min(objects_dict.values(), key=lambda x: getattr(x, 'order'))
                     start_index = getattr(start_object, 'order') or 0
                     step = 1
@@ -174,11 +175,11 @@ class SortableAdmin(ModelAdmin):
                     setattr(obj, 'order', start_index)
                     obj.save()
                     start_index += step
-                response = {'objects_sorted' : True}
+                response = {'objects_sorted': True}
             except (KeyError, IndexError, klass.DoesNotExist, AttributeError):
                 pass
         else:
-            response = {'objects_sorted' : False}
+            response = {'objects_sorted': False}
         return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
 
 

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls.defaults import patterns, url, include
+from django.conf.urls.defaults import patterns, include
 from django.contrib import admin
 
 

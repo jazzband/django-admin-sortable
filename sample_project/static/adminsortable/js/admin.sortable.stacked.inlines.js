@@ -22,8 +22,7 @@ jQuery(function($){
                     data: { indexes : indexes.join(',') },
                     success: function()
                     {
-                        //highlight sorted stacked inline
-                        ui.item.parent().effect('highlight', {}, 1000);
+                        ui.item.effect('highlight', {}, 1000);
                     }
                 });
             }

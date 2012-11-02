@@ -129,11 +129,10 @@ Status
 admin-sortable is currently used in production.
 
 
-What's new in 1.3.4?
+What's new in 1.3.5.1?
 =============
-- Added support to override templates on a per-model basis. This is useful if you would
-like to provide an alternate display of the sortable items, such as thumbnails.
-Thanks to BlindHunter (https://github.com/BlindHunter) for contributing this functionality!
+- Hotfix to correctly pass in the object for the get sorting url templatetag.
+- PEP8 code enhancements
 
 Features
 =============

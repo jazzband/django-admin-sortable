@@ -45,7 +45,7 @@ class Credit(Sortable):
     last_name = models.CharField(max_length=30)
 
     def __unicode__(self):
-        return '%s %s' % (self.first_name, self.last_name)
+        return '{0} {1}'.format(self.first_name, self.last_name)
 
 
 #registered as a stacked inline on `Project`

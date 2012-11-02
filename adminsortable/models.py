@@ -31,7 +31,7 @@ class Sortable(models.Model):
 
     order = models.PositiveIntegerField(editable=False, default=1, db_index=True)
 
-    #legacy support
+    # legacy support
     sortable_by = None
 
     class Meta:
@@ -53,7 +53,7 @@ class Sortable(models.Model):
     def __init__(self, *args, **kwargs):
         super(Sortable, self).__init__(*args, **kwargs)
 
-        #Validate that model only contains at most one SortableForeignKey
+        # Validate that model only contains at most one SortableForeignKey
         sortable_foreign_keys = []
         for field in self._meta.fields:
             if isinstance(field, SortableForeignKey):
@@ -65,7 +65,7 @@ class Sortable(models.Model):
         if not self.id:
             try:
                 self.order = self.__class__.objects.aggregate(models.Max('order'))['order__max'] + 1
-            except TypeError, IndexError:
+            except (TypeError, IndexError):
                 pass
 
         super(Sortable, self).save(*args, **kwargs)

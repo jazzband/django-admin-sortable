@@ -50,13 +50,13 @@ class SortableTestCase(TestCase):
         A model should only become sortable if it has more than
         record to sort.
         """
-        category = self.create_category()
+        self.create_category()
         self.assertFalse(Category.is_sortable(),
                          'Category only has one record. It should not be sortable.')
 
     def test_is_sortable(self):
-        category1 = self.create_category()
-        category2 = self.create_category(title='Category 2')
+        self.create_category()
+        self.create_category(title='Category 2')
         self.assertTrue(Category.is_sortable(),
                         'Category has more than one record. It should be sortable.')
 
@@ -80,10 +80,10 @@ class SortableTestCase(TestCase):
 
     def get_sorting_url(self):
         return reverse('admin:app_do_sorting', args=(),
-                      kwargs={'model_type_id' : Category.model_type_id()})
+                      kwargs={'model_type_id': Category.model_type_id()})
 
     def get_category_indexes(self, *categories):
-        return {'indexes' : ','.join([str(c.id) for c in categories])}
+        return {'indexes': ','.join([str(c.id) for c in categories])}
 
     def test_adminsortable_changelist_templates(self):
         logged_in = self.client.login(username=self.user.username, password=self.user_raw_password)
@@ -138,4 +138,3 @@ class SortableTestCase(TestCase):
 
         self.assertEqual(cat3.order, 3, u'Third category returned should have order == 3')
         self.assertEqual(cat3.pk, 1, u'Category ID 1 should have been third in queryset')
-

@@ -1,5 +1,5 @@
 from itertools import groupby
-from django import template
+from django import template, TemplateSyntaxError
 
 register = template.Library()
 
@@ -42,6 +42,7 @@ class DynamicRegroupNode(template.Node):
         ]
 
         return ''
+
 
 @register.tag
 def dynamic_regroup(parser, token):
