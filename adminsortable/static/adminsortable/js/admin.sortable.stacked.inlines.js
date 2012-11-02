@@ -1,6 +1,8 @@
 jQuery(function($){
     if ($(':hidden[name="admin_sorting_url"]').length > 0)
     {
+        var sortable_inline_rows = $('.inline-group .inline-related');
+        sortable_inline_rows.addClass('sortable');
         $('.inline-group').sortable({
             axis : 'y',
             containment : 'parent',
