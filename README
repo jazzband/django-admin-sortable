@@ -16,7 +16,8 @@ location you server static files from, or if you're using the StaticFiles app
 run: $ python manage.py collectstatic to move the files to the location
 you've specified for static files.
 3. Add ``adminsortable`` to your INSTALLED_APPS.
-4. Have a look at the included sample_project to see working examples.
+4. Ensure "django.core.context_processors.static" is in your TEMPLATE_CONTEXT_PROCESSORS.
+5. Have a look at the included sample_project to see working examples.
 The login credentials for admin are: admin/admin
 
 When a model is sortable, a tool-area link will be added that says "Change Order".
