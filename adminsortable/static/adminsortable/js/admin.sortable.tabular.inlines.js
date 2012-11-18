@@ -7,7 +7,7 @@ jQuery(function($){
             axis : 'y',
             containment : 'parent',
             tolerance : 'pointer',
-            items : 'tr',
+            items : 'tr:not(.add-row)',
             stop : function(event, ui)
             {
                 var indexes = Array();
