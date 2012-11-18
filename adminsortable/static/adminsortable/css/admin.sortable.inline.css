@@ -1,0 +1,3 @@
+.tabular .sortable:not(.add-row) {
+    cursor: move;
+}
