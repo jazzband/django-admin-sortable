@@ -1,5 +1,10 @@
 from itertools import groupby
-from django import template, TemplateSyntaxError
+from django import template
+try:
+    from django import TemplateSyntaxError
+except ImportError:
+    #support for django 1.3
+    from django.template.base import TemplateSyntaxError
 
 register = template.Library()
 
