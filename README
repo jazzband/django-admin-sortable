@@ -35,12 +35,12 @@ have an inner Meta class that inherits from ``Sortable.Meta``
 
     #models.py
     from adminsortable.models import Sortable
-    
+
     class MySortableClass(Sortable):
         class Meta(Sortable.Meta)
-        
+
         title = models.CharField(max_length=50)
-        
+
         def __unicode__(self):
             return self.title
 
@@ -54,13 +54,13 @@ even if that model does not inherit from Sortable:
     class Category(models.Model):
         title = models.CharField(max_length=50)
         ...
-    
+
     class Project(Sortable):
         class Meta(Sortable.Meta)
-        
+
         category = SortableForeignKey(Category)
         title = models.CharField(max_length=50)
-        
+
         def __unicode__(self):
             return self.title
 
@@ -79,10 +79,10 @@ To enable sorting in the admin, you need to inherit from SortableAdmin:
     from django.contrib import admin
     from myapp.models import MySortableClass
     from adminsortable.admin import SortableAdmin
-    
+
     class MySortableAdminClass(SortableAdmin):
         """Any admin options you need go here"""
-    
+
     admin.site.register(MySortableClass, MySortableAdminClass)
 
 
@@ -90,7 +90,7 @@ To enable sorting on TabularInline models, you need to inherit from
 SortableTabularInline:
 
     from adminsortable.admin import SortableTabularInline
-    
+
     class MySortableTabularInline(SortableTabularInline):
        """Your inline options go here"""
 
@@ -99,7 +99,7 @@ To enable sorting on StackedInline models, you need to inherit from
 SortableStackedInline:
 
     from adminsortable.admin import SortableStackedInline
-    
+
     class MySortableStackedInline(SortableStackedInline):
        """Your inline options go here"""
 
@@ -109,6 +109,25 @@ which can cause sortable stacked inlines to not behave as expected.
 If the height of the stacked inline is going to be very tall, I would
 suggest NOT using SortableStackedInline. I'm currently working on
 a way to make this more usable.
+
+
+Potential Gotcha
+=============
+
+If you have an existing model that you're now making Sortable, existing
+rows won't have an "order" attribute. Django-admin-sortable depends on
+being able to leverage an aggregate Max to determine if a model is sortable.
+
+A good rule of thumb if you're adding django-admin-sortable to an existing
+project is to create a Data Migration using South to set the "order" column
+according to your needs.
+
+For example, if you have a SortableForeignKey field, you would need to set
+the "order" column relative to that field, instead of setting the "order"
+column in linear succession.
+
+See: http://south.readthedocs.org/en/latest/tutorial/part3.html for more
+information on Data Migrations.
 
 
 Rationale
@@ -130,9 +149,10 @@ Status
 admin-sortable is currently used in production.
 
 
-What's new in 1.3.7?
+What's new in 1.3.8?
 =============
 - CSS fixes for tabular inlines courtesty of @ionelmc: https://github.com/ionelmc
+- Updated documentation
 
 Features
 =============
@@ -160,5 +180,5 @@ Requires django-appmedia, included
 
 License
 =============
-The admin-sortable app is released 
+The admin-sortable app is released
 under the Apache Public License v2.
