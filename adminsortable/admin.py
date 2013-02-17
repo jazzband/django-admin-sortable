@@ -62,6 +62,19 @@ class SortableAdmin(ModelAdmin):
         )
         return admin_urls + urls
 
+    def sortable_get_objects_queryset(self):
+        """
+        override it for make you own queryset:
+
+        MyModel(SortableAdmin):
+            def sortable_objects_queryset(self, *args, **kargs):
+                objects_queryset = super(MyModel, self).sortable_get_objects_queryset(*args, **kargs)
+                return objects_queryset.filter(parent=None)
+
+        """
+        objects_queryset = self.model.objects
+        return objects_queryset
+
     def sort_view(self, request):
         """
         Custom admin view that displays the objects as a list whose sort order can be
@@ -69,7 +82,7 @@ class SortableAdmin(ModelAdmin):
         """
         opts = self.model._meta
         has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label, opts.get_change_permission()))
-        objects = self.model.objects.all()
+        objects = self.sortable_get_objects_queryset().all()
 
         # Determine if we need to regroup objects relative to a foreign key specified on the
         # model class that is extending Sortable.
