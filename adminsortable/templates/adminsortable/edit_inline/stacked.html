@@ -1,26 +1,24 @@
 {% load i18n adminmedia adminsortable_tags %}
 <div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
-    <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }} {% if inline_admin_formset.opts.is_sortable %} - drag and drop to change order{% endif %}</h2>
-    {{ inline_admin_formset.formset.management_form }}
-    {{ inline_admin_formset.formset.non_form_errors }}
+  <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }} {% if inline_admin_formset.opts.is_sortable %} - drag and drop to change order{% endif %}</h2>
+{{ inline_admin_formset.formset.management_form }}
+{{ inline_admin_formset.formset.non_form_errors }}
 
-    {% for inline_admin_form in inline_admin_formset %}
-    <div class="inline-related{% if forloop.last %} empty-form last-related{% endif %}" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
-        <h3><b>{{ inline_admin_formset.opts.verbose_name|title }}:</b>&nbsp;<span class="inline_label">{% if inline_admin_form.original %}{{ inline_admin_form.original }}{% else %}#{{ forloop.counter }}{% endif %}</span>
-            {% if inline_admin_form.show_url %}<a href="../../../r/{{ inline_admin_form.original_content_type_id }}/{{ inline_admin_form.original.id }}/">{% trans "View on site" %}</a>{% endif %}
-            {% if inline_admin_formset.formset.can_delete and inline_admin_form.original %}<span class="delete">{{ inline_admin_form.deletion_field.field }} {{ inline_admin_form.deletion_field.label_tag }}</span>{% endif %}
-        </h3>
-        {% if inline_admin_form.form.non_field_errors %}{{ inline_admin_form.form.non_field_errors }}{% endif %}
-        {% for fieldset in inline_admin_form %}
-            {% include "admin/includes/fieldset.html" %}
-        {% endfor %}
-        {% if inline_admin_form.has_auto_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
-        {{ inline_admin_form.fk_field.field }}
-        {% if inline_admin_form.original %}
-            <input type="hidden" name="admin_sorting_url" value="{% get_do_sorting_url inline_admin_form.original %}" />
-        {% endif %}
-    </div>
-    {% endfor %}
+{% for inline_admin_form in inline_admin_formset %}<div class="inline-related{% if forloop.last %} empty-form last-related{% endif %}" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
+  <h3><b>{{ inline_admin_formset.opts.verbose_name|title }}:</b>&nbsp;<span class="inline_label">{% if inline_admin_form.original %}{{ inline_admin_form.original }}{% else %}#{{ forloop.counter }}{% endif %}</span>
+    {% if inline_admin_form.show_url %}<a href="../../../r/{{ inline_admin_form.original_content_type_id }}/{{ inline_admin_form.original.id }}/">{% trans "View on site" %}</a>{% endif %}
+    {% if inline_admin_formset.formset.can_delete and inline_admin_form.original %}<span class="delete">{{ inline_admin_form.deletion_field.field }} {{ inline_admin_form.deletion_field.label_tag }}</span>{% endif %}
+  </h3>
+  {% if inline_admin_form.form.non_field_errors %}{{ inline_admin_form.form.non_field_errors }}{% endif %}
+  {% for fieldset in inline_admin_form %}
+    {% include "admin/includes/fieldset.html" %}
+  {% endfor %}
+  {% if inline_admin_form.has_auto_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
+  {{ inline_admin_form.fk_field.field }}
+  {% if inline_admin_form.original %}
+  <input type="hidden" name="admin_sorting_url" value="{% url admin:admin_do_sorting inline_admin_form.original.model_type_id %}" />
+  {% endif %}
+</div>{% endfor %}
 </div>
 
 <script type="text/javascript">
@@ -45,11 +43,11 @@
             if (typeof SelectFilter != "undefined"){
                 $(".selectfilter").each(function(index, value){
                   var namearr = value.name.split('-');
-                  SelectFilter.init(value.id, namearr[namearr.length-1], false, "{% admin_media_prefix %}");
+                  SelectFilter.init(value.id, namearr[namearr.length-1], false, "{{ STATIC_URL }}admin/");
                 });
                 $(".selectfilterstacked").each(function(index, value){
                   var namearr = value.name.split('-');
-                  SelectFilter.init(value.id, namearr[namearr.length-1], true, "{% admin_media_prefix %}");
+                  SelectFilter.init(value.id, namearr[namearr.length-1], true, "{{ STATIC_URL }}admin/");
                 });
             }
         }

@@ -1,4 +1,4 @@
-{% load i18n adminmedia admin_modify adminsortable_tags %}
+{% load i18n admin_modify adminsortable_tags %}
 <div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
   <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
 {{ inline_admin_formset.formset.management_form }}
@@ -20,7 +20,7 @@
         {% if inline_admin_form.form.non_field_errors %}
         <tr><td colspan="{{ inline_admin_form|cell_count }}">{{ inline_admin_form.form.non_field_errors }}</td></tr>
         {% endif %}
-        <tr class="sortable {% cycle "row1" "row2" %} {% if inline_admin_form.original or inline_admin_form.show_url %}has_original{% endif %}{% if forloop.last %} empty-form{% endif %}"
+        <tr class="{% cycle "row1" "row2" %} {% if inline_admin_form.original or inline_admin_form.show_url %}has_original{% endif %}{% if forloop.last %} empty-form{% endif %}"
              id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
         <td class="original">
             
@@ -40,7 +40,7 @@
           {% endfor %}
           {% endspaceless %}
           {% if inline_admin_form.original %}
-          <input type="hidden" name="admin_sorting_url" value="{% get_do_sorting_url inline_admin_form.original %}" />
+          <input type="hidden" name="admin_sorting_url" value="{% url admin:admin_do_sorting inline_admin_form.original.model_type_id %}" />
           {% endif %}
         </td>
         {% for fieldset in inline_admin_form %}
@@ -90,11 +90,11 @@
             if (typeof SelectFilter != "undefined"){
                 $(".selectfilter").each(function(index, value){
                   var namearr = value.name.split('-');
-                  SelectFilter.init(value.id, namearr[namearr.length-1], false, "{% admin_media_prefix %}");
+                  SelectFilter.init(value.id, namearr[namearr.length-1], false, "{{ STATIC_URL }}admin/");
                 });
                 $(".selectfilterstacked").each(function(index, value){
                   var namearr = value.name.split('-');
-                  SelectFilter.init(value.id, namearr[namearr.length-1], true, "{% admin_media_prefix %}");
+                  SelectFilter.init(value.id, namearr[namearr.length-1], true, "{{ STATIC_URL }}admin/");
                 });
             }
         }
