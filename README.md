@@ -86,7 +86,16 @@ even if that model does not inherit from Sortable:
 Sortable has one field: `order` and adds a default ordering value set to `order`.
 
 ### South
-If you're adding Sorting to an existing model, it is recommended that you use [django-south](http://south.areacode.com/) to create a migration to add the "order" field to your model.
+If you're adding Sorting to an existing model, it is recommended that you use [django-south](http://south.areacode.com/) to create a schema migration to add the "order" field to your model. You will also need to create a data migration in order to add the appropriate values for the `order` column.
+
+Example assuming a model named "Category":
+    def forwards(self, orm):
+        for index, category in enumerate(orm.Category.objects.all()):
+            category.order = index + 1
+            category.save()
+
+See: [this link](http://south.readthedocs.org/en/latest/tutorial/part3.html) for more
+information on Data Migrations.
 
 
 ### Django Admin
@@ -125,24 +134,6 @@ which can cause sortable stacked inlines to not behave as expected.
 If the height of the stacked inline is going to be very tall, I would
 suggest NOT using SortableStackedInline. I'm currently working on
 a way to make this more usable.
-
-
-### Potential Gotcha
-
-If you have an existing model that you're now making Sortable, existing
-rows won't have an "order" attribute. Django-admin-sortable depends on
-being able to leverage an aggregate Max to determine if a model is sortable.
-
-A good rule of thumb if you're adding django-admin-sortable to an existing
-project is to create a Data Migration using South to set the "order" column
-according to your needs.
-
-For example, if you have a `SortableForeignKey` field, you would need to set
-the "order" column relative to that field, instead of setting the "order"
-column in linear succession.
-
-See: [this link](http://south.readthedocs.org/en/latest/tutorial/part3.html) for more
-information on Data Migrations.
 
 
 ### Rationale
