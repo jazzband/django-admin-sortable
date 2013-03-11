@@ -85,7 +85,7 @@ even if that model does not inherit from Sortable:
 
 Sortable has one field: `order` and adds a default ordering value set to `order`.
 
-### South
+### Adding Sortable to an existing model
 If you're adding Sorting to an existing model, it is recommended that you use [django-south](http://south.areacode.com/) to create a schema migration to add the "order" field to your model. You will also need to create a data migration in order to add the appropriate values for the `order` column.
 
 Example assuming a model named "Category":
