@@ -27,11 +27,11 @@
 
 {% block content_title %}
 	<h1>
-	{% if sort_type %}
-	{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ sort_type }} {{ model }} to change their order.{% endblocktrans %}
-	{% else %}
-	{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ model }} to change their order.{% endblocktrans %}
-	{% endif %}
+    	{% if sort_type %}
+    	{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ sort_type }} {{ model }} to change their order.{% endblocktrans %}
+    	{% else %}
+    	{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ model }} to change their order.{% endblocktrans %}
+    	{% endif %}
 	</h1>
 	{% if sortable_by_class.is_sortable %}
 	<p>

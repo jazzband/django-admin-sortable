@@ -1,4 +1,5 @@
 from django import template
+from django import VERSION as DJANGO_VERSION
 from django.core.urlresolvers import reverse
 
 register = template.Library()
@@ -38,5 +39,5 @@ def render_object_rep(context, obj,
 
 @register.simple_tag(takes_context=False)
 def get_do_sorting_url(obj):
-    return reverse('admin:%s_do_sorting' % obj._meta.app_label,
-        kwargs={'model_type_id': obj.model_type_id()})
+    return reverse('admin:{0}_do_sorting'.format(obj._meta.app_label),
+            kwargs={'model_type_id': obj.model_type_id()})

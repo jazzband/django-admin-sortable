@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from adminsortable.admin import SortableAdmin, SortableTabularInline, SortableStackedInline
+from adminsortable.admin import (SortableAdmin, SortableTabularInline,
+    SortableStackedInline)
 from app.models import Category, Project, Credit, Note
 
 
