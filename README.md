@@ -89,6 +89,7 @@ Sortable has one field: `order` and adds a default ordering value set to `order`
 If you're adding Sorting to an existing model, it is recommended that you use [django-south](http://south.areacode.com/) to create a schema migration to add the "order" field to your model. You will also need to create a data migration in order to add the appropriate values for the `order` column.
 
 Example assuming a model named "Category":
+
     def forwards(self, orm):
         for index, category in enumerate(orm.Category.objects.all()):
             category.order = index + 1
