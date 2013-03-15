@@ -154,8 +154,9 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4?
+### What's new in 1.4.1?
 - Django 1.5 compatibility
+- Support for Generic Inlines (thanks @Hedde!)
 
 
 ### Future

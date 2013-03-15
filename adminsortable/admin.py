@@ -1,7 +1,8 @@
 import json
 
 from django import VERSION as DJANGO_VERSION
-from django.contrib.contenttypes.generic import GenericStackedInline, GenericTabularInline
+from django.contrib.contenttypes.generic import (GenericStackedInline,
+    GenericTabularInline)
 
 DJANGO_MINOR_VERSION = DJANGO_VERSION[1]
 
