@@ -40,7 +40,7 @@ When a model is sortable, a tool-area link will be added that says "Change Order
 Click this link, and you will be taken to the custom view where you can drag-and-drop
 the records into order.
 
-Tabular inlines may be drag-and-dropped into any order directly from the change form.
+Inlines may be drag-and-dropped into any order directly from the change form.
 
 
 ## Usage
@@ -128,6 +128,12 @@ SortableStackedInline:
 
     class MySortableStackedInline(SortableStackedInline):
        """Your inline options go here"""
+
+There are also generic equivalents that you can inherit from:
+
+    from adminsortable.admin import (SortableGenericTabularInline,
+        SortableGenericStackedInline)
+
 
 *** IMPORTANT  ***
 With stacked inline models, their height can dynamically increase,
