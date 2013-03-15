@@ -1,6 +1,8 @@
 import json
 
 from django import VERSION as DJANGO_VERSION
+from django.contrib.contenttypes.generic import GenericStackedInline, GenericTabularInline
+
 DJANGO_MINOR_VERSION = DJANGO_VERSION[1]
 
 from django.conf import settings
@@ -236,5 +238,15 @@ class SortableTabularInline(SortableInlineBase, TabularInline):
 
 
 class SortableStackedInline(SortableInlineBase, StackedInline):
+    """Custom template that enables sorting for stacked inlines"""
+    template = 'adminsortable/edit_inline/stacked.html'
+
+
+class SortableGenericTabularInline(SortableInlineBase, GenericTabularInline):
+    """Custom template that enables sorting for tabular inlines"""
+    template = 'adminsortable/edit_inline/tabular.html'
+
+
+class SortableGenericStackedInline(SortableInlineBase, GenericStackedInline):
     """Custom template that enables sorting for stacked inlines"""
     template = 'adminsortable/edit_inline/stacked.html'

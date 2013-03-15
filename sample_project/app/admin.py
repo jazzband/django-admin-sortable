@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 from adminsortable.admin import (SortableAdmin, SortableTabularInline,
-    SortableStackedInline)
-from app.models import Category, Project, Credit, Note
+    SortableStackedInline, SortableGenericStackedInline)
+from app.models import Category, Project, Credit, Note, GenericNote
 
 
 admin.site.register(Category, SortableAdmin)
@@ -17,8 +17,13 @@ class NoteInline(SortableStackedInline):
     extra = 0
 
 
+class GenericNoteInline(SortableGenericStackedInline):
+    model = GenericNote
+    extra = 0
+
+
 class ProjectAdmin(SortableAdmin):
-    inlines = [CreditInline, NoteInline]
+    inlines = [CreditInline, NoteInline, GenericNoteInline]
     list_display = ['__unicode__', 'category']
 
 admin.site.register(Project, ProjectAdmin)

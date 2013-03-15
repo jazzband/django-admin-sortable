@@ -1,3 +1,5 @@
+from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from adminsortable.fields import SortableForeignKey
@@ -58,3 +60,16 @@ class Note(Sortable):
 
     def __unicode__(self):
         return self.text
+
+
+#a generic bound model
+class GenericNote(SimpleModel, Sortable):
+    content_type = models.ForeignKey(ContentType, verbose_name=u"Content type", related_name="generic_notes")
+    object_id = models.PositiveIntegerField(u"Content id")
+    content_object = generic.GenericForeignKey(ct_field='content_type', fk_field='object_id')
+
+    class Meta(Sortable.Meta):
+        pass
+
+    def __unicode__(self):
+        return u"%s : %s" % (self.title, self.content_object)
