@@ -142,7 +142,7 @@ class SortableAdmin(ModelAdmin):
             verbose_name_plural = opts.verbose_name_plural
 
         context = {
-            'title': 'Drag and drop {0} to change display order'.format(
+            'title': u'Drag and drop {0} to change display order'.format(
                 capfirst(verbose_name_plural)),
             'opts': opts,
             'app_label': opts.app_label,
