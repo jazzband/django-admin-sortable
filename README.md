@@ -129,10 +129,12 @@ SortableStackedInline:
     class MySortableStackedInline(SortableStackedInline):
        """Your inline options go here"""
 
+
 There are also generic equivalents that you can inherit from:
 
     from adminsortable.admin import (SortableGenericTabularInline,
         SortableGenericStackedInline)
+        """Your generic inline options go here"""
 
 
 *** IMPORTANT  ***
@@ -160,9 +162,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4.1?
-- Django 1.5 compatibility
-- Support for Generic Inlines (thanks @Hedde!)
+### What's new in 1.4.2?
+- Unicode support for the sort view title (thanks @knyazz)
 
 
 ### Future
