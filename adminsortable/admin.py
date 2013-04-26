@@ -72,11 +72,11 @@ class SortableAdmin(ModelAdmin):
             # this view changes the order
             url(r'^sorting/do-sorting/(?P<model_type_id>\d+)/$',
                 self.admin_site.admin_view(self.do_sorting_view),
-                name='{0}_do_sorting'.format(self.model._meta.app_label)),
+                name='admin_do_sorting'),
 
             # this view shows a link to the drag-and-drop view
             url(r'^sort/$', self.admin_site.admin_view(self.sort_view),
-                name='{0}_sort'.format(self.model._meta.app_label)),
+                name='admin_sort'),
         )
         return admin_urls + urls
 
@@ -142,7 +142,7 @@ class SortableAdmin(ModelAdmin):
             verbose_name_plural = opts.verbose_name_plural
 
         context = {
-            'title': u'Drag and drop {0} to change display order'.format(
+            'title': 'Drag and drop {0} to change display order'.format(
                 capfirst(verbose_name_plural)),
             'opts': opts,
             'app_label': opts.app_label,

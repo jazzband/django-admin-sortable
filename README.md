@@ -162,8 +162,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4.2?
-- Unicode support for the sort view title (thanks @knyazz)
+### What's new in 1.4.3?
+- Reverted changes that broke getting the sorting url for inlines
 
 
 ### Future
