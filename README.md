@@ -162,8 +162,9 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4.3?
-- Reverted changes that broke getting the sorting url for inlines
+### What's new in 1.4.4?
+- Decided to go with the simplest approach to add the sorting urls to inlines
+for Django <= 1.4 and Django 1.5.x support
 
 
 ### Future
