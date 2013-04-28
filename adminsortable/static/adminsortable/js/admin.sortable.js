@@ -6,7 +6,7 @@ jQuery(function($){
         items : 'li',
         stop : function(event, ui)
         {
-            var indexes = Array();
+            var indexes = [];
             ui.item.parent().children('li').each(function(i)
             {
                 indexes.push($(this).find(':hidden[name="pk"]').val());
@@ -17,5 +17,7 @@ jQuery(function($){
                 data: { indexes: indexes.join(',') }
             });
         }
+    }).click(function(e){
+        e.preventDefault();
     });
 });

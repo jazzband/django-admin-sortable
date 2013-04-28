@@ -16,7 +16,7 @@ class SimpleModel(models.Model):
         return self.title
 
 
-#a model that is sortable
+# A model that is sortable
 class Category(SimpleModel, Sortable):
     class Meta(Sortable.Meta):
         """
@@ -27,8 +27,17 @@ class Category(SimpleModel, Sortable):
         verbose_name_plural = 'Categories'
 
 
-#a model that is sortable relative to a foreign key that is also sortable
-#uses SortableForeignKey field. Works with versions 1.3+
+# A model with an override of its queryset for admin
+class Widget(SimpleModel, Sortable):
+    class Meta(Sortable.Meta):
+        pass
+
+    def __unicode__(self):
+        return self.title
+
+
+# A model that is sortable relative to a foreign key that is also sortable
+# uses SortableForeignKey field. Works with versions 1.3+
 class Project(SimpleModel, Sortable):
     class Meta(Sortable.Meta):
         pass
@@ -37,7 +46,7 @@ class Project(SimpleModel, Sortable):
     description = models.TextField()
 
 
-#registered as a tabular inline on `Project`
+# Registered as a tabular inline on `Project`
 class Credit(Sortable):
     class Meta(Sortable.Meta):
         pass
@@ -50,7 +59,7 @@ class Credit(Sortable):
         return '{0} {1}'.format(self.first_name, self.last_name)
 
 
-#registered as a stacked inline on `Project`
+# Registered as a stacked inline on `Project`
 class Note(Sortable):
     class Meta(Sortable.Meta):
         pass
@@ -62,7 +71,7 @@ class Note(Sortable):
         return self.text
 
 
-#a generic bound model
+# A generic bound model
 class GenericNote(SimpleModel, Sortable):
     content_type = models.ForeignKey(ContentType,
         verbose_name=u"Content type", related_name="generic_notes")
@@ -75,3 +84,14 @@ class GenericNote(SimpleModel, Sortable):
 
     def __unicode__(self):
         return u'{0} : {1}'.format(self.title, self.content_object)
+
+
+# An model registered as an inline that has a custom queryset
+class Component(SimpleModel, Sortable):
+    class Meta(Sortable.Meta):
+        pass
+
+    widget = SortableForeignKey(Widget)
+
+    def __unicode__(self):
+        return self.title

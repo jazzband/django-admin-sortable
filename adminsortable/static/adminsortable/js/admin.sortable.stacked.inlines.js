@@ -10,21 +10,23 @@ jQuery(function($){
             items : '.inline-related',
             stop : function(event, ui)
             {
-                var indexes = Array();
+                var indexes = [];
                 ui.item.parent().children('.inline-related').each(function(i)
                 {
-                    index_value = $(this).find(':hidden[name$="-id"]').val();
-                    if (index_value != "" && index_value != undefined)
+                    var index_value = $(this).find(':hidden[name$="-id"]').val();
+                    if (index_value !== "" && index_value !== undefined)
+                    {
                         indexes.push(index_value);
+                    }
                 });
-                    
+
                 $.ajax({
                     url: ui.item.parent().find(':hidden[name="admin_sorting_url"]').val(),
                     type: 'POST',
                     data: { indexes : indexes.join(',') },
                     success: function()
                     {
-                        ui.item.effect('highlight', {}, 1000);
+                        ui.item.find('.form-row').effect('highlight', {}, 1000);
                     }
                 });
             }

@@ -26,14 +26,11 @@ class Sortable(models.Model):
 
     `save` the override of save increments the last/highest value of
     order by 1
-
-    Override `sortable_by` method to make your model be sortable by a
-    foreign key field. Set `sortable_by` to the class specified in the
-    foreign key relationship.
     """
 
     order = models.PositiveIntegerField(editable=False, default=1,
         db_index=True)
+    is_sortable = False
 
     # legacy support
     sortable_by = None
@@ -42,14 +39,18 @@ class Sortable(models.Model):
         abstract = True
         ordering = ['order']
 
-    @classmethod
-    def is_sortable(cls):
-        try:
-            max_order = cls.objects.aggregate(
-                models.Max('order'))['order__max']
-        except (TypeError, IndexError):
-            max_order = 0
-        return True if max_order > 1 else False
+    # @classmethod
+    # def determine_if_sortable(cls):
+    #     try:
+    #         max_order = cls.objects.aggregate(
+    #             models.Max('order'))['order__max']
+    #     except (TypeError, IndexError):
+    #         max_order = 0
+
+    #     if max_order > 1:
+    #         cls.is_sortable = True
+    #     else:
+    #         cls.is_sortable = False
 
     @classmethod
     def model_type_id(cls):

@@ -21,13 +21,30 @@ from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 from django.views.decorators.csrf import csrf_exempt
 
+from adminsortable.utils import get_is_sortable
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
 
 STATIC_URL = settings.STATIC_URL
 
 
-class SortableAdmin(ModelAdmin):
+class SortableAdminBase(object):
+    def changelist_view(self, request, extra_context=None):
+        """
+        If the model that inherits Sortable has more than one object,
+        its sort order can be changed. This view adds a link to the
+        object_tools block to take people to the view to change the sorting.
+        """
+
+        if get_is_sortable(self.queryset(request)):
+            self.change_list_template = \
+                self.sortable_change_list_with_sort_link_template
+            self.is_sortable = True
+        return super(SortableAdminBase, self).changelist_view(request,
+            extra_context=extra_context)
+
+
+class SortableAdmin(SortableAdminBase, ModelAdmin):
     """
     Admin class to add template overrides and context objects to enable
     drag-and-drop ordering.
@@ -52,18 +69,20 @@ class SortableAdmin(ModelAdmin):
                 break
         return sortable_foreign_key
 
-    def __init__(self, *args, **kwargs):
-        super(SortableAdmin, self).__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super(SortableAdmin, self).__init__(*args, **kwargs)
 
-        self.has_sortable_tabular_inlines = False
-        self.has_sortable_stacked_inlines = False
-        for klass in self.inlines:
-            if issubclass(klass, SortableTabularInline):
-                if klass.model.is_sortable():
-                    self.has_sortable_tabular_inlines = True
-            if issubclass(klass, SortableStackedInline):
-                if klass.model.is_sortable():
-                    self.has_sortable_stacked_inlines = True
+    #     self.has_sortable_tabular_inlines = False
+    #     self.has_sortable_stacked_inlines = False
+    #     for klass in self.inlines:
+    #         print type(klass)
+            # is_sortable = get_is_sortable(
+            #     klass.model._default_manager.get_query_set())
+            # print is_sortable
+            # if issubclass(klass, SortableTabularInline) and is_sortable:
+            #     self.has_sortable_tabular_inlines = True
+            # if issubclass(klass, SortableStackedInline) and is_sortable:
+            #     self.has_sortable_stacked_inlines = True
 
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
@@ -88,7 +107,8 @@ class SortableAdmin(ModelAdmin):
         opts = self.model._meta
         has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
             opts.get_change_permission()))
-        objects = self.model.objects.all()
+
+        objects = self.queryset(request)
 
         # Determine if we need to regroup objects relative to a
         # foreign key specified on the model class that is extending Sortable.
@@ -97,6 +117,7 @@ class SortableAdmin(ModelAdmin):
 
         # `sortable_by` defined as a SortableForeignKey
         sortable_by_fk = self._get_sortable_foreign_key()
+        sortable_by_class_is_sortable = get_is_sortable(objects)
 
         if sortable_by_property:
             # backwards compatibility for < 1.1.1, where sortable_by was a
@@ -110,7 +131,6 @@ class SortableAdmin(ModelAdmin):
 
             sortable_by_class_display_name = sortable_by_class._meta \
                 .verbose_name_plural
-            sortable_by_class_is_sortable = sortable_by_class.is_sortable()
 
         elif sortable_by_fk:
             # get sortable by properties from the SortableForeignKey
@@ -119,10 +139,6 @@ class SortableAdmin(ModelAdmin):
                 ._meta.verbose_name_plural
             sortable_by_class = sortable_by_fk.rel.to
             sortable_by_expression = sortable_by_fk.name.lower()
-            try:
-                sortable_by_class_is_sortable = sortable_by_class.is_sortable()
-            except AttributeError:
-                sortable_by_class_is_sortable = False
 
         else:
             # model is not sortable by another model
@@ -132,7 +148,7 @@ class SortableAdmin(ModelAdmin):
 
         if sortable_by_property or sortable_by_fk:
             # Order the objects by the property they are sortable by,
-            #then by the order, otherwise the regroup
+            # then by the order, otherwise the regroup
             # template tag will not show the objects correctly
             objects = objects.order_by(sortable_by_expression, 'order')
 
@@ -157,19 +173,17 @@ class SortableAdmin(ModelAdmin):
         }
         return render(request, self.sortable_change_list_template, context)
 
-    def changelist_view(self, request, extra_context=None):
-        """
-        If the model that inherits Sortable has more than one object,
-        its sort order can be changed. This view adds a link to the
-        object_tools block to take people to the view to change the sorting.
-        """
-        if self.model.is_sortable():
-            self.change_list_template = \
-                self.sortable_change_list_with_sort_link_template
-        return super(SortableAdmin, self).changelist_view(request,
-            extra_context=extra_context)
-
     def change_view(self, request, object_id, extra_context=None):
+        self.has_sortable_tabular_inlines = False
+        self.has_sortable_stacked_inlines = False
+
+        for klass in self.inlines:
+            is_sortable = klass.model.is_sortable
+            if issubclass(klass, SortableTabularInline) and is_sortable:
+                self.has_sortable_tabular_inlines = True
+            if issubclass(klass, SortableStackedInline) and is_sortable:
+                self.has_sortable_stacked_inlines = True
+
         if self.has_sortable_tabular_inlines or \
                 self.has_sortable_stacked_inlines:
             self.change_form_template = self.sortable_change_form_template
@@ -222,7 +236,7 @@ class SortableAdmin(ModelAdmin):
             mimetype='application/json')
 
 
-class SortableInlineBase(InlineModelAdmin):
+class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
     def __init__(self, *args, **kwargs):
         super(SortableInlineBase, self).__init__(*args, **kwargs)
 
@@ -230,7 +244,13 @@ class SortableInlineBase(InlineModelAdmin):
             raise Warning(u'Models that are specified in SortableTabluarInline'
                 ' and SortableStackedInline must inherit from Sortable')
 
-        self.is_sortable = self.model.is_sortable()
+    def queryset(self, request):
+        qs = super(SortableInlineBase, self).queryset(request)
+        if get_is_sortable(qs):
+            self.model.is_sortable = True
+        else:
+            self.model.is_sortable = False
+        return qs
 
 
 class SortableTabularInline(SortableInlineBase, TabularInline):

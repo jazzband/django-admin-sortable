@@ -137,6 +137,47 @@ There are also generic equivalents that you can inherit from:
         """Your generic inline options go here"""
 
 
+### Overriding `queryset()`
+django-admin-sortable now supports custom queryset overrides on admin models
+and inline models in Django admin!
+
+If you're providing an override of a SortableAdmin or Sortable inline model,
+you don't need to do anything extra. django-admin-sortable will automatically
+honor your queryset.
+
+Have a look at the WidgetAdmin class in the sample project for an example of
+an admin class with a custom `queryset()` override.
+
+#### Overriding `queryset()` for an inline model
+This is a special case, which requires a few lines of extra code to properly
+determine the sortability of your model. Example:
+
+    # add this import to your admin.py
+    from adminsortable.utils import get_is_sortable
+
+
+    class ComponentInline(SortableStackedInline):
+        model = Component
+
+        def queryset(self, request):
+            qs = super(ComponentInline, self).queryset(request).filter(
+                title__icontains='foo')
+
+            # You'll need to add these lines to determine if your model
+            # is sortable once we hit the change_form() for the parent model.
+
+            if get_is_sortable(qs):
+                self.model.is_sortable = True
+            else:
+                self.model.is_sortable = False
+            return qs
+
+If you override the queryset of an inline, the number of objects present
+may change, and adminsortable won't be able to automatically determine
+if the inline model is sortable from here, which is why we have to set the
+`is_sortable` property of the model in this method.
+
+
 *** IMPORTANT  ***
 With stacked inline models, their height can dynamically increase,
 which can cause sortable stacked inlines to not behave as expected.
@@ -162,9 +203,10 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4.4?
-- Decided to go with the simplest approach to add the sorting urls to inlines
-for Django <= 1.4 and Django 1.5.x support
+### What's new in 1.4.5?
+- Support for queryset overrides!
+- More efficient JavaScript in sortables
+- Fixed highlight effect for stacked inlines on sort finish
 
 
 ### Future
