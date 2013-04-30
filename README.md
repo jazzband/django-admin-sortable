@@ -203,10 +203,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4.5?
-- Support for queryset overrides!
-- More efficient JavaScript in sortables
-- Fixed highlight effect for stacked inlines on sort finish
+### What's new in 1.4.5.1?
+- Fixed unicode support in sort view title.
 
 
 ### Future

@@ -69,21 +69,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 break
         return sortable_foreign_key
 
-    # def __init__(self, *args, **kwargs):
-    #     super(SortableAdmin, self).__init__(*args, **kwargs)
-
-    #     self.has_sortable_tabular_inlines = False
-    #     self.has_sortable_stacked_inlines = False
-    #     for klass in self.inlines:
-    #         print type(klass)
-            # is_sortable = get_is_sortable(
-            #     klass.model._default_manager.get_query_set())
-            # print is_sortable
-            # if issubclass(klass, SortableTabularInline) and is_sortable:
-            #     self.has_sortable_tabular_inlines = True
-            # if issubclass(klass, SortableStackedInline) and is_sortable:
-            #     self.has_sortable_stacked_inlines = True
-
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
         admin_urls = patterns('',
@@ -158,7 +143,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             verbose_name_plural = opts.verbose_name_plural
 
         context = {
-            'title': 'Drag and drop {0} to change display order'.format(
+            'title': u'Drag and drop {0} to change display order'.format(
                 capfirst(verbose_name_plural)),
             'opts': opts,
             'app_label': opts.app_label,
