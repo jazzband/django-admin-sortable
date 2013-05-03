@@ -14,7 +14,8 @@ class ComponentInline(SortableStackedInline):
     model = Component
 
     def queryset(self, request):
-        qs = super(ComponentInline, self).queryset(request).exclude(title__icontains='2')
+        qs = super(ComponentInline, self).queryset(
+            request).exclude(title__icontains='2')
         if get_is_sortable(qs):
             self.model.is_sortable = True
         else:

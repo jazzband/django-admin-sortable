@@ -9,6 +9,7 @@ from django.test.client import Client, RequestFactory
 
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
+from adminsortable.utils import get_is_sortable
 from app.models import Category, Credit, Note
 
 
@@ -52,13 +53,13 @@ class SortableTestCase(TestCase):
         record to sort.
         """
         self.create_category()
-        self.assertFalse(Category.is_sortable(),
+        self.assertFalse(get_is_sortable(Category.objects.all()),
             'Category only has one record. It should not be sortable.')
 
     def test_is_sortable(self):
         self.create_category()
         self.create_category(title='Category 2')
-        self.assertTrue(Category.is_sortable(),
+        self.assertTrue(get_is_sortable(Category.objects.all()),
             'Category has more than one record. It should be sortable.')
 
     def test_save_order_incremented(self):
@@ -82,8 +83,8 @@ class SortableTestCase(TestCase):
         return category1, category2, category3
 
     def get_sorting_url(self):
-        return reverse('admin:app_do_sorting', args=(),
-                      kwargs={'model_type_id': Category.model_type_id()})
+        return '/admin/app/category/sorting/do-sorting/{0}/'.format(
+            Category.model_type_id())
 
     def get_category_indexes(self, *categories):
         return {'indexes': ','.join([str(c.id) for c in categories])}
@@ -93,7 +94,7 @@ class SortableTestCase(TestCase):
             password=self.user_raw_password)
         self.assertTrue(logged_in, 'User is not logged in')
 
-        response = self.client.get(reverse('admin:app_sort'))
+        response = self.client.get('/admin/app/category/sort/')
         self.assertEqual(response.status_code, httplib.OK,
             'Admin sort request failed.')
 

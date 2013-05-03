@@ -1,6 +1,6 @@
 {% load i18n admin_modify adminsortable_tags %}
 <div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
-  <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }} {% if inline_admin_formset.opts.is_sortable %} - drag and drop to change order{% endif %}</h2>
+  <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }} {% if inline_admin_formset.formset.initial_form_count > 1 %} - drag and drop to change order{% endif %}</h2>
 {{ inline_admin_formset.formset.management_form }}
 {{ inline_admin_formset.formset.non_form_errors }}
 

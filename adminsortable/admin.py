@@ -40,6 +40,13 @@ class SortableAdminBase(object):
             self.change_list_template = \
                 self.sortable_change_list_with_sort_link_template
             self.is_sortable = True
+
+        if extra_context is None:
+            extra_context = {}
+
+        extra_context.update({
+            'change_list_template_extends': self.change_list_template_extends
+        })
         return super(SortableAdminBase, self).changelist_view(request,
             extra_context=extra_context)
 
@@ -57,6 +64,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
     sortable_change_list_template = 'adminsortable/change_list.html'
     sortable_javascript_includes_template = \
         'adminsortable/shared/javascript_includes.html'
+
+    change_form_template_extends = 'admin/change_form.html'
+    change_list_template_extends = 'admin/change_list.html'
 
     class Meta:
         abstract = True
@@ -162,6 +172,13 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         self.has_sortable_tabular_inlines = False
         self.has_sortable_stacked_inlines = False
 
+        if extra_context is None:
+            extra_context = {}
+
+        extra_context.update({
+            'change_form_template_extends': self.change_form_template_extends
+        })
+
         for klass in self.inlines:
             is_sortable = klass.model.is_sortable
             if issubclass(klass, SortableTabularInline) and is_sortable:
@@ -171,15 +188,18 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         if self.has_sortable_tabular_inlines or \
                 self.has_sortable_stacked_inlines:
+
             self.change_form_template = self.sortable_change_form_template
-            extra_context = {
+
+            extra_context.update({
                 'sortable_javascript_includes_template':
                 self.sortable_javascript_includes_template,
                 'has_sortable_tabular_inlines':
                 self.has_sortable_tabular_inlines,
                 'has_sortable_stacked_inlines':
                 self.has_sortable_stacked_inlines
-            }
+            })
+
         return super(SortableAdmin, self).change_view(request, object_id,
             extra_context=extra_context)
 
@@ -238,21 +258,21 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
         return qs
 
 
-class SortableTabularInline(SortableInlineBase, TabularInline):
+class SortableTabularInline(TabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
     template = 'adminsortable/edit_inline/tabular.html'
 
 
-class SortableStackedInline(SortableInlineBase, StackedInline):
+class SortableStackedInline(StackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
     template = 'adminsortable/edit_inline/stacked.html'
 
 
-class SortableGenericTabularInline(SortableInlineBase, GenericTabularInline):
+class SortableGenericTabularInline(GenericTabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
     template = 'adminsortable/edit_inline/tabular.html'
 
 
-class SortableGenericStackedInline(SortableInlineBase, GenericStackedInline):
+class SortableGenericStackedInline(GenericStackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
     template = 'adminsortable/edit_inline/stacked.html'

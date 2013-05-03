@@ -39,19 +39,6 @@ class Sortable(models.Model):
         abstract = True
         ordering = ['order']
 
-    # @classmethod
-    # def determine_if_sortable(cls):
-    #     try:
-    #         max_order = cls.objects.aggregate(
-    #             models.Max('order'))['order__max']
-    #     except (TypeError, IndexError):
-    #         max_order = 0
-
-    #     if max_order > 1:
-    #         cls.is_sortable = True
-    #     else:
-    #         cls.is_sortable = False
-
     @classmethod
     def model_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
