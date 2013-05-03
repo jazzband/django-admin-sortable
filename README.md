@@ -177,13 +177,28 @@ may change, and adminsortable won't be able to automatically determine
 if the inline model is sortable from here, which is why we have to set the
 `is_sortable` property of the model in this method.
 
+#### Extending custom templates
+By default, adminsortable's change form and change list views inherit from
+Django admin's standard templates. Sometimes you need to have a custom change 
+form or change list, but also need adminsortable's CSS and JavaScript for 
+inline models that are sortable for example.
 
-*** IMPORTANT  ***
-With stacked inline models, their height can dynamically increase,
-which can cause sortable stacked inlines to not behave as expected.
-If the height of the stacked inline is going to be very tall, I would
-suggest NOT using SortableStackedInline. I'm currently working on
-a way to make this more usable.
+SortableAdmin has two properties you can override for this use case:
+
+    change_form_template_extends
+    change_list_template_extends
+
+These properties have default values of:
+
+    change_form_template_extends = 'admin/change_form.html'
+    change_list_template_extends = 'admin/change_list.html'
+
+
+#### A Special Note About Stacked Inlines...
+The height of a stacked inline model can dynamically increase,
+which can make them difficult to sort. If you anticipate the height of a
+stacked inline is going to be very tall, I would suggest using
+TabularStackedInline instead.
 
 
 ### Rationale
@@ -203,8 +218,13 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4.5.1?
-- Fixed unicode support in sort view title.
+### What's new in 1.4.6?
+- SortableAdmin now allows you to specify a custom template to extend,
+rather than using the default admin change list/form templates. This gives
+you the ability to have a custom change list/form template that also has
+sorting capabilities.
+- Fixed a problem with the display of drag-and-drop capability messaging in
+inline models that was caused by adminsortable respecting custom querysets.
 
 
 ### Future
