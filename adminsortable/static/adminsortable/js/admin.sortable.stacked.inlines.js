@@ -3,9 +3,13 @@ jQuery(function($){
     {
         var sortable_inline_rows = $('.inline-group .inline-related');
         sortable_inline_rows.addClass('sortable');
+
         $('.inline-group').sortable({
             axis : 'y',
             containment : 'parent',
+            create: function(event, ui) {
+                $('.inline-related :checkbox').unbind();
+            },
             tolerance : 'pointer',
             items : '.inline-related',
             stop : function(event, ui)

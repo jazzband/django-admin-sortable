@@ -7,10 +7,13 @@
     {% url 'admin:jsi18n' as jsi18nurl %}
 
     {% if has_sortable_tabular_inlines or has_sortable_stacked_inlines %}
-        {% include sortable_javascript_includes_template %}
+        {% include sortable_javascript_includes_template with inlines=True %}
     {% endif %}
     {% if has_sortable_tabular_inlines %}
         <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/admin.sortable.tabular.inlines.js"></script>
+    {% endif %}
+    {% if has_sortable_stacked_inlines %}
+        <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/admin.sortable.stacked.inlines.js"></script>
     {% endif %}
     {% if has_sortable_stacked_inlines %}
         <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/jquery.effects.core.js"></script>

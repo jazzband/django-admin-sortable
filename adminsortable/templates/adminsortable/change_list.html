@@ -9,6 +9,7 @@
 {% block extrahead %}
 	{{ block.super }}
 	{% include sortable_javascript_includes_template %}
+    <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/admin.sortable.js"></script>
 {% endblock %}
 
 {% block breadcrumbs %}

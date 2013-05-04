@@ -6,6 +6,10 @@ jQuery(function($){
         $('.tabular.inline-related').sortable({
             axis : 'y',
             containment : 'parent',
+            create: function(event, ui)
+            {
+                $('td.delete :checkbox').unbind();
+            },
             tolerance : 'pointer',
             items : 'tr:not(.add-row)',
             stop : function(event, ui)

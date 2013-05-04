@@ -14,7 +14,11 @@ jQuery(function($){
             $.ajax({
                 url: ui.item.find('a.admin_sorting_url').attr('href'),
                 type: 'POST',
-                data: { indexes: indexes.join(',') }
+                data: { indexes: indexes.join(',') },
+                success: function()
+                {
+                    ui.item.effect('highlight', {}, 1000);
+                }
             });
         }
     }).click(function(e){
