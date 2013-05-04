@@ -179,8 +179,8 @@ if the inline model is sortable from here, which is why we have to set the
 
 #### Extending custom templates
 By default, adminsortable's change form and change list views inherit from
-Django admin's standard templates. Sometimes you need to have a custom change 
-form or change list, but also need adminsortable's CSS and JavaScript for 
+Django admin's standard templates. Sometimes you need to have a custom change
+form or change list, but also need adminsortable's CSS and JavaScript for
 inline models that are sortable for example.
 
 SortableAdmin has two properties you can override for this use case:
@@ -218,13 +218,12 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4.6?
-- SortableAdmin now allows you to specify a custom template to extend,
-rather than using the default admin change list/form templates. This gives
-you the ability to have a custom change list/form template that also has
-sorting capabilities.
-- Fixed a problem with the display of drag-and-drop capability messaging in
-inline models that was caused by adminsortable respecting custom querysets.
+### What's new in 1.4.7?
+- Added `create` handlers for jQueryUI sortables to unbind events for checkboxes
+on inline models. This was preventing the "delete" checkboxes from being checked.
+- Updated jQuery to 1.9.1 and jQueryUI to 1.10.2.
+- Updated the shared JavaScript includes template, change form and change list
+to not include unnecessary files.
 
 
 ### Future
