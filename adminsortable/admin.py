@@ -180,10 +180,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         })
 
         for klass in self.inlines:
-            is_sortable = klass.model.is_sortable
-            if issubclass(klass, SortableTabularInline) and is_sortable:
+            if issubclass(klass, SortableTabularInline):
                 self.has_sortable_tabular_inlines = True
-            if issubclass(klass, SortableStackedInline) and is_sortable:
+            if issubclass(klass, SortableStackedInline):
                 self.has_sortable_stacked_inlines = True
 
         if self.has_sortable_tabular_inlines or \
