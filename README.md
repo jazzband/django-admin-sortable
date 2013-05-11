@@ -218,12 +218,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4.7?
-- Added `create` handlers for jQueryUI sortables to unbind events for checkboxes
-on inline models. This was preventing the "delete" checkboxes from being checked.
-- Updated jQuery to 1.9.1 and jQueryUI to 1.10.2.
-- Updated the shared JavaScript includes template, change form and change list
-to not include unnecessary files.
+### What's new in 1.4.8?
+- Support for Python 3
 
 
 ### Future
