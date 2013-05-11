@@ -210,7 +210,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         """
         if request.is_ajax() and request.method == 'POST':
             try:
-                indexes = map(str, request.POST.get('indexes', []).split(','))
+                indexes = list(map(str, request.POST.get('indexes', []).split(',')))
                 klass = ContentType.objects.get(id=model_type_id).model_class()
                 objects_dict = dict([(str(obj.pk), obj) for obj in
                     klass.objects.filter(pk__in=indexes)])
