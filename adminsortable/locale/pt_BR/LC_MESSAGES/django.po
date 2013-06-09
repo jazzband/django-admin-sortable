@@ -9,6 +9,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: templates/adminsortable/change_list.html:15
+#, python-format
+msgid "Drag and drop %(model)s to change display order"
+msgstr "Arraste e solte %(model)s para mudar a ordem de exibição"
+
+#: templates/adminsortable/change_list.html:25
+#, python-format
+msgid "Reorder"
+msgstr "Reordenar"
+
 #: templates/adminsortable/change_list.html:32
 #, python-format
 msgid "Drag and drop %(sort_type)s %(model)s to change their order."

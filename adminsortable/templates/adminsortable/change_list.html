@@ -12,6 +12,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/admin.sortable.js"></script>
 {% endblock %}
 
+{% block title %}{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ model }} to change display order{% endblocktrans %} | {% trans 'Django site admin' %}{% endblock %}
+
 {% block breadcrumbs %}
     <div class="breadcrumbs">
       <a href="../../../">
@@ -22,7 +24,7 @@
          {{ app_label|capfirst }}
       </a>
       &rsaquo;
-      Reorder
+      	{% trans 'Reorder' %}
     </div>
 {% endblock %}
 
