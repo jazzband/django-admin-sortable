@@ -13,6 +13,16 @@ msgstr ""
 "X-Poedit-Language: Dutch\n"
 "X-Poedit-Country: NETHERLANDS\n"
 
+#: templates/adminsortable/change_list.html:15
+#, python-format
+msgid "Drag and drop %(model)s to change display order"
+msgstr ""
+
+#: templates/adminsortable/change_list.html:25
+#, python-format
+msgid "Reorder"
+msgstr "Reorder"
+
 #: templates/adminsortable/change_list.html:32
 #, python-format
 msgid "Drag and drop %(sort_type)s %(model)s to change their order."
