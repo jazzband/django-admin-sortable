@@ -218,8 +218,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.4.9?
-- Added Brazilian Portugese locale (Thanks to @gladson)
+### What's new in 1.5?
+- More Brazilian Portugese translations (Thanks to @gladson)
 
 
 ### Future
