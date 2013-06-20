@@ -218,8 +218,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.5?
-- More Brazilian Portugese translations (Thanks to @gladson)
+### What's new in 1.5.1?
+- Fixed a bug that could cause the change_form template to not be populated correctly when adding a new record.
 
 
 ### Future

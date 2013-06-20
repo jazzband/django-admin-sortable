@@ -168,6 +168,16 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         }
         return render(request, self.sortable_change_list_template, context)
 
+    def add_view(self, request, form_url='', extra_context=None):
+        if extra_context is None:
+            extra_context = {}
+
+        extra_context.update({
+            'change_form_template_extends': self.change_form_template_extends
+        })
+        return super(SortableAdmin, self).add_view(request, form_url,
+            extra_context=extra_context)
+
     def change_view(self, request, object_id, extra_context=None):
         self.has_sortable_tabular_inlines = False
         self.has_sortable_stacked_inlines = False
