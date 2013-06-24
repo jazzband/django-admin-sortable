@@ -1,15 +1,16 @@
 {% extends 'admin/change_list.html' %}
 {% load admin_list i18n adminsortable_tags %}
+{% load static from staticfiles %}
 
 {% block extrastyle %}
 	{{ block.super }}
-	<link rel="stylesheet" href="{{ STATIC_URL }}adminsortable/css/admin.sortable.css" />
+	<link rel="stylesheet" href="{% static 'adminsortable/css/admin.sortable.css' %}" />
 {% endblock %}
 
 {% block extrahead %}
 	{{ block.super }}
 	{% include sortable_javascript_includes_template %}
-    <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/admin.sortable.js"></script>
+    <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.js' %}"></script>
 {% endblock %}
 
 {% block title %}{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ model }} to change display order{% endblocktrans %} | {% trans 'Django site admin' %}{% endblock %}
