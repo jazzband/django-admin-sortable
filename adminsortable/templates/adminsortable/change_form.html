@@ -1,6 +1,7 @@
 {% extends change_form_template_extends %}
 {% load i18n admin_modify %}
 {% load url from future %}
+{% load static from staticfiles %}
 
 {% block extrahead %}
     {{ block.super }}
@@ -10,19 +11,19 @@
         {% include sortable_javascript_includes_template with inlines=True %}
     {% endif %}
     {% if has_sortable_tabular_inlines %}
-        <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/admin.sortable.tabular.inlines.js"></script>
+        <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
     {% endif %}
     {% if has_sortable_stacked_inlines %}
-        <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/admin.sortable.stacked.inlines.js"></script>
+        <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
     {% endif %}
     {% if has_sortable_stacked_inlines %}
-        <script type="text/javascript" src="{{ STATIC_URL }}adminsortable/js/jquery.effects.core.js"></script>
+        <script type="text/javascript" src="{% static 'adminsortable/js/jquery.effects.core.js' %}"></script>
     {% endif %}
 {% endblock %}
 
 {% block extrastyle %}
     {{ block.super }}
     {% if has_sortable_tabular_inlines or has_sortable_stacked_inlines %}
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}adminsortable/css/admin.sortable.inline.css" />
+        <link rel="stylesheet" type="text/css" href="{{ ST{% static 'adminsortable/css/admin.sortable.inline.css' %}" />
     {% endif %}
 {% endblock %}
