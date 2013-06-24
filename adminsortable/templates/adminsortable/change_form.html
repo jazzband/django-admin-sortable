@@ -24,6 +24,6 @@
 {% block extrastyle %}
     {{ block.super }}
     {% if has_sortable_tabular_inlines or has_sortable_stacked_inlines %}
-        <link rel="stylesheet" type="text/css" href="{{ ST{% static 'adminsortable/css/admin.sortable.inline.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'adminsortable/css/admin.sortable.inline.css' %}" />
     {% endif %}
 {% endblock %}
