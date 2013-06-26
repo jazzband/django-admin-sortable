@@ -7,6 +7,12 @@ enabling individual items or groups of items to be sortable.
 ## Requirements
 jQuery
 
+## Supported Django Versions
+If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
+For Django 1.5.x, use the latest version of django-admin-sortable.
+
+django-admin-sortable 1.5.2 introduces backward-incompatible changes for Django 1.4.x
+
 
 ## Installation
 1. pip install django-admin-sortable
@@ -218,8 +224,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.5.1?
-- Fixed a bug that could cause the change_form template to not be populated correctly when adding a new record.
+### What's new in 1.5.2?
+- Added support for {% static %} template tag for Django 1.5.x (thanks @acgray)
 
 
 ### Future

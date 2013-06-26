@@ -6,9 +6,6 @@ django_admin_sortable.egg-info
 *.pyo
 .idea
 atlassian-ide-plugin.xml
-django-admin-sortable.sublime-project
-django-admin-sortable.sublime-workspace
-adminsortable.sublime-project
-adminsortable.sublime-workspace
+*.sublime-*
 .ropeproject
 .codeintel
