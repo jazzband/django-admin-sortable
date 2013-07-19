@@ -11,7 +11,7 @@ jQuery
 If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
 For Django 1.5.x, use the latest version of django-admin-sortable.
 
-django-admin-sortable 1.5.2 introduces backward-incompatible changes for Django 1.4.x
+django-admin-sortable 1.5.2 introduced backward-incompatible changes for Django 1.4.x
 
 
 ## Installation
@@ -224,8 +224,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.5.2?
-- Added support for {% static %} template tag for Django 1.5.x (thanks @acgray)
+### What's new in 1.5.3?
+- Merged pull request [9d128ffc79e81e410fa825f0ef4ed15cc466ede5](https://github.com/marcelometal/django-admin-sortable/commit/9d128ffc79e81e410fa825f0ef4ed15cc466ede5)
 
 
 ### Future
