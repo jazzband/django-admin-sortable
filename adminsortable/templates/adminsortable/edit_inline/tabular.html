@@ -4,7 +4,7 @@
   <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
 {{ inline_admin_formset.formset.management_form }}
 <fieldset class="module">
-   <h2>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }} {% if inline_admin_formset.formset.initial_form_count > 1 %} - drag and drop to change order{% endif %}</h2>
+   <h2>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }} {% if inline_admin_formset.formset.initial_form_count > 1 %} - {% trans "drag and drop to change order" %}{% endif %}</h2>
    {{ inline_admin_formset.formset.non_form_errors }}
    <table>
      <thead><tr>
