@@ -36,7 +36,7 @@ Use the [staticfiles app](https://docs.djangoproject.com/en/1.4/ref/contrib/stat
 
 Alternate:
 Copy the `adminsortable` folder from the `static` folder to the
-location you server static files from.
+location you serve static files from.
 
 ### Testing
 Have a look at the included sample_project to see working examples.
@@ -105,7 +105,7 @@ See: [this link](http://south.readthedocs.org/en/latest/tutorial/part3.html) for
 information on Data Migrations.
 
 
-### Django Admin
+### Django Admin Integration
 To enable sorting in the admin, you need to inherit from `SortableAdmin`:
 
     from django.contrib import admin
@@ -205,6 +205,30 @@ The height of a stacked inline model can dynamically increase,
 which can make them difficult to sort. If you anticipate the height of a
 stacked inline is going to be very tall, I would suggest using
 TabularStackedInline instead.
+
+
+### Known Issue(s)
+Because of the way inline models are added to their parent model in the
+change form, it is not currently possible to have sortable inline models
+whose parent does not inhert from `Sortable`, without adding the necessary
+JavaScript and CSS files to the change form manually.
+
+Example:
+
+    class GalleryImageInline(SortableTabularInline):
+        model = GalleryImage  # inherits from Sortable
+
+    class GalleryAlbumAdmin  # GalleryAlbum does not inherit Sortable
+        class Media:
+            js = (
+                    '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+                    '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
+                    # 'adminsortable/js/admin.sortable.stacked.inlines.js',
+                    'adminsortable/js/admin.sortable.tabular.inlines.js',
+                )
+            css = {
+                'screen': ('adminsortable/css/admin.sortable.inline.css'),
+            }
 
 
 ### Rationale
