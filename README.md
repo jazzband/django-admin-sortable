@@ -227,7 +227,7 @@ Example:
                     'adminsortable/js/admin.sortable.tabular.inlines.js',
                 )
             css = {
-                'screen': ('adminsortable/css/admin.sortable.inline.css'),
+                'screen': ('adminsortable/css/admin.sortable.inline.css', ),
             }
 
 
