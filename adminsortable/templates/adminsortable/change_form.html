@@ -10,6 +10,7 @@
     {% if has_sortable_tabular_inlines or has_sortable_stacked_inlines %}
         {% include sortable_javascript_includes_template with inlines=True %}
     {% endif %}
+    <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
     {% if has_sortable_tabular_inlines %}
         <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
     {% endif %}
