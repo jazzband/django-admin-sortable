@@ -19,7 +19,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.defaultfilters import capfirst
-from django.views.decorators.csrf import csrf_exempt
 
 from adminsortable.utils import get_is_sortable
 from adminsortable.fields import SortableForeignKey
@@ -212,7 +211,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         return super(SortableAdmin, self).change_view(request, object_id,
             extra_context=extra_context)
 
-    @csrf_exempt
     def do_sorting_view(self, request, model_type_id=None):
         """
         This view sets the ordering of the objects for the model type
