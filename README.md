@@ -210,26 +210,8 @@ TabularStackedInline instead.
 ### Known Issue(s)
 Because of the way inline models are added to their parent model in the
 change form, it is not currently possible to have sortable inline models
-whose parent does not inhert from `Sortable`, without adding the necessary
-JavaScript and CSS files to the change form manually.
-
-Example:
-
-    class GalleryImageInline(SortableTabularInline):
-        model = GalleryImage  # inherits from Sortable
-
-    class GalleryAlbumAdmin  # GalleryAlbum does not inherit Sortable
-        class Media:
-            js = (
-                    '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-                    '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
-                    'adminsortable/js/jquery.django-csrf.js',
-                    # 'adminsortable/js/admin.sortable.stacked.inlines.js',
-                    'adminsortable/js/admin.sortable.tabular.inlines.js',
-                )
-            css = {
-                'screen': ('adminsortable/css/admin.sortable.inline.css', ),
-            }
+whose parent does not inhert from `Sortable`. A workaround is currently
+being investigated.
 
 
 ### Rationale
@@ -249,8 +231,12 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.5.3?
-- Merged pull request [9d128ffc79e81e410fa825f0ef4ed15cc466ede5](https://github.com/marcelometal/django-admin-sortable/commit/9d128ffc79e81e410fa825f0ef4ed15cc466ede5)
+### What's new in 1.5.4?
+- Eliminated loading jQuery and jQueryUI from external CDNs.
+- All jQuery-based JavaScript code now leverages the django.jQuery namespace and version of jQuery included in Django Admin.
+- Eliminated needing to include jQueryUI effects core to do highlighting on drag complete.
+- Added CSRF protection to sort views (thanks @dokterbob)
+- Static includes now leverage {% static %} template tag.
 
 
 ### Future

@@ -1,2 +1,2 @@
-django==1.5
-South==0.7.6
+django==1.5.2
+south==0.8.1
