@@ -4,9 +4,6 @@ This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
 enabling individual items or groups of items to be sortable.
 
-## Requirements
-jQuery
-
 ## Supported Django Versions
 If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
 For Django 1.5.x, use the latest version of django-admin-sortable.
@@ -231,18 +228,14 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.5.4?
-- Eliminated loading jQuery and jQueryUI from external CDNs.
-- All jQuery-based JavaScript code now leverages the django.jQuery namespace and version of jQuery included in Django Admin.
-- Eliminated needing to include jQueryUI effects core to do highlighting on drag complete.
-- Added CSRF protection to sort views (thanks @dokterbob)
-- Static includes now leverage {% static %} template tag.
+### What's new in 1.5.5?
+- Improved url resolution to sorting urls
+- Fixed a potential issue with JavaScript namespace on sortable() calls that could prevent sortable from working in environments where jQuery is already included, such as Django-CMS
 
 
 ### Future
 - Support for foreign keys that are self referential
-- More unit tests
-- Move unit tests out of sample project
+- Move unit tests out of sample project (I could really use some help with this one)
 - Travis CI integration
 
 

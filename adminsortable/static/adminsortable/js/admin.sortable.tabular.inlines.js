@@ -5,7 +5,7 @@
         {
             var tabular_inline_rows = $('.tabular table tbody tr');
             tabular_inline_rows.addClass('sortable');
-            $('.tabular.inline-related').sortable({
+            jQuery('.tabular.inline-related').sortable({
                 axis : 'y',
                 containment : 'parent',
                 create: function(event, ui)

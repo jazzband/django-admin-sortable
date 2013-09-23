@@ -1,7 +1,7 @@
 (function($){
 
     $(function() {
-        $('.sortable').sortable({
+        jQuery('.sortable').sortable({
             axis : 'y',
             containment : 'parent',
             tolerance : 'pointer',

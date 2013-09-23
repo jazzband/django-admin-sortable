@@ -17,7 +17,7 @@
   {% if inline_admin_form.has_auto_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
   {{ inline_admin_form.fk_field.field }}
   {% if inline_admin_form.original %}
-  <input type="hidden" name="admin_sorting_url" value="../sorting/do-sorting/{{ inline_admin_form.original.model_type_id }}/" />
+  <input type="hidden" name="admin_sorting_url" value="{% url 'admin:admin_do_sorting' inline_admin_form.original.model_type_id %}" />
   {% endif %}
 </div>{% endfor %}
 </div>

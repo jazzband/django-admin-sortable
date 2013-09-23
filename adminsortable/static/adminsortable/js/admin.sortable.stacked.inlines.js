@@ -6,7 +6,7 @@
             var sortable_inline_rows = $('.inline-group .inline-related');
             sortable_inline_rows.addClass('sortable');
 
-            $('.inline-group').sortable({
+            jQuery('.inline-group').sortable({
                 axis : 'y',
                 containment : 'parent',
                 create: function(event, ui) {

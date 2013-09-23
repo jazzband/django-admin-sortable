@@ -102,10 +102,6 @@ class SortableTestCase(TestCase):
         template_names = [t.name for t in response.templates]
         self.assertTrue('adminsortable/change_list.html' in template_names,
                         'adminsortable/change_list.html was not rendered')
-        self.assertTrue('adminsortable/shared/javascript_includes.html'
-            in template_names,
-            'JavaScript includes for adminsortable change list '
-            'were not rendered')
 
     def test_adminsortable_change_list_sorting_fails_if_not_ajax(self):
         logged_in = self.client.login(username=self.user.username,

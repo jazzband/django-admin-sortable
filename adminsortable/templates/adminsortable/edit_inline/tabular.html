@@ -41,7 +41,7 @@
           {% endfor %}
           {% endspaceless %}
           {% if inline_admin_form.original %}
-          <input type="hidden" name="admin_sorting_url" value="../sorting/do-sorting/{{ inline_admin_form.original.model_type_id }}/" />
+          <input type="hidden" name="admin_sorting_url" value="{% url 'admin:admin_do_sorting' inline_admin_form.original.model_type_id %}" />
           {% endif %}
         </td>
         {% for fieldset in inline_admin_form %}
