@@ -216,6 +216,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         This view sets the ordering of the objects for the model type
         and primary keys passed in. It must be an Ajax POST.
         """
+        response = {'objects_sorted': False}
+
         if request.is_ajax() and request.method == 'POST':
             try:
                 indexes = list(map(str, request.POST.get('indexes', []).split(',')))
@@ -240,10 +242,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                     obj.save()
                     start_index += step
                 response = {'objects_sorted': True}
-            except (KeyError, IndexError, klass.DoesNotExist, AttributeError):
+            except (KeyError, IndexError, klass.DoesNotExist, AttributeError, ValueError):
                 pass
-        else:
-            response = {'objects_sorted': False}
+
         return HttpResponse(json.dumps(response, ensure_ascii=False),
             mimetype='application/json')
 
