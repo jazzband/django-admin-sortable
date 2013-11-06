@@ -1,4 +1,4 @@
 def get_is_sortable(objects):
-    if len(objects) > 1:
+    if objects.count() > 1:
         return True
     return False
