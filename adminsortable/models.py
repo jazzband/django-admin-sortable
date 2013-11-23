@@ -57,9 +57,17 @@ class Sortable(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id:
+            queryset = self.__class__.objects
+
+            for field in self._meta.fields:
+                if isinstance(field, SortableForeignKey):
+                    params = {field.name: getattr(self, field.name)}
+                    queryset = queryset.filter(**params)
+                    break
+
             try:
-                self.order = self.__class__.objects.aggregate(
-                    models.Max('order'))['order__max'] + 1
+                self.order = queryset.aggregate(
+                        models.Max('order'))['order__max'] + 1
             except (TypeError, IndexError):
                 pass
 
