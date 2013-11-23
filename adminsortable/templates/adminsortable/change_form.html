@@ -8,7 +8,7 @@
     {% url 'admin:jsi18n' as jsi18nurl %}
 
     {% if has_sortable_tabular_inlines or has_sortable_stacked_inlines %}
-        <script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui.django-admin.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui.js' %}"></script>
         <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
     {% endif %}
 

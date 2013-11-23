@@ -1,5 +1,7 @@
 # Django Admin Sortable
 
+Current version: 1.6
+
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
 enabling individual items or groups of items to be sortable.
@@ -8,7 +10,7 @@ enabling individual items or groups of items to be sortable.
 
 ## Supported Django Versions
 If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
-For Django 1.5.x, use the latest version of django-admin-sortable.
+For Django 1.5.x or higher, use the latest version of django-admin-sortable.
 
 django-admin-sortable 1.5.2 introduced backward-incompatible changes for Django 1.4.x
 
@@ -143,7 +145,7 @@ There are also generic equivalents that you can inherit from:
 
 
 ### Overriding `queryset()`
-django-admin-sortable now supports custom queryset overrides on admin models
+django-admin-sortable supports custom queryset overrides on admin models
 and inline models in Django admin!
 
 If you're providing an override of a SortableAdmin or Sortable inline model,
@@ -240,7 +242,7 @@ the extrahead block with:
 
     {% block extrahead %}
         {{ block.super }}
-        <script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui.django-admin.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
         <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
 
@@ -282,9 +284,10 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.5.5?
-- Improved url resolution to sorting urls
-- Fixed a potential issue with JavaScript namespace on sortable() calls that could prevent sortable from working in environments where jQuery is already included, such as Django-CMS
+### What's new in 1.6?
+- Faster query counting - thanks [PyKaB](https://github.com/PyKaB)
+- Updated jQueryUI to be compatible with jQuery 1.9.x or higher.
+- Django 1.6 compatibility
 
 
 ### Future
