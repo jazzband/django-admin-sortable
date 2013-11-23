@@ -246,7 +246,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 pass
 
         return HttpResponse(json.dumps(response, ensure_ascii=False),
-            mimetype='application/json')
+            content_type='application/json')
 
 
 class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
