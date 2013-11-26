@@ -268,19 +268,31 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
 
 class SortableTabularInline(TabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
-    template = 'adminsortable/edit_inline/tabular.html'
+    if DJANGO_MINOR_VERSION <= 5:
+        template = 'adminsortable/edit_inline/tabular-1.5.x.html'
+    else:
+        template = 'adminsortable/edit_inline/tabular.html'
 
 
 class SortableStackedInline(StackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
-    template = 'adminsortable/edit_inline/stacked.html'
+    if DJANGO_MINOR_VERSION <= 5:
+        template = 'adminsortable/edit_inline/stacked-1.5.x.html'
+    else:
+        template = 'adminsortable/edit_inline/stacked.html'
 
 
 class SortableGenericTabularInline(GenericTabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
-    template = 'adminsortable/edit_inline/tabular.html'
+    if DJANGO_MINOR_VERSION <= 5:
+        template = 'adminsortable/edit_inline/tabular-1.5.x.html'
+    else:
+        template = 'adminsortable/edit_inline/tabular.html'
 
 
 class SortableGenericStackedInline(GenericStackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
-    template = 'adminsortable/edit_inline/stacked.html'
+    if DJANGO_MINOR_VERSION <= 5:
+        template = 'adminsortable/edit_inline/stacked-1.5.x.html'
+    else:
+        template = 'adminsortable/edit_inline/stacked.html'
