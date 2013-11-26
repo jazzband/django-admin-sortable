@@ -284,10 +284,11 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.6?
+### What's new in 1.6.1?
 - Faster query counting - thanks [PyKaB](https://github.com/PyKaB)
 - Updated jQueryUI to be compatible with jQuery 1.9.x or higher.
 - Django 1.6 compatibility
+- Fixed the link to jQueryUI in the admin sortable change form (facepalm)
 
 
 ### Future
