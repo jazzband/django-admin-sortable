@@ -1,0 +1,80 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Adminsortable 1.6.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-29 10:36+0100\n"
+"PO-Revision-Date: 2013-11-29 10:50+0100\n"
+"Last-Translator: Moritz Pfeiffer <moritz.pfeiffer@alp-phone.ch>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.7\n"
+
+#: templates/adminsortable/change_list.html:19
+#, python-format
+msgid "Drag and drop %(model)s to change display order"
+msgstr "Drag and drop %(model)s um die Reihenfolge zu ändern"
+
+#: templates/adminsortable/change_list.html:31
+msgid "Reorder"
+msgstr "Reihenfolge ändern"
+
+#: templates/adminsortable/change_list.html:38
+#, python-format
+msgid "Drag and drop %(sort_type)s %(model)s to change their order."
+msgstr "Drag and drop %(sort_type)s %(model)s um die Reihenfolge zu ändern."
+
+#: templates/adminsortable/change_list.html:40
+#, python-format
+msgid "Drag and drop %(model)s to change their order."
+msgstr "Drag and drop %(model)s um ihre Reihenfolge zu ändern."
+
+#: templates/adminsortable/change_list.html:45
+#, python-format
+msgid ""
+"You may also drag and drop %(sortable_by_class_display_name)s to change "
+"their order."
+msgstr ""
+"Sie können per drag and drop die Reihenfolge von "
+"%(sortable_by_class_display_name)s ändern."
+
+#: templates/adminsortable/change_list.html:56
+#, python-format
+msgid "Return to %(model)s"
+msgstr "Zurück zu %(model)s"
+
+#: templates/adminsortable/change_list_with_sort_link.html:6
+msgid "Change Order"
+msgstr "Reihenfolge ändern"
+
+#: templates/adminsortable/edit_inline/stacked.html:3
+#: templates/adminsortable/edit_inline/tabular.html:6
+msgid "drag and drop to change order"
+msgstr "drag and drop um die Reihenfolge zu ändern"
+
+#: templates/adminsortable/edit_inline/stacked.html:9
+#: templates/adminsortable/edit_inline/tabular.html:30
+msgid "View on site"
+msgstr ""
+
+#: templates/adminsortable/edit_inline/stacked.html:29
+#: templates/adminsortable/edit_inline/tabular.html:79
+msgid "Remove"
+msgstr "Entfernen"
+
+#: templates/adminsortable/edit_inline/stacked.html:30
+#: templates/adminsortable/edit_inline/tabular.html:78
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr ""
+
+#: templates/adminsortable/edit_inline/tabular.html:17
+msgid "Delete?"
+msgstr "Löschen?"
