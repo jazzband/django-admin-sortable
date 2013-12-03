@@ -189,9 +189,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         })
 
         for klass in self.inlines:
-            if issubclass(klass, SortableTabularInline):
+            if issubclass(klass, SortableTabularInline) or issubclass(klass, SortableGenericTabularInline):
                 self.has_sortable_tabular_inlines = True
-            if issubclass(klass, SortableStackedInline):
+            if issubclass(klass, SortableStackedInline) or issubclass(klass, SortableGenericStackedInline):
                 self.has_sortable_stacked_inlines = True
 
         if self.has_sortable_tabular_inlines or \
