@@ -27,3 +27,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'adminsortable/css/admin.sortable.inline.css' %}" />
     {% endif %}
 {% endblock %}
+
+{% block after_related_objects %}{{ block.super }}
+<input type="hidden" id="localized_save_before_reorder_message" value="{% trans 'There are unsaved changes on this page. Please save your changes before reordering.' %}"/>
+{% endblock %}
