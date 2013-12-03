@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Adminsortable 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-29 10:36+0100\n"
-"PO-Revision-Date: 2013-11-29 10:50+0100\n"
+"POT-Creation-Date: 2013-12-03 10:36+0100\n"
+"PO-Revision-Date: 2013-12-03 10:37+0100\n"
 "Last-Translator: Moritz Pfeiffer <moritz.pfeiffer@alp-phone.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,10 +17,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.7\n"
 
+#: templates/adminsortable/change_form.html:32
+msgid ""
+"There are unsaved changes on this page. Please save your changes before "
+"reordering."
+msgstr ""
+"Bitte speichern Sie zuerst die Änderungen auf dieser Seite bevor Sie die "
+"Reihenfolge ändern."
+
 #: templates/adminsortable/change_list.html:19
 #, python-format
 msgid "Drag and drop %(model)s to change display order"
 msgstr "Drag and drop %(model)s um die Reihenfolge zu ändern"
+
+#: templates/adminsortable/change_list.html:19
+msgid "Django site admin"
+msgstr ""
+
+#: templates/adminsortable/change_list.html:24
+msgid "Home"
+msgstr ""
 
 #: templates/adminsortable/change_list.html:31
 msgid "Reorder"
@@ -54,27 +70,36 @@ msgstr "Zurück zu %(model)s"
 msgid "Change Order"
 msgstr "Reihenfolge ändern"
 
+#: templates/adminsortable/edit_inline/stacked-1.5.x.html:4
 #: templates/adminsortable/edit_inline/stacked.html:3
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:7
 #: templates/adminsortable/edit_inline/tabular.html:6
 msgid "drag and drop to change order"
 msgstr "drag and drop um die Reihenfolge zu ändern"
 
+#: templates/adminsortable/edit_inline/stacked-1.5.x.html:10
 #: templates/adminsortable/edit_inline/stacked.html:9
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:30
 #: templates/adminsortable/edit_inline/tabular.html:30
 msgid "View on site"
 msgstr ""
 
-#: templates/adminsortable/edit_inline/stacked.html:29
-#: templates/adminsortable/edit_inline/tabular.html:79
-msgid "Remove"
-msgstr "Entfernen"
-
+#: templates/adminsortable/edit_inline/stacked-1.5.x.html:71
 #: templates/adminsortable/edit_inline/stacked.html:30
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:118
 #: templates/adminsortable/edit_inline/tabular.html:78
 #, python-format
 msgid "Add another %(verbose_name)s"
 msgstr ""
 
+#: templates/adminsortable/edit_inline/stacked-1.5.x.html:74
+#: templates/adminsortable/edit_inline/stacked.html:29
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:121
+#: templates/adminsortable/edit_inline/tabular.html:79
+msgid "Remove"
+msgstr "Entfernen"
+
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:16
 #: templates/adminsortable/edit_inline/tabular.html:17
 msgid "Delete?"
 msgstr "Löschen?"

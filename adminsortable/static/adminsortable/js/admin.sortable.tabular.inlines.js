@@ -16,6 +16,12 @@
                 items : 'tr:not(.add-row)',
                 stop : function(event, ui)
                 {
+                    if ($('.inline-deletelink').length > 0) {
+                        $(ui.sender).sortable('cancel');
+                        alert($('#localized_save_before_reorder_message').val());
+                        return false;
+                    }
+                    
                     var indexes = [];
                     ui.item.parent().children('tr').each(function(i)
                     {
