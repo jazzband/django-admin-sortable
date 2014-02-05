@@ -9,11 +9,11 @@
 
 {% block extrahead %}
 	{{ block.super }}
-    <script type="text/javascript" src="{% static 'admin/js/jquery.js' %}"></script>
-    <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
-	<script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
-    <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.js' %}"></script>
+    <script src="{% static 'admin/js/jquery.js' %}"></script>
+    <script src="{% static 'admin/js/jquery.init.js' %}"></script>
+	<script src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
+    <script src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
+    <script src="{% static 'adminsortable/js/admin.sortable.js' %}"></script>
 {% endblock %}
 
 {% block title %}{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ model }} to change display order{% endblocktrans %} | {% trans 'Django site admin' %}{% endblock %}

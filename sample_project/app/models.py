@@ -105,9 +105,7 @@ class Person(Sortable):
     last_name = models.CharField(max_length=50)
     is_board_member = models.BooleanField(default=False)
 
+    sorting_filters = {'is_board_member': True}
+
     def __unicode__(self):
         return '{} {}'.format(self.first_name, self.last_name)
-
-    @classmethod
-    def ordering_subset(cls):
-        return cls.objects.filter(is_board_member=True)

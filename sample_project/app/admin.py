@@ -60,4 +60,8 @@ class ProjectAdmin(SortableAdmin):
 admin.site.register(Project, ProjectAdmin)
 
 
-admin.site.register(Person, SortableAdmin)
+class PersonAdmin(SortableAdmin):
+    sortable_change_list_with_sort_link_template = 'app/person/admin/change_list_with_sort_link.html'
+
+
+admin.site.register(Person, PersonAdmin)
