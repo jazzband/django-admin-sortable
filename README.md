@@ -6,8 +6,6 @@ This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
 enabling individual items or groups of items to be sortable.
 
-=======
-
 ## Supported Django Versions
 If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
 For Django 1.5.x or higher, use the latest version of django-admin-sortable.
@@ -69,13 +67,15 @@ have an inner Meta class that inherits from `Sortable.Meta`
             return self.title
 
 
-It is also possible to order objects relative to another object that is a ForeignKey,
-even if that model does not inherit from Sortable:
+It is also possible to order objects relative to another object that is a ForeignKey. A small caveat here is that `Category` must also either inherit from `Sortable` or include an `order` property which is a `PositiveSmallInteger` field. This is due to the way Django admin instantiates classes.
 
     from adminsortable.fields import SortableForeignKey
 
     #models.py
-    class Category(models.Model):
+    class Category(Sortable):
+        class Meta(Sortable.Meta):
+            pass
+
         title = models.CharField(max_length=50)
         ...
 
@@ -184,6 +184,24 @@ may change, and adminsortable won't be able to automatically determine
 if the inline model is sortable from here, which is why we have to set the
 `is_sortable` property of the model in this method.
 
+#### Sorting a subset of objects
+It is also possible to sort a subset of objects in your model by adding a `sorting_filters` dictionary. This dictionary works exactly the same as `.filter()` on a QuerySet, and is applied *after* `get_queryset()` on the admin class, allowing you to override the queryset as you would normally in admin but apply additional filters for sorting.
+
+This is useful when you need to have some objects orderable via drag-and-drop, and others not. An example would be a "Board of Directors". In this use case, you have a list of "People". Some of these people are on the Board of Directors, and you need to sort them at will. Other people need to be sorted alphabetically.
+
+    class Person(Sortable):
+        class Meta(Sortable.Meta):
+            verbose_name_plural = 'People'
+    
+            first_name = models.CharField(max_length=50)
+            last_name = models.CharField(max_length=50)
+            is_board_member = models.BooleanField(default=False)
+    
+            sorting_filters = {'is_board_member': True}
+    
+            def __unicode__(self):
+                return '{} {}'.format(self.first_name, self.last_name)
+
 #### Extending custom templates
 By default, adminsortable's change form and change list views inherit from
 Django admin's standard templates. Sometimes you need to have a custom change
@@ -270,10 +288,7 @@ with:
 
 
 ### Known Issue(s)
-Because of the way inline models are added to their parent model in the
-change form, it is not currently possible to have sortable inline models
-whose parent does not inhert from `Sortable`. A workaround is currently
-being investigated.
+Because of the way inline models are added to their parent model in the change form, it is not currently possible to have sortable inline models whose parent does not inhert from `Sortable`.
 
 
 ### Rationale
@@ -293,9 +308,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.6.3?
-- German localization - danke [Alp-Phone](https://github.com/Alp-Phone)
-- JavaScript drag and drop handlers now work as expected if only Generic Inline models are present
+### What's new in 1.6.4?
+- Added "sorting_filters" to specify a subset of model objects to be sorted.
 
 
 ### Future
