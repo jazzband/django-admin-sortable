@@ -144,7 +144,7 @@ There are also generic equivalents that you can inherit from:
         """Your generic inline options go here"""
 
 
-### Overriding `queryset()`
+#### Overriding `queryset()`
 django-admin-sortable supports custom queryset overrides on admin models
 and inline models in Django admin!
 
