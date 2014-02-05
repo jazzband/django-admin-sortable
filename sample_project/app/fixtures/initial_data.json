@@ -1,0 +1,37 @@
+[{
+    "pk": 1,
+    "model": "app.person",
+    "fields": {
+        "first_name": "Bob",
+        "last_name": "Smith",
+        "order": 1,
+        "is_board_member": true
+    }
+}, {
+    "pk": 2,
+    "model": "app.person",
+    "fields": {
+        "first_name": "Sally",
+        "last_name": "Sue",
+        "order": 2,
+        "is_board_member": false
+    }
+}, {
+    "pk": 3,
+    "model": "app.person",
+    "fields": {
+        "first_name": "Mike",
+        "last_name": "Wilson",
+        "order": 3,
+        "is_board_member": true
+    }
+}, {
+    "pk": 4,
+    "model": "app.person",
+    "fields": {
+        "first_name": "Robert",
+        "last_name": "Roberts",
+        "order": 2,
+        "is_board_member": true
+    }
+}]

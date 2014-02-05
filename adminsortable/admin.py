@@ -28,6 +28,8 @@ STATIC_URL = settings.STATIC_URL
 
 
 class SortableAdminBase(object):
+    filtered_objects = []
+
     def changelist_view(self, request, extra_context=None):
         """
         If the model that inherits Sortable has more than one object,
@@ -35,7 +37,11 @@ class SortableAdminBase(object):
         object_tools block to take people to the view to change the sorting.
         """
 
-        if get_is_sortable(self.queryset(request)):
+        # Apply any additional filters to create a subset of sortable objects
+        self.filtered_objects = self.queryset(request).filter(
+            **self.model.sorting_filters)
+
+        if get_is_sortable(self.filtered_objects):
             self.change_list_template = \
                 self.sortable_change_list_with_sort_link_template
             self.is_sortable = True
@@ -61,8 +67,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         'adminsortable/change_list_with_sort_link.html'
     sortable_change_form_template = 'adminsortable/change_form.html'
     sortable_change_list_template = 'adminsortable/change_list.html'
-    sortable_javascript_includes_template = \
-        'adminsortable/shared/javascript_includes.html'
 
     change_form_template_extends = 'admin/change_form.html'
     change_list_template_extends = 'admin/change_list.html'
@@ -102,7 +106,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
             opts.get_change_permission()))
 
-        objects = self.queryset(request)
+        objects = self.filtered_objects
 
         # Determine if we need to regroup objects relative to a
         # foreign key specified on the model class that is extending Sortable.
@@ -161,9 +165,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'group_expression': sortable_by_expression,
             'sortable_by_class': sortable_by_class,
             'sortable_by_class_is_sortable': sortable_by_class_is_sortable,
-            'sortable_by_class_display_name': sortable_by_class_display_name,
-            'sortable_javascript_includes_template':
-            self.sortable_javascript_includes_template
+            'sortable_by_class_display_name': sortable_by_class_display_name
         }
         return render(request, self.sortable_change_list_template, context)
 
@@ -200,8 +202,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             self.change_form_template = self.sortable_change_form_template
 
             extra_context.update({
-                'sortable_javascript_includes_template':
-                self.sortable_javascript_includes_template,
                 'has_sortable_tabular_inlines':
                 self.has_sortable_tabular_inlines,
                 'has_sortable_stacked_inlines':

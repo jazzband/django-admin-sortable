@@ -31,6 +31,7 @@ class Sortable(models.Model):
     order = models.PositiveIntegerField(editable=False, default=1,
         db_index=True)
     is_sortable = False
+    sorting_filters = {}
 
     # legacy support
     sortable_by = None
@@ -53,7 +54,7 @@ class Sortable(models.Model):
                 sortable_foreign_keys.append(field)
         if len(sortable_foreign_keys) > 1:
             raise MultipleSortableForeignKeyException(
-                u'%s may only have one SortableForeignKey' % self)
+                u'{} may only have one SortableForeignKey'.format(self))
 
     def save(self, *args, **kwargs):
         if not self.id:
