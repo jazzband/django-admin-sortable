@@ -1,6 +1,6 @@
 # Django Admin Sortable
 
-Current version: 1.6.3
+Current version: 1.6.4
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
