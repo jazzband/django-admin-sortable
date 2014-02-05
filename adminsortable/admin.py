@@ -35,7 +35,12 @@ class SortableAdminBase(object):
         object_tools block to take people to the view to change the sorting.
         """
 
-        if get_is_sortable(self.queryset(request)):
+        if self.model.ordering_subset() is not None:
+            objects = self.model.ordering_subset()
+        else:
+            objects = self.queryset(request)
+
+        if get_is_sortable(objects):
             self.change_list_template = \
                 self.sortable_change_list_with_sort_link_template
             self.is_sortable = True
@@ -102,7 +107,10 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         has_perm = request.user.has_perm('{}.{}'.format(opts.app_label,
             opts.get_change_permission()))
 
-        objects = self.queryset(request)
+        if self.model.ordering_subset() is not None:
+            objects = self.model.ordering_subset()
+        else:
+            objects = self.queryset(request)
 
         # Determine if we need to regroup objects relative to a
         # foreign key specified on the model class that is extending Sortable.

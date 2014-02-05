@@ -43,6 +43,10 @@ class Sortable(models.Model):
     def model_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
 
+    @classmethod
+    def ordering_subset(cls):
+        return None
+
     def __init__(self, *args, **kwargs):
         super(Sortable, self).__init__(*args, **kwargs)
 

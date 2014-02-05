@@ -95,3 +95,19 @@ class Component(SimpleModel, Sortable):
 
     def __unicode__(self):
         return self.title
+
+
+class Person(Sortable):
+    class Meta(Sortable.Meta):
+        verbose_name_plural = 'People'
+
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    is_board_member = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+
+    @classmethod
+    def ordering_subset(cls):
+        return cls.objects.filter(is_board_member=True)

@@ -4,7 +4,7 @@ from adminsortable.admin import (SortableAdmin, SortableTabularInline,
     SortableStackedInline, SortableGenericStackedInline)
 from adminsortable.utils import get_is_sortable
 from app.models import (Category, Widget, Project, Credit, Note, GenericNote,
-    Component)
+    Component, Person)
 
 
 admin.site.register(Category, SortableAdmin)
@@ -58,3 +58,6 @@ class ProjectAdmin(SortableAdmin):
     list_display = ['__unicode__', 'category']
 
 admin.site.register(Project, ProjectAdmin)
+
+
+admin.site.register(Person, SortableAdmin)
