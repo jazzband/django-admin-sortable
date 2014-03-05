@@ -14,9 +14,6 @@ class MultipleSortableForeignKeyException(Exception):
 
 class Sortable(models.Model):
     """
-    Unfortunately, Django doesn't support using more than one AutoField
-    in a model or this class could be simplified.
-
     `is_sortable` determines whether or not the Model is sortable by
     determining if the last value of `order` is greater than the default
     of 1, which should be present if there is only one object.
@@ -31,7 +28,7 @@ class Sortable(models.Model):
     order = models.PositiveIntegerField(editable=False, default=1,
         db_index=True)
     is_sortable = False
-    sorting_filters = {}
+    sorting_filters = ()
 
     # legacy support
     sortable_by = None

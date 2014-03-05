@@ -2,8 +2,14 @@
 {% load i18n %}
 
 {% block object-tools-items %}
-	<li>
-		<a href="./sort/">{% trans 'Change Order' %}</a>
-	</li>
-	{{ block.super }}
+    {% for sorting_filter in sorting_filters %}
+    <li>
+        <a href="./sort/?sort_filter={{ forloop.counter0 }}">{% trans 'Change Order of' %} {{ sorting_filter }}</a>
+    </li>
+    {% empty %}
+    <li>
+        <a href="./sort/">{% trans 'Change Order' %}</a>
+    </li>
+    {% endfor %}
+    {{ block.super }}
 {% endblock %}

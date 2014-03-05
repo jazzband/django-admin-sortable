@@ -1,6 +1,6 @@
 # Django Admin Sortable
 
-Current version: 1.6.5
+Current version: 1.6.6
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -11,6 +11,8 @@ If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
 For Django 1.5.x or higher, use the latest version of django-admin-sortable.
 
 django-admin-sortable 1.5.2 introduced backward-incompatible changes for Django 1.4.x
+
+django-admin-sortable 1.6.6 introduced a backward-incompatible change for the `sorting_filters` attribute. Please convert your attributes to the new tuple-based format.
 
 
 ## Installation
@@ -31,7 +33,7 @@ Download django-admin-sortable from [source](https://github.com/iambrandontaylor
 
 ### Static Media
 Preferred:
-Use the [staticfiles app](https://docs.djangoproject.com/en/1.4/ref/contrib/staticfiles/)
+Use the [staticfiles app](https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/)
 
 Alternate:
 Copy the `adminsortable` folder from the `static` folder to the
@@ -184,23 +186,29 @@ may change, and adminsortable won't be able to automatically determine
 if the inline model is sortable from here, which is why we have to set the
 `is_sortable` property of the model in this method.
 
-#### Sorting a subset of objects
-It is also possible to sort a subset of objects in your model by adding a `sorting_filters` dictionary. This dictionary works exactly the same as `.filter()` on a QuerySet, and is applied *after* `get_queryset()` on the admin class, allowing you to override the queryset as you would normally in admin but apply additional filters for sorting.
+#### Sorting subsets of objects
+It is also possible to sort a subset of objects in your model by adding a `sorting_filters` tuple. This works exactly the same as `.filter()` on a QuerySet, and is applied *after* `get_queryset()` on the admin class, allowing you to override the queryset as you would normally in admin but apply additional filters for sorting. The text "Change Order of" will appear before each filter in the Change List template, and the filter groups are displayed from left to right in the order listed. If no `sorting_filters` are specified, the text "Change Order" will be displayed for the link.
 
-This is useful when you need to have some objects orderable via drag-and-drop, and others not. An example would be a "Board of Directors". In this use case, you have a list of "People". Some of these people are on the Board of Directors, and you need to sort them at will. Other people need to be sorted alphabetically.
+#####Important!
+django-admin-sortable 1.6.6 introduces a backwards-incompatible change for `sorting_filters`. Previously this attribute was defined as a dictionary, so you'll need to change your values over to the new tuple-based format.
+
+An example of sorting subsets would be a "Board of Directors". In this use case, you have a list of "People" objects. Some of these people are on the Board of Directors and some not, and you need to sort them independently.
 
     class Person(Sortable):
         class Meta(Sortable.Meta):
             verbose_name_plural = 'People'
-    
-            first_name = models.CharField(max_length=50)
-            last_name = models.CharField(max_length=50)
-            is_board_member = models.BooleanField(default=False)
-    
-            sorting_filters = {'is_board_member': True}
-    
-            def __unicode__(self):
-                return '{} {}'.format(self.first_name, self.last_name)
+
+        first_name = models.CharField(max_length=50)
+        last_name = models.CharField(max_length=50)
+        is_board_member = models.BooleanField('Board Member', default=False)
+
+        sorting_filters = (
+            ('Board Members', {'is_board_member': True}),
+            ('Non-Board Members', {'is_board_member': False}),
+        )
+
+        def __unicode__(self):
+            return '{} {}'.format(self.first_name, self.last_name)
 
 #### Extending custom templates
 By default, adminsortable's change form and change list views inherit from
@@ -208,12 +216,12 @@ Django admin's standard templates. Sometimes you need to have a custom change
 form or change list, but also need adminsortable's CSS and JavaScript for
 inline models that are sortable for example.
 
-SortableAdmin has two properties you can override for this use case:
+SortableAdmin has two attributes you can override for this use case:
 
     change_form_template_extends
     change_list_template_extends
 
-These properties have default values of:
+These attributes have default values of:
 
     change_form_template_extends = 'admin/change_form.html'
     change_list_template_extends = 'admin/change_list.html'
@@ -308,8 +316,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.6.5?
-- Namespace fixes for jQuery in Django admin
+### What's new in 1.6.6?
+- Multiple sorting_filters
 
 
 ### Future
