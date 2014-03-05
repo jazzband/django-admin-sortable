@@ -28,8 +28,6 @@ STATIC_URL = settings.STATIC_URL
 
 
 class SortableAdminBase(object):
-    filtered_objects = []
-
     def changelist_view(self, request, extra_context=None):
         """
         If the model that inherits Sortable has more than one object,
@@ -37,11 +35,10 @@ class SortableAdminBase(object):
         object_tools block to take people to the view to change the sorting.
         """
 
-        # Apply any additional filters to create a subset of sortable objects
-        self.filtered_objects = self.queryset(request).filter(
-            **self.model.sorting_filters)
+        # get sort group index from querystring
+        sort_filter_index = request.GET.get('sort_filter')
 
-        if get_is_sortable(self.filtered_objects):
+        if get_is_sortable(self.queryset(request)):
             self.change_list_template = \
                 self.sortable_change_list_with_sort_link_template
             self.is_sortable = True
@@ -50,7 +47,8 @@ class SortableAdminBase(object):
             extra_context = {}
 
         extra_context.update({
-            'change_list_template_extends': self.change_list_template_extends
+            'change_list_template_extends': self.change_list_template_extends,
+            'sorting_filters': [sort_filter[0] for sort_filter in self.model.sorting_filters]
         })
         return super(SortableAdminBase, self).changelist_view(request,
             extra_context=extra_context)
@@ -106,7 +104,18 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
             opts.get_change_permission()))
 
-        objects = self.filtered_objects
+        # get sort group index from querystring if present
+        sort_filter_index = request.GET.get('sort_filter')
+
+        filters = {}
+        if sort_filter_index:
+            try:
+                filters = self.model.sorting_filters[int(sort_filter_index)][1]
+            except IndexError, ValueError:
+                pass
+
+        # Apply any sort filters to create a subset of sortable objects
+        objects = self.queryset(request).filter(**filters)
 
         # Determine if we need to regroup objects relative to a
         # foreign key specified on the model class that is extending Sortable.
@@ -191,9 +200,11 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         })
 
         for klass in self.inlines:
-            if issubclass(klass, SortableTabularInline) or issubclass(klass, SortableGenericTabularInline):
+            if issubclass(klass, SortableTabularInline) or issubclass(klass,
+                SortableGenericTabularInline):
                 self.has_sortable_tabular_inlines = True
-            if issubclass(klass, SortableStackedInline) or issubclass(klass, SortableGenericStackedInline):
+            if issubclass(klass, SortableStackedInline) or issubclass(klass,
+                SortableGenericStackedInline):
                 self.has_sortable_stacked_inlines = True
 
         if self.has_sortable_tabular_inlines or \
