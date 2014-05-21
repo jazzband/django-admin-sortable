@@ -111,7 +111,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         if sort_filter_index:
             try:
                 filters = self.model.sorting_filters[int(sort_filter_index)][1]
-            except IndexError as ValueError:
+            except (IndexError, ValueError):
                 pass
 
         # Apply any sort filters to create a subset of sortable objects
