@@ -5,7 +5,7 @@ django_admin_sortable.egg-info
 *.pyc
 *.pyo
 .idea
-atlassian-ide-plugin.xml
+atlassian-*
 *.sublime-*
 .ropeproject
 .codeintel
