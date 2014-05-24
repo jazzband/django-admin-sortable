@@ -13,7 +13,7 @@ setup(
     license='APL',
     author='Brandon Taylor',
     author_email='alsoicode@gmail.com',
-    url='https://brandonftaylor.com/',
+    url='https://github.com/iambrandontaylor/django-admin-sortable',
     packages=find_packages(exclude=['sample_project']),
     zip_safe=False,
     include_package_data=True,
