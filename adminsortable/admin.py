@@ -101,7 +101,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         order can be changed via drag-and-drop.
         """
         opts = self.model._meta
-        has_perm = request.user.has_perm('{}.{}'.format(opts.app_label,
+        has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
             opts.get_change_permission()))
 
         # get sort group index from querystring if present

@@ -83,7 +83,7 @@ class GenericNote(SimpleModel, Sortable):
         pass
 
     def __unicode__(self):
-        return u'{}: {}'.format(self.title, self.content_object)
+        return u'{0}: {1}'.format(self.title, self.content_object)
 
 
 # An model registered as an inline that has a custom queryset
@@ -115,4 +115,4 @@ class Person(Sortable):
     )
 
     def __unicode__(self):
-        return '{} {}'.format(self.first_name, self.last_name)
+        return '{0} {1}'.format(self.first_name, self.last_name)
