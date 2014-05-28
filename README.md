@@ -1,6 +1,6 @@
 # Django Admin Sortable
 
-Current version: 1.6.8
+Current version: 1.6.9
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -316,8 +316,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.6.8?
-- Russian localization. Thanks @akadan47!
+### What's new in 1.6.9?
+- Exception handling fix. Thanks [@kirov](https://github.com/kirov)
 
 
 ### Future
