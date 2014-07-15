@@ -16,7 +16,7 @@ django-admin-sortable 1.6.6 introduced a backward-incompatible change for the `s
 
 
 ## Installation
-1. pip install django-admin-sortable
+1. `$ pip install django-admin-sortable`
 
 --or--
 
