@@ -29,7 +29,7 @@
 
   
     <link rel="top" title="Django Admin Sortable 1.7.0 documentation" href="index.html"/>
-        <link rel="next" title="Testing" href="testing.html"/>
+        <link rel="next" title="Django-CMS Integration" href="django-cms.html"/>
         <link rel="prev" title="Configuring Django Admin Sortable" href="configuration.html"/> 
 
   
@@ -67,9 +67,19 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Using Django Admin Sortable</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#django-admin">Django Admin</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="django-cms.html">Django-CMS Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="known-issues.html">Known Issue(s)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rationale.html">Rationale</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rationale.html#why-another-drag-and-drop-ordering-plugin">Why another drag-and-drop ordering plugin?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future.html">Future Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
 
         
@@ -140,8 +150,9 @@
 </div>
 <p>See <a class="reference external" href="http://south.readthedocs.org/en/latest/tutorial/part3.html">this link</a> for more information on Data Migrations.</p>
 </div>
-<div class="section" id="django-admin-integration">
-<h3>Django Admin Integration<a class="headerlink" href="#django-admin-integration" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="django-admin">
+<h2>Django Admin<a class="headerlink" href="#django-admin" title="Permalink to this headline">¶</a></h2>
 <p>To enable sorting in the admin, you need to inherit from <code class="docutils literal"><span class="pre">SortableAdmin</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 <span class="kn">from</span> <span class="nn">myapp.models</span> <span class="kn">import</span> <span class="n">MySortableClass</span>
@@ -172,7 +183,6 @@
     SortableGenericStackedInline)
     &quot;&quot;&quot;Your generic inline options go here&quot;&quot;&quot;
 </pre></div>
-</div>
 </div>
 <div class="section" id="overriding-queryset">
 <h3>Overriding <code class="docutils literal"><span class="pre">queryset()</span></code><a class="headerlink" href="#overriding-queryset" title="Permalink to this headline">¶</a></h3>
@@ -270,7 +280,7 @@ The height of a stacked inline model can dynamically increase, which can make th
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="testing.html" class="btn btn-neutral float-right" title="Testing">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="django-cms.html" class="btn btn-neutral float-right" title="Django-CMS Integration">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="configuration.html" class="btn btn-neutral" title="Configuring Django Admin Sortable"><span class="fa fa-arrow-circle-left"></span> Previous</a>

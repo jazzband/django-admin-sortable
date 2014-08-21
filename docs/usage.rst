@@ -38,8 +38,8 @@ Example assuming a model named "Category"::
 
 See `this link <http://south.readthedocs.org/en/latest/tutorial/part3.html>`_ for more information on Data Migrations.
 
-Django Admin Integration
-^^^^^^^^^^^^^^^^^^^^^^^^
+Django Admin
+------------
 
 To enable sorting in the admin, you need to inherit from ``SortableAdmin``::
 
