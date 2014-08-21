@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using Django Admin Sortable &mdash; Django Admin Sortable 1.7.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Django Admin Sortable 1.7.0 documentation" href="index.html"/>
+        <link rel="next" title="Testing" href="testing.html"/>
+        <link rel="prev" title="Configuring Django Admin Sortable" href="configuration.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> Django Admin Sortable</a>
+        
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuring Django Admin Sortable</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#static-media">Static Media</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Using Django Admin Sortable</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Django Admin Sortable</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Using Django Admin Sortable</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/usage.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="using-django-admin-sortable">
+<h1>Using Django Admin Sortable<a class="headerlink" href="#using-django-admin-sortable" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
+<p>To add sorting to a model, your model needs to inherit from <code class="docutils literal"><span class="pre">Sortable</span></code> and have an inner <code class="docutils literal"><span class="pre">Meta</span></code> class that inherits from <code class="docutils literal"><span class="pre">Sortable.Meta</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># models.py</span>
+<span class="kn">from</span> <span class="nn">adminsortable.models</span> <span class="kn">import</span> <span class="n">Sortable</span>
+
+<span class="k">class</span> <span class="nc">MySortableClass</span><span class="p">(</span><span class="n">Sortable</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">Sortable</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+</pre></div>
+</div>
+<p>It is also possible to order objects relative to another object that is a ForeignKey.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A small caveat here is that <code class="docutils literal"><span class="pre">Category</span></code> must also either inherit from <code class="docutils literal"><span class="pre">Sortable</span></code> or include an <code class="docutils literal"><span class="pre">order</span></code> property which is a <code class="docutils literal"><span class="pre">PositiveSmallInteger</span></code> field. This is due to the way Django admin instantiates classes.</p>
+</div>
+<p><code class="docutils literal"><span class="pre">Sortable</span></code> has one field: <code class="docutils literal"><span class="pre">order</span></code> and adds a default ordering value set to <code class="docutils literal"><span class="pre">order</span></code>, ascending.</p>
+<div class="section" id="adding-sortable-to-an-existing-model">
+<h3>Adding Sortable to an existing model<a class="headerlink" href="#adding-sortable-to-an-existing-model" title="Permalink to this headline">¶</a></h3>
+<p>If you&#8217;re adding Sorting to an existing model, it is recommended that you use <a class="reference external" href="http://south.areacode.com/">django-south</a> to create a schema migration to add the &#8220;order&#8221; field to your model. You will also need to create a data migration in order to add the appropriate values for the <code class="docutils literal"><span class="pre">order</span></code> column.</p>
+<p>Example assuming a model named &#8220;Category&#8221;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">forwards</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orm</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">category</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">orm</span><span class="o">.</span><span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()):</span>
+        <span class="n">category</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">category</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="http://south.readthedocs.org/en/latest/tutorial/part3.html">this link</a> for more information on Data Migrations.</p>
+</div>
+<div class="section" id="django-admin-integration">
+<h3>Django Admin Integration<a class="headerlink" href="#django-admin-integration" title="Permalink to this headline">¶</a></h3>
+<p>To enable sorting in the admin, you need to inherit from <code class="docutils literal"><span class="pre">SortableAdmin</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">myapp.models</span> <span class="kn">import</span> <span class="n">MySortableClass</span>
+<span class="kn">from</span> <span class="nn">adminsortable.admin</span> <span class="kn">import</span> <span class="n">SortableAdmin</span>
+
+<span class="k">class</span> <span class="nc">MySortableAdminClass</span><span class="p">(</span><span class="n">SortableAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Any admin options you need go here&quot;&quot;&quot;</span>
+
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">MySortableClass</span><span class="p">,</span> <span class="n">MySortableAdminClass</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To enable sorting on TabularInline models, you need to inherit from SortableTabularInline:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">adminsortable.admin</span> <span class="kn">import</span> <span class="n">SortableTabularInline</span>
+
+<span class="k">class</span> <span class="nc">MySortableTabularInline</span><span class="p">(</span><span class="n">SortableTabularInline</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Your inline options go here&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>To enable sorting on StackedInline models, you need to inherit from SortableStackedInline:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">adminsortable.admin</span> <span class="kn">import</span> <span class="n">SortableStackedInline</span>
+
+<span class="k">class</span> <span class="nc">MySortableStackedInline</span><span class="p">(</span><span class="n">SortableStackedInline</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Your inline options go here&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>There are also generic equivalents that you can inherit from:</p>
+<div class="highlight-python"><div class="highlight"><pre>from adminsortable.admin import (SortableGenericTabularInline,
+    SortableGenericStackedInline)
+    &quot;&quot;&quot;Your generic inline options go here&quot;&quot;&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="overriding-queryset">
+<h3>Overriding <code class="docutils literal"><span class="pre">queryset()</span></code><a class="headerlink" href="#overriding-queryset" title="Permalink to this headline">¶</a></h3>
+<p>django-admin-sortable supports custom queryset overrides on admin models and inline models in Django admin!</p>
+<p>If you&#8217;re providing an override of a <code class="docutils literal"><span class="pre">SortableAdmin</span></code> or <code class="docutils literal"><span class="pre">Sortable</span></code> inline model, you don&#8217;t need to do anything extra. django-admin-sortable will automatically honor your queryset.</p>
+<p>Have a look at the <code class="docutils literal"><span class="pre">WidgetAdmin</span></code> class in the sample project for an example of an admin class with a custom <code class="docutils literal"><span class="pre">queryset()</span></code> override.</p>
+</div>
+<div class="section" id="overriding-queryset-for-an-inline-model">
+<h3>Overriding <code class="docutils literal"><span class="pre">queryset()</span></code> for an inline model<a class="headerlink" href="#overriding-queryset-for-an-inline-model" title="Permalink to this headline">¶</a></h3>
+<p>This is a special case, which requires a few lines of extra code to properly determine the sortability of your model. Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># add this import to your admin.py</span>
+<span class="kn">from</span> <span class="nn">adminsortable.utils</span> <span class="kn">import</span> <span class="n">get_is_sortable</span>
+
+
+<span class="k">class</span> <span class="nc">ComponentInline</span><span class="p">(</span><span class="n">SortableStackedInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Component</span>
+
+    <span class="k">def</span> <span class="nf">queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ComponentInline</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">queryset</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">title__icontains</span><span class="o">=</span><span class="s">&#39;foo&#39;</span><span class="p">)</span>
+
+        <span class="c"># You&#39;ll need to add these lines to determine if your model</span>
+        <span class="c"># is sortable once we hit the change_form() for the parent model.</span>
+
+        <span class="k">if</span> <span class="n">get_is_sortable</span><span class="p">(</span><span class="n">qs</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">is_sortable</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">is_sortable</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="n">qs</span>
+</pre></div>
+</div>
+<p>If you override the queryset of an inline, the number of objects present may change, and adminsortable won&#8217;t be able to automatically determine if the inline model is sortable from here, which is why we have to set the <code class="docutils literal"><span class="pre">is_sortable</span></code> property of the model in this method.</p>
+</div>
+<div class="section" id="sorting-subsets-of-objects">
+<h3>Sorting subsets of objects<a class="headerlink" href="#sorting-subsets-of-objects" title="Permalink to this headline">¶</a></h3>
+<p>It is also possible to sort a subset of objects in your model by adding a <code class="docutils literal"><span class="pre">sorting_filters</span></code> tuple. This works exactly the same as <code class="docutils literal"><span class="pre">.filter()</span></code> on a QuerySet, and is applied <em>after</em> <code class="docutils literal"><span class="pre">get_queryset()</span></code> on the admin class, allowing you to override the queryset as you would normally in admin but apply additional filters for sorting. The text &#8220;Change Order of&#8221; will appear before each filter in the Change List template, and the filter groups are displayed from left to right in the order listed. If no <code class="docutils literal"><span class="pre">sorting_filters</span></code> are specified, the text &#8220;Change Order&#8221; will be displayed for the link.</p>
+<p>An example of sorting subsets would be a &#8220;Board of Directors&#8221;. In this use case, you have a list of &#8220;People&#8221; objects. Some of these people are on the Board of Directors and some not, and you need to sort them independently:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">Sortable</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">Sortable</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s">&#39;People&#39;</span>
+
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">is_board_member</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;Board Member&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="n">sorting_filters</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s">&#39;Board Members&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;is_board_member&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}),</span>
+        <span class="p">(</span><span class="s">&#39;Non-Board Members&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;is_board_member&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}),</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;{} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">django-admin-sortable 1.6.6 introduces a backwards-incompatible change for <code class="docutils literal"><span class="pre">sorting_filters</span></code>. Previously this attribute was defined as a dictionary, so you&#8217;ll need to change your values over to the new tuple-based format.</p>
+</div>
+</div>
+<div class="section" id="extending-custom-templates">
+<h3>Extending custom templates<a class="headerlink" href="#extending-custom-templates" title="Permalink to this headline">¶</a></h3>
+<p>By default, adminsortable&#8217;s change form and change list views inherit from Django admin&#8217;s standard templates. Sometimes you need to have a custom change form or change list, but also need adminsortable&#8217;s CSS and JavaScript for inline models that are sortable for example.</p>
+<p><code class="docutils literal"><span class="pre">SortableAdmin</span></code> has two attributes you can override for this use case:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">change_form_template_extends</span>
+<span class="n">change_list_template_extends</span>
+</pre></div>
+</div>
+<p>These attributes have default values of:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">change_form_template_extends</span> <span class="o">=</span> <span class="s">&#39;admin/change_form.html&#39;</span>
+<span class="n">change_list_template_extends</span> <span class="o">=</span> <span class="s">&#39;admin/change_list.html&#39;</span>
+</pre></div>
+</div>
+<p>If you need to extend the inline change form templates, you&#8217;ll need to select the right one, depending on your version of Django. For Django 1.5.x or below, you&#8217;ll need to extend one of the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">templates</span><span class="o">/</span><span class="n">adminsortable</span><span class="o">/</span><span class="n">edit_inline</span><span class="o">/</span><span class="n">stacked</span><span class="o">-</span><span class="mf">1.5</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">html</span>
+<span class="n">templates</span><span class="o">/</span><span class="n">adminsortable</span><span class="o">/</span><span class="n">edit_inline</span><span class="o">/</span><span class="n">tabular</span><span class="o">-</span><span class="n">inline</span><span class="o">-</span><span class="mf">1.5</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+<p>For Django &gt;= 1.6.x, extend:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">templates</span><span class="o">/</span><span class="n">adminsortable</span><span class="o">/</span><span class="n">edit_inline</span><span class="o">/</span><span class="n">stacked</span><span class="o">.</span><span class="n">html</span>
+<span class="n">templates</span><span class="o">/</span><span class="n">adminsortable</span><span class="o">/</span><span class="n">edit_inline</span><span class="o">/</span><span class="n">tabular</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A Special Note About Stacked Inlines...
+The height of a stacked inline model can dynamically increase, which can make them difficult to sort. If you anticipate the height of a stacked inline is going to be very tall, I would suggest using TabularStackedInline instead.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="testing.html" class="btn btn-neutral float-right" title="Testing">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="configuration.html" class="btn btn-neutral" title="Configuring Django Admin Sortable"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Brandon Taylor.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.7.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
