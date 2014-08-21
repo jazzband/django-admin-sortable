@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -8,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; Django Admin Sortable 1.7.0 documentation</title>
+  <title>Rationale &mdash; Django Admin Sortable 1.7.0 documentation</title>
   
 
   
@@ -29,7 +28,8 @@
   
 
   
-    <link rel="top" title="Django Admin Sortable 1.7.0 documentation" href="index.html"/> 
+    <link rel="top" title="Django Admin Sortable 1.7.0 documentation" href="index.html"/>
+        <link rel="prev" title="Testing" href="testing.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -58,7 +58,7 @@
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         
         
-            <ul>
+            <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuring Django Admin Sortable</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#static-media">Static Media</a></li>
@@ -71,11 +71,10 @@
 <li class="toctree-l1"><a class="reference internal" href="django-cms.html">Django-CMS Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="known-issues.html">Known Issue(s)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rationale.html">Rationale</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rationale.html#why-another-drag-and-drop-ordering-plugin">Why another drag-and-drop ordering plugin?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Rationale</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-another-drag-and-drop-ordering-plugin">Why another drag-and-drop ordering plugin?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
 </ul>
 
         
@@ -99,8 +98,10 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>Rationale</li>
       <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/rationale.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -108,16 +109,29 @@
 </div>
           <div role="main" class="document">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="rationale">
+<h1>Rationale<a class="headerlink" href="#rationale" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="why-another-drag-and-drop-ordering-plugin">
+<h2>Why another drag-and-drop ordering plugin?<a class="headerlink" href="#why-another-drag-and-drop-ordering-plugin" title="Permalink to this headline">¶</a></h2>
+<p>Other projects have added drag-and-drop ordering to the ChangeList view, however this introduces a couple of problems...</p>
+<ul class="simple">
+<li>The ChangeList view supports pagination, which makes drag-and-drop ordering across pages impossible.</li>
+<li>The ChangeList view by default, does not order records based on a foreign key, nor distinguish between rows that are associated with a foreign key. This makes ordering the records grouped by a foreign key impossible.</li>
+<li>The ChangeList supports in-line editing, and adding drag-and-drop ordering on top of that just seemed a little much in my opinion.</li>
+</ul>
+</div>
 </div>
 
 
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="testing.html" class="btn btn-neutral" title="Testing"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
