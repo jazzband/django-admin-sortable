@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>&lt;no title&gt; &mdash; Django Admin Sortable 1.7.0 documentation</title>
+  <title>Configuring Django Admin Sortable &mdash; Django Admin Sortable 1.7.0 documentation</title>
   
 
   
@@ -58,8 +58,12 @@
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         
         
-            <ul>
+            <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Configuring Django Admin Sortable</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#static-media">Static Media</a></li>
+</ul>
+</li>
 </ul>
 
         
@@ -83,7 +87,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>&lt;no title&gt;</li>
+    <li>Configuring Django Admin Sortable</li>
       <li class="wy-breadcrumbs-aside">
         
           <a href="_sources/configuration.txt" rel="nofollow"> View page source</a>
@@ -94,7 +98,22 @@
 </div>
           <div role="main" class="document">
             
-  
+  <div class="section" id="configuring-django-admin-sortable">
+<h1>Configuring Django Admin Sortable<a class="headerlink" href="#configuring-django-admin-sortable" title="Permalink to this headline">¶</a></h1>
+<p>Configuring django-admin-sortable is quite simple:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Add <code class="docutils literal"><span class="pre">adminsortable</span></code> to your <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code>.</li>
+<li>Ensure <code class="docutils literal"><span class="pre">django.core.context_processors.static</span></code> is in your <code class="docutils literal"><span class="pre">TEMPLATE_CONTEXT_PROCESSORS</span></code>.</li>
+</ol>
+</div></blockquote>
+<div class="section" id="static-media">
+<h2>Static Media<a class="headerlink" href="#static-media" title="Permalink to this headline">¶</a></h2>
+<p>django-admin-sortable includes a few CSS and JavaScript files. The preferred method of getting these files into your project is to use the <a class="reference external" href="https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/">staticfiles app</a>.</p>
+<p>Alternatively, you can copy or symlink the <code class="docutils literal"><span class="pre">adminsortable</span></code> folder inside the <code class="docutils literal"><span class="pre">static</span></code> directory to the location you serve static files from.</p>
+</div>
+</div>
+
 
           </div>
           <footer>

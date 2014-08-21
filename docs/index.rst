@@ -46,7 +46,7 @@ Contents:
    usage
    django-cms
    known-issues
-   tests
+   testing
    rationale
    status
    future

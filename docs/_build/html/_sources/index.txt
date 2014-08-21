@@ -36,6 +36,7 @@ What's New in |version|?
 
 
 Contents:
+---------
 
 .. toctree::
    :maxdepth: 2
@@ -45,6 +46,7 @@ Contents:
    usage
    django-cms
    known-issues
+   testing
    rationale
    status
    future

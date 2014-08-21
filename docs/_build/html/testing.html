@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Search &mdash; Django Admin Sortable 1.7.0 documentation</title>
+  <title>Testing &mdash; Django Admin Sortable 1.7.0 documentation</title>
   
 
   
@@ -28,7 +28,8 @@
   
 
   
-    <link rel="top" title="Django Admin Sortable 1.7.0 documentation" href="index.html"/> 
+    <link rel="top" title="Django Admin Sortable 1.7.0 documentation" href="index.html"/>
+        <link rel="prev" title="Configuring Django Admin Sortable" href="configuration.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -46,7 +47,7 @@
           <a href="index.html" class="fa fa-home"> Django Admin Sortable</a>
         
         <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -57,13 +58,13 @@
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         
         
-            <ul>
+            <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuring Django Admin Sortable</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#static-media">Static Media</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Testing</a></li>
 </ul>
 
         
@@ -87,8 +88,10 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>Testing</li>
       <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/testing.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -96,22 +99,26 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="testing">
+<h1>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h1>
+<p>Have a look at the included <code class="xref doc docutils literal"><span class="pre">/sample_project</span></code> directory to see a working project. The login credentials for admin are: admin/admin</p>
+<p>When a model is sortable, a tool-area link will be added that says &#8220;Change Order&#8221;. Click this link, and you will be taken to the custom view where you can drag-and-drop the records into order.</p>
+<p>Inlines may be drag-and-dropped into any order directly from the change form.</p>
+<p>Unit and functional tests may be found in the <code class="docutils literal"><span class="pre">app/tests.py</span></code> file and run via:</p>
+<blockquote>
+<div>$ python manage.py test app</div></blockquote>
+</div>
 
-  
-  <div id="search-results">
-  
-  </div>
 
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="configuration.html" class="btn btn-neutral" title="Configuring Django Admin Sortable"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -147,7 +154,6 @@
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -163,14 +169,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>
