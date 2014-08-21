@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Django-CMS Integration &mdash; Django Admin Sortable 1.7.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Django Admin Sortable 1.7.0 documentation" href="index.html"/>
+        <link rel="next" title="Testing" href="testing.html"/>
+        <link rel="prev" title="Using Django Admin Sortable" href="usage.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> Django Admin Sortable</a>
+        
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuring Django Admin Sortable</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#static-media">Static Media</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using Django Admin Sortable</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Django-CMS Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Django Admin Sortable</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Django-CMS Integration</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/django-cms.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="django-cms-integration">
+<h1>Django-CMS Integration<a class="headerlink" href="#django-cms-integration" title="Permalink to this headline">¶</a></h1>
+<p>Django-CMS plugins use their own change form, and thus won&#8217;t automatically include the necessary JavaScript for django-admin-sortable to work. Fortunately, this is easy to resolve, as the <code class="docutils literal"><span class="pre">CMSPlugin</span></code> class allows a change form template to be specified:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># example plugin</span>
+<span class="kn">from</span> <span class="nn">cms.plugin_base</span> <span class="kn">import</span> <span class="n">CMSPluginBase</span>
+
+<span class="k">class</span> <span class="nc">CMSCarouselPlugin</span><span class="p">(</span><span class="n">CMSPluginBase</span><span class="p">):</span>
+    <span class="n">admin_preview</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">change_form_template</span> <span class="o">=</span> <span class="s">&#39;cms/sortable-stacked-inline-change-form.html&#39;</span>
+    <span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">SlideInline</span><span class="p">]</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Carousel</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Carousel&#39;</span><span class="p">)</span>
+    <span class="n">render_template</span> <span class="o">=</span> <span class="s">&#39;carousels/carousel.html&#39;</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">placeholder</span><span class="p">):</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s">&#39;carousel&#39;</span><span class="p">:</span> <span class="n">instance</span><span class="p">,</span>
+            <span class="s">&#39;placeholder&#39;</span><span class="p">:</span> <span class="n">placeholder</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">context</span>
+
+<span class="n">plugin_pool</span><span class="o">.</span><span class="n">register_plugin</span><span class="p">(</span><span class="n">CMSCarouselPlugin</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The contents of sortable-stacked-inline-change-form.html at a minimum need to extend the extrahead block with:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% extends &quot;admin/cms/page/plugin_change_form.html&quot; %}
+{% load static from staticfiles %}
+
+{% block extrahead %}
+    {{ block.super }}
+    &lt;script type=&quot;text/javascript&quot; src=&quot;{% static &#39;adminsortable/js/jquery-ui-django-admin.min.js&#39; %}&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;{% static &#39;adminsortable/js/jquery.django-csrf.js&#39; %}&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;{% static &#39;adminsortable/js/admin.sortable.stacked.inlines.js&#39; %}&quot;&gt;&lt;/script&gt;
+
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;{% static &#39;adminsortable/css/admin.sortable.inline.css&#39; %}&quot; /&gt;
+{% endblock extrahead %}
+</pre></div>
+</div>
+<p>Sorting within Django-CMS is really only feasible for inline models of a plugin as Django-CMS already includes sorting for plugin instances. For tabular inlines, just substitute:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script type=&quot;text/javascript&quot; src=&quot;{% static &#39;adminsortable/js/admin.sortable.stacked.inlines.js&#39; %}&quot;&gt;&lt;/script&gt;
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script type=&quot;text/javascript&quot; src=&quot;{% static &#39;adminsortable/js/admin.sortable.tabular.inlines.js&#39; %}&quot;&gt;&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="testing.html" class="btn btn-neutral float-right" title="Testing">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="usage.html" class="btn btn-neutral" title="Using Django Admin Sortable"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Brandon Taylor.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.7.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
