@@ -2,7 +2,8 @@
 import os
 import sys
 
-# Adds the adminsortable package from the cloned repository instead of site_packages
+# Adds the adminsortable package from the cloned repository instead of
+# site_packages
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 if __name__ == "__main__":
