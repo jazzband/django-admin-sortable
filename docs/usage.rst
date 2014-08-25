@@ -4,8 +4,8 @@ Using Django Admin Sortable
 Models
 ------
 
-To add sorting to a model, your model needs to inherit from ``Sortable`` and have an inner ``Meta`` class that inherits from ``Sortable.Meta``::
-
+To add sorting to a model, your model needs to inherit from ``Sortable`` and have an inner ``Meta`` class that inherits from ``Sortable.Meta``
+::
     # models.py
     from adminsortable.models import Sortable
 
