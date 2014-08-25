@@ -20,7 +20,7 @@ To add sorting to a model, your model needs to inherit from ``Sortable`` and hav
 
 It is also possible to order objects relative to another object that is a ForeignKey.
 
-.. note:: A small caveat here is that ``Category`` must also either inherit from ``Sortable`` or include an ``order`` property which is a ``PositiveSmallInteger`` field. This is due to the way Django admin instantiates classes.
+.. note:: A small caveat here is that ``Category`` must also either inherit from ``Sortable`` or include an ``order`` property which is a ``PositiveSmallInteger`` field. This is due to the way Django admin instantiates classes.::
 
     from adminsortable.fields import SortableForeignKey
 
