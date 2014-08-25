@@ -22,6 +22,26 @@ It is also possible to order objects relative to another object that is a Foreig
 
 .. note:: A small caveat here is that ``Category`` must also either inherit from ``Sortable`` or include an ``order`` property which is a ``PositiveSmallInteger`` field. This is due to the way Django admin instantiates classes.
 
+from adminsortable.fields import SortableForeignKey
+
+    # models.py
+    class Category(Sortable):
+        class Meta(Sortable.Meta):
+            pass
+
+        title = models.CharField(max_length=50)
+        ...
+
+    class Project(Sortable):
+        class Meta(Sortable.Meta):
+            pass
+
+        category = SortableForeignKey(Category)
+        title = models.CharField(max_length=50)
+
+        def __unicode__(self):
+            return self.title
+
 ``Sortable`` has one field: ``order`` and adds a default ordering value set to ``order``, ascending.
 
 Adding Sortable to an existing model
