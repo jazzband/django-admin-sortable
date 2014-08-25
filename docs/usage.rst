@@ -22,7 +22,7 @@ It is also possible to order objects relative to another object that is a Foreig
 
 .. note:: A small caveat here is that ``Category`` must also either inherit from ``Sortable`` or include an ``order`` property which is a ``PositiveSmallInteger`` field. This is due to the way Django admin instantiates classes.
 
-from adminsortable.fields import SortableForeignKey
+    from adminsortable.fields import SortableForeignKey
 
     # models.py
     class Category(Sortable):
