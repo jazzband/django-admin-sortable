@@ -1,2 +1,2 @@
-django==1.6.1
-south==0.8.1
+django
+south
