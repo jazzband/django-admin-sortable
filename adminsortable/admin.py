@@ -188,7 +188,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         return super(SortableAdmin, self).add_view(request, form_url,
             extra_context=extra_context)
 
-    def change_view(self, request, object_id, extra_context=None):
+    def change_view(self, request, object_id, form_url='', extra_context=None):
         self.has_sortable_tabular_inlines = False
         self.has_sortable_stacked_inlines = False
 
@@ -220,7 +220,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             })
 
         return super(SortableAdmin, self).change_view(request, object_id,
-            extra_context=extra_context)
+            form_url='', extra_context=extra_context)
 
     def do_sorting_view(self, request, model_type_id=None):
         """
