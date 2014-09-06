@@ -2,7 +2,6 @@ import httplib
 import json
 
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.test import TestCase
 from django.test.client import Client, RequestFactory
@@ -10,7 +9,7 @@ from django.test.client import Client, RequestFactory
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
 from adminsortable.utils import get_is_sortable
-from app.models import Category, Credit, Note
+from app.models import Category, Credit, Note, Person
 
 
 class BadSortableModel(models.Model):
@@ -26,6 +25,8 @@ class TestSortableModel(Sortable):
 
 
 class SortableTestCase(TestCase):
+    fixtures = ['initial_data.json']
+
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
@@ -35,6 +36,10 @@ class SortableTestCase(TestCase):
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
+
+        people = Person.objects.all()
+        self.first_person = people[0]
+        self.second_person = people[1]
 
     def create_category(self, title='Category 1'):
         category = Category.objects.create(title=title)
@@ -152,3 +157,15 @@ class SortableTestCase(TestCase):
             'Third category returned should have order == 3')
         self.assertEqual(cat3.pk, 1,
             'Category ID 1 should have been third in queryset')
+
+    def test_get_next(self):
+        result = self.first_person.get_next()
+
+        self.assertEqual(self.second_person, result, 'Next person should '
+            'be "{}"'.format(self.second_person))
+
+    def test_get_previous(self):
+        result = self.second_person.get_previous()
+
+        self.assertEqual(self.first_person, result, 'Previous person should '
+            'be "{}"'.format(self.first_person))
