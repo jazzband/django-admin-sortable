@@ -68,11 +68,11 @@ class Sortable(models.Model):
 
         super(Sortable, self).save(*args, **kwargs)
 
-    def _filter_objects(self, filters, extra_filters):
+    def _filter_objects(self, filters, extra_filters, filter_on_sortable_fk):
         if extra_filters:
             filters.update(extra_filters)
 
-        if self.sortable_foreign_key:
+        if self.sortable_foreign_key and filter_on_sortable_fk:
             # sfk_obj == sortable foreign key instance
             sfk_obj = getattr(self, self.sortable_foreign_key.name)
             filters.update(
@@ -85,10 +85,10 @@ class Sortable(models.Model):
 
         return obj
 
-    def get_next(self, extra_filters={}):
+    def get_next(self, extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects({'order__gt': self.order},
             extra_filters)
 
-    def get_previous(self, extra_filters={}):
+    def get_previous(self, extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects({'order__lt': self.order},
             extra_filters)
