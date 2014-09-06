@@ -102,13 +102,13 @@ Each instance of a sortable model has two convenience methods to get the next or
 
 By default, these methods will respect their order in relation to a `SortableForeignKey` field, if present. Meaning, that given the following data:
 
-| Parent Model 1 |               |
-|                | Child Model 1 |
-|                | Child Model 2 |
-| Parent Model 2 |               |
-|                | Child Model 3 |
-|                | Child Model 4 |
-|                | Child Model 5 |
+    | Parent Model 1 |               |
+    |                | Child Model 1 |
+    |                | Child Model 2 |
+    | Parent Model 2 |               |
+    |                | Child Model 3 |
+    |                | Child Model 4 |
+    |                | Child Model 5 |
 
 "Child Model 2" `get_next()` would return `None`
 "Child Model 3" `get_previous` would return `None`
