@@ -32,6 +32,7 @@ class Sortable(models.Model):
 
     # legacy support
     sortable_by = None
+    sortable_foreign_key = None
 
     class Meta:
         abstract = True
@@ -49,9 +50,13 @@ class Sortable(models.Model):
         for field in self._meta.fields:
             if isinstance(field, SortableForeignKey):
                 sortable_foreign_keys.append(field)
-        if len(sortable_foreign_keys) > 1:
+
+        sortable_foreign_keys_length = len(sortable_foreign_keys)
+        if sortable_foreign_keys_length > 1:
             raise MultipleSortableForeignKeyException(
                 u'{0} may only have one SortableForeignKey'.format(self))
+        elif sortable_foreign_keys_length == 1:
+            self.__class__.sortable_foreign_key = sortable_foreign_keys[0]
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -62,3 +67,28 @@ class Sortable(models.Model):
                 pass
 
         super(Sortable, self).save(*args, **kwargs)
+
+    def _filter_objects(self, filters, extra_filters):
+        if extra_filters:
+            filters.update(extra_filters)
+
+        if self.sortable_foreign_key:
+            # sfk_obj == sortable foreign key instance
+            sfk_obj = getattr(self, self.sortable_foreign_key.name)
+            filters.update(
+                {self.sortable_foreign_key.name: sfk_obj.id})
+
+        try:
+            obj = self._meta.model.objects.filter(**filters)[:1][0]
+        except IndexError:
+            obj = None
+
+        return obj
+
+    def get_next(self, extra_filters={}):
+        return self._filter_objects({'order__gt': self.order},
+            extra_filters)
+
+    def get_previous(self, extra_filters={}):
+        return self._filter_objects({'order__lt': self.order},
+            extra_filters)

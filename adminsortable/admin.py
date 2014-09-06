@@ -72,14 +72,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
     class Meta:
         abstract = True
 
-    def _get_sortable_foreign_key(self):
-        sortable_foreign_key = None
-        for field in self.model._meta.fields:
-            if isinstance(field, SortableForeignKey):
-                sortable_foreign_key = field
-                break
-        return sortable_foreign_key
-
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
         admin_urls = patterns('',
@@ -123,7 +115,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         sortable_by_property = getattr(self.model, 'sortable_by', None)
 
         # `sortable_by` defined as a SortableForeignKey
-        sortable_by_fk = self._get_sortable_foreign_key()
+        sortable_by_fk = self.model.sortable_foreign_key
         sortable_by_class_is_sortable = get_is_sortable(objects)
 
         if sortable_by_property:
