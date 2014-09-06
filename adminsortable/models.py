@@ -87,8 +87,8 @@ class Sortable(models.Model):
 
     def get_next(self, extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects({'order__gt': self.order},
-            extra_filters)
+            extra_filters, filter_on_sortable_fk)
 
     def get_previous(self, extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects({'order__lt': self.order},
-            extra_filters)
+            extra_filters, filter_on_sortable_fk)
