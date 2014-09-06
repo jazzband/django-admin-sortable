@@ -1,6 +1,6 @@
 # Django Admin Sortable
 
-Current version: 1.7.2
+Current version: 1.7.3
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -93,6 +93,35 @@ It is also possible to order objects relative to another object that is a Foreig
 
 
 Sortable has one field: `order` and adds a default ordering value set to `order`.
+
+#### Model Instance Methods
+Each instance of a sortable model has two convenience methods to get the next or previous instance:
+
+    .get_next()
+    .get_previous()
+
+By default, these methods will respect their order in relation to a `SortableForeignKey` field, if present. Meaning, that given the following data:
+
+| Parent Model 1 |               |
+|----------------|---------------|
+|                | Child Model 1 |
+|                | Child Model 2 |
+| Parent Model 2 |               |
+|                | Child Model 3 |
+|                | Child Model 4 |
+|                | Child Model 5 |
+
+"Child Model 2" `get_next()` would return `None`
+"Child Model 3" `get_previous` would return `None`
+
+If you wish to override this behavior, pass in: `filter_on_sortable_fk=False`:
+
+    your_instance.get_next(filter_on_sortable_fk=False)
+
+You may also pass in additional ORM "extra_filters" as a dictionary, should you need to:
+
+    your_instance.get_next(extra_filters={'title__icontains': 'blue'})
+
 
 ### Adding Sortable to an existing model
 If you're adding Sorting to an existing model, it is recommended that you use [django-south](http://south.areacode.com/) to create a schema migration to add the "order" field to your model. You will also need to create a data migration in order to add the appropriate values for the `order` column.
@@ -242,7 +271,6 @@ which can make them difficult to sort. If you anticipate the height of a
 stacked inline is going to be very tall, I would suggest using
 TabularStackedInline instead.
 
-
 ### Django-CMS integration
 Django-CMS plugins use their own change form, and thus won't automatically
 include the necessary JavaScript for django-admin-sortable to work. Fortunately,
@@ -316,14 +344,13 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.7.2?
-- Added form_url to change_view kwargs to allow overriding of change_view vis super(). Thanks [@clarkbarz](https://github.com/clarkbarz)
+### What's new in 1.7.3?
+- Travis CI integration
+- get_next/previous instance methods
 
 
 ### Future
 - Support for foreign keys that are self referential
-- Move unit tests out of sample project (I could really use some help with this one)
-- Travis CI integration
 
 
 ### License
