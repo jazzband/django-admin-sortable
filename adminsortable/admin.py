@@ -35,9 +35,6 @@ class SortableAdminBase(object):
         object_tools block to take people to the view to change the sorting.
         """
 
-        # get sort group index from querystring
-        sort_filter_index = request.GET.get('sort_filter')
-
         if get_is_sortable(self.queryset(request)):
             self.change_list_template = \
                 self.sortable_change_list_with_sort_link_template
@@ -48,7 +45,8 @@ class SortableAdminBase(object):
 
         extra_context.update({
             'change_list_template_extends': self.change_list_template_extends,
-            'sorting_filters': [sort_filter[0] for sort_filter in self.model.sorting_filters]
+            'sorting_filters': [sort_filter[0] for sort_filter
+                in self.model.sorting_filters]
         })
         return super(SortableAdminBase, self).changelist_view(request,
             extra_context=extra_context)
