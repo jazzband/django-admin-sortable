@@ -103,7 +103,6 @@ Each instance of a sortable model has two convenience methods to get the next or
 By default, these methods will respect their order in relation to a `SortableForeignKey` field, if present. Meaning, that given the following data:
 
 | Parent Model 1 |               |
-|----------------|---------------|
 |                | Child Model 1 |
 |                | Child Model 2 |
 | Parent Model 2 |               |
