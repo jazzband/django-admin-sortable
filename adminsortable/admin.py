@@ -21,7 +21,6 @@ from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 
 from adminsortable.utils import get_is_sortable
-from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
 
 STATIC_URL = settings.STATIC_URL
@@ -191,10 +190,10 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         for klass in self.inlines:
             if issubclass(klass, SortableTabularInline) or issubclass(klass,
-                SortableGenericTabularInline):
+                    SortableGenericTabularInline):
                 self.has_sortable_tabular_inlines = True
             if issubclass(klass, SortableStackedInline) or issubclass(klass,
-                SortableGenericStackedInline):
+                    SortableGenericStackedInline):
                 self.has_sortable_stacked_inlines = True
 
         if self.has_sortable_tabular_inlines or \
@@ -221,8 +220,10 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         if request.is_ajax() and request.method == 'POST':
             try:
-                indexes = list(map(str, request.POST.get('indexes', []).split(',')))
-                klass = ContentType.objects.get(id=model_type_id).model_class()
+                indexes = list(map(str,
+                    request.POST.get('indexes', []).split(',')))
+                klass = ContentType.objects.get(
+                    id=model_type_id).model_class()
                 objects_dict = dict([(str(obj.pk), obj) for obj in
                     klass.objects.filter(pk__in=indexes)])
                 if '-order' in klass._meta.ordering:  # desc order
@@ -243,7 +244,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                     obj.save()
                     start_index += step
                 response = {'objects_sorted': True}
-            except (KeyError, IndexError, klass.DoesNotExist, AttributeError, ValueError):
+            except (KeyError, IndexError, klass.DoesNotExist,
+                    AttributeError, ValueError):
                 pass
 
         return HttpResponse(json.dumps(response, ensure_ascii=False),
