@@ -4,11 +4,11 @@ python:
     - "2.7"
 
 env:
-    - DJANGO=1.7
+    - DJANGO=1.6.6
 
 install:
     - pip install . --use-mirrors
     - pip install -r sample_project/requirements.txt --use-mirrors
 
 script:
-    - python ./sample_project/manage.py test
+    - python sample_project/manage.py test
