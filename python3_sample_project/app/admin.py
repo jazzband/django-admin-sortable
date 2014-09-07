@@ -56,12 +56,12 @@ class GenericNoteInline(SortableGenericStackedInline):
 
 class ProjectAdmin(SortableAdmin):
     inlines = [CreditInline, NoteInline, GenericNoteInline]
-    list_display = ['__unicode__', 'category']
+    list_display = ['__str__', 'category']
 
 admin.site.register(Project, ProjectAdmin)
 
 
 class PersonAdmin(SortableAdmin):
-    list_display = ['__unicode__', 'is_board_member']
+    list_display = ['__str__', 'is_board_member']
 
 admin.site.register(Person, PersonAdmin)

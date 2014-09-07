@@ -1,0 +1,52 @@
+[
+{
+    "fields": {
+        "is_board_member": true,
+        "order": 1,
+        "first_name": "Brandon",
+        "last_name": "Taylor"
+    },
+    "pk": 1,
+    "model": "app.person"
+},
+{
+    "fields": {
+        "is_board_member": true,
+        "order": 2,
+        "first_name": "Kerri",
+        "last_name": "Taylor"
+    },
+    "pk": 2,
+    "model": "app.person"
+},
+{
+    "fields": {
+        "is_board_member": false,
+        "order": 3,
+        "first_name": "Sarah",
+        "last_name": "Taylor"
+    },
+    "pk": 3,
+    "model": "app.person"
+},
+{
+    "fields": {
+        "is_board_member": false,
+        "order": 4,
+        "first_name": "Renna",
+        "last_name": "Taylor"
+    },
+    "pk": 4,
+    "model": "app.person"
+},
+{
+    "fields": {
+        "is_board_member": false,
+        "order": 5,
+        "first_name": "Jake",
+        "last_name": "Taylor"
+    },
+    "pk": 5,
+    "model": "app.person"
+}
+]
