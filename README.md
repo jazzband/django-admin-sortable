@@ -1,5 +1,7 @@
 # Django Admin Sortable
 
+[![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
+
 Current version: 1.7.3
 
 This project makes it easy to add drag-and-drop ordering to any model in
