@@ -1,2 +1,2 @@
 django==1.6.6
-south=1.0
+south==1.0
