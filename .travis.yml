@@ -6,9 +6,10 @@ python:
     - "3.4"
 
 env:
-    - DJANGO_VERSION=1.5.10
-    - DJANGO_VERSION=1.6.7
-    - DJANGO_VERSION=1.7
+    - DJANGO_VERSION=1.5.10 SAMPLE_PROJECT=sample_project
+    - DJANGO_VERSION=1.6.7 SAMPLE_PROJECT=sample_project
+    - DJANGO_VERSION=1.7 SAMPLE_PROJECT=sample_project
+    - DJANGO_VERSION=1.7 SAMPLE_PROJECT=python3_sample_project
 
 branches:
     only:
@@ -18,7 +19,11 @@ matrix:
     exclude:
         -
             python: "2.6"
-            env: DJANGO_VERSION=1.5.10
+            env: DJANGO_VERSION=1.6.7
+
+        -
+            python: "2.6"
+            env: DJANGO_VERSION=1.7
 
         -
             python: "3.4"
@@ -28,10 +33,14 @@ matrix:
             python: "3.4"
             env: DJANGO_VERSION=1.6.7
 
+        -
+            python: "3.4"
+            env: SAMPLE_PROJECT=sample_project
+
 install:
     - pip install south
-    - pip install -q django==$DJANGO_VERSION
+    - pip install django==$DJANGO_VERSION
 
 script:
-    - cd sample_project
+    - cd $SAMPLE_PROJECT
     - python manage.py test
