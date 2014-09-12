@@ -50,7 +50,6 @@ matrix:
             env: DJANGO_VERSION=1.7 SAMPLE_PROJECT=sample_project
 
 install:
-    - pip install south
     - pip install django==$DJANGO_VERSION
 
 script:
