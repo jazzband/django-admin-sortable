@@ -1,13 +1,24 @@
 language: python
 
 python:
+    - "2.6"
     - "2.7"
+    - "3.2"
+    - "3.3"
+    - "3.4"
 
 env:
-    - DJANGO=1.6.6
+    - DJANGO_VERSION=1.5.10
+    - DJANGO_VERSION=1.6.7
+    - DJANGO_VERSION=1.7
+
+branches:
+    only:
+        - master
 
 install:
-    - pip install -r sample_project/requirements.txt
+    - pip install -q south
+    - pip install -q django==$DJANGO_VERSION
 
 script:
     - cd sample_project
