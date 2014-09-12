@@ -29,7 +29,6 @@ matrix:
             env: DJANGO_VERSION=1.6.7
 
 install:
-    - pip install -q south
     - pip install -q django==$DJANGO_VERSION
 
 script:
