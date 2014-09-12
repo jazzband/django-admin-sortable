@@ -162,10 +162,10 @@ class SortableTestCase(TestCase):
         result = self.first_person.get_next()
 
         self.assertEqual(self.second_person, result, 'Next person should '
-            'be "{}"'.format(self.second_person))
+            'be "{0}"'.format(self.second_person))
 
     def test_get_previous(self):
         result = self.second_person.get_previous()
 
         self.assertEqual(self.first_person, result, 'Previous person should '
-            'be "{}"'.format(self.first_person))
+            'be "{0}"'.format(self.first_person))
