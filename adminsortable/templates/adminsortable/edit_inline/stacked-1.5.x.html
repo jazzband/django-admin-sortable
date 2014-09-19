@@ -1,6 +1,6 @@
 {% load i18n admin_modify adminsortable_tags %}
 {% load static from staticfiles %}
-<div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">TEST 2
+<div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
   <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }} {% if inline_admin_formset.formset.initial_form_count > 1 %} - {% trans "drag and drop to change order" %}{% endif %}</h2>
 {{ inline_admin_formset.formset.management_form }}
 {{ inline_admin_formset.formset.non_form_errors }}
