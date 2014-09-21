@@ -62,7 +62,7 @@ Inlines may be drag-and-dropped into any order directly from the change form.
 To add sorting to a model, your model needs to inherit from `Sortable` and
 have an inner Meta class that inherits from `Sortable.Meta`
 
-    #models.py
+    # models.py
     from adminsortable.models import Sortable
 
     class MySortableClass(Sortable):
@@ -96,7 +96,7 @@ A common use case is to have child objects that are sortable relative to a paren
         def __unicode__(self):
             return self.title
 
-    # admin
+    # admin.py
     from adminsortable.admin import SortableAdmin
 
     from your_app.models import Category, Project
