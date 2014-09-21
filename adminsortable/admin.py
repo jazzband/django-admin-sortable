@@ -27,6 +27,14 @@ STATIC_URL = settings.STATIC_URL
 
 
 class SortableAdminBase(object):
+    sortable_change_list_with_sort_link_template = \
+        'adminsortable/change_list_with_sort_link.html'
+    sortable_change_form_template = 'adminsortable/change_form.html'
+    sortable_change_list_template = 'adminsortable/change_list.html'
+
+    change_form_template_extends = 'admin/change_form.html'
+    change_list_template_extends = 'admin/change_list.html'
+
     def changelist_view(self, request, extra_context=None):
         """
         If the model that inherits Sortable has more than one object,
@@ -45,7 +53,7 @@ class SortableAdminBase(object):
         extra_context.update({
             'change_list_template_extends': self.change_list_template_extends,
             'sorting_filters': [sort_filter[0] for sort_filter
-                in self.model.sorting_filters]
+                in getattr(self.model, 'sorting_filters', [])]
         })
         return super(SortableAdminBase, self).changelist_view(request,
             extra_context=extra_context)
@@ -56,15 +64,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
     Admin class to add template overrides and context objects to enable
     drag-and-drop ordering.
     """
-    ordering = ('order', 'id')
-
-    sortable_change_list_with_sort_link_template = \
-        'adminsortable/change_list_with_sort_link.html'
-    sortable_change_form_template = 'adminsortable/change_form.html'
-    sortable_change_list_template = 'adminsortable/change_list.html'
-
-    change_form_template_extends = 'admin/change_form.html'
-    change_list_template_extends = 'admin/change_list.html'
 
     class Meta:
         abstract = True
@@ -89,6 +88,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         Custom admin view that displays the objects as a list whose sort
         order can be changed via drag-and-drop.
         """
+
         opts = self.model._meta
         has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
             opts.get_change_permission()))
@@ -226,17 +226,17 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                     id=model_type_id).model_class()
                 objects_dict = dict([(str(obj.pk), obj) for obj in
                     klass.objects.filter(pk__in=indexes)])
-                if '-order' in klass._meta.ordering:  # desc order
+
+                if '-order' in klass._meta.ordering:
+                    step = -1
                     start_object = max(objects_dict.values(),
                         key=lambda x: getattr(x, 'order'))
-                    start_index = getattr(start_object, 'order') \
-                        or len(indexes)
-                    step = -1
-                else:  # 'order' is default, asc order
+                else:
+                    step = 1
                     start_object = min(objects_dict.values(),
                         key=lambda x: getattr(x, 'order'))
-                    start_index = getattr(start_object, 'order') or 0
-                    step = 1
+
+                start_index = getattr(start_object, 'order', len(indexes))
 
                 for index in indexes:
                     obj = objects_dict.get(index)
@@ -250,6 +250,12 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         return HttpResponse(json.dumps(response, ensure_ascii=False),
             content_type='application/json')
+
+
+class NonSortableParentAdmin(SortableAdmin):
+    def changelist_view(self, request, extra_context=None):
+        return super(SortableAdminBase, self).changelist_view(request,
+            extra_context=extra_context)
 
 
 class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
