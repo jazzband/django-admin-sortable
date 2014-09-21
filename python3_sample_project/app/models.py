@@ -119,3 +119,23 @@ class Person(Sortable):
 
     def __str__(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
+
+
+class NonSortableCategory(SimpleModel):
+    class Meta(SimpleModel.Meta):
+        verbose_name = 'Non-Sortable Category'
+        verbose_name_plural = 'Non-Sortable Categories'
+
+    def __str__(self):
+        return self.title
+
+
+class SortableCategoryWidget(SimpleModel, Sortable):
+    class Meta(Sortable.Meta):
+        verbose_name = 'Sortable Category Widget'
+        verbose_name_plural = 'Sortable Category Widgets'
+
+    non_sortable_category = SortableForeignKey(NonSortableCategory)
+
+    def __str__(self):
+        return self.title

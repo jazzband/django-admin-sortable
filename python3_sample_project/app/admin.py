@@ -1,10 +1,11 @@
 from django.contrib import admin
 
 from adminsortable.admin import (SortableAdmin, SortableTabularInline,
-    SortableStackedInline, SortableGenericStackedInline)
+    SortableStackedInline, SortableGenericStackedInline,
+    NonSortableParentAdmin)
 from adminsortable.utils import get_is_sortable
 from app.models import (Category, Widget, Project, Credit, Note, GenericNote,
-    Component, Person)
+    Component, Person, NonSortableCategory, SortableCategoryWidget)
 
 
 admin.site.register(Category, SortableAdmin)
@@ -65,3 +66,14 @@ class PersonAdmin(SortableAdmin):
     list_display = ['__str__', 'is_board_member']
 
 admin.site.register(Person, PersonAdmin)
+
+
+class SortableCategoryWidgetInline(SortableStackedInline):
+    model = SortableCategoryWidget
+    extra = 0
+
+
+class NonSortableCategoryAdmin(NonSortableParentAdmin):
+    inlines = [SortableCategoryWidgetInline]
+
+admin.site.register(NonSortableCategory, NonSortableCategoryAdmin)
