@@ -116,3 +116,17 @@ class Person(Sortable):
 
     def __unicode__(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
+
+
+class NonSortableCategory(SimpleModel):
+    class Meta(SimpleModel.Meta):
+        verbose_name = 'Non-Sortable Category'
+        verbose_name_plural = 'Non-Sortable Categories'
+
+
+class SortableCategoryWidget(SimpleModel, Sortable):
+    class Meta(Sortable.Meta):
+        verbose_name = 'Sortable Category Widget'
+        verbose_name_plural = 'Sortable Category Widgets'
+
+    non_sortable_category = SortableForeignKey(NonSortableCategory)
