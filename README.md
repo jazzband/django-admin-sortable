@@ -173,6 +173,8 @@ You may also pass in additional ORM "extra_filters" as a dictionary, should you 
 
 
 ### Adding Sortable to an existing model
+
+#### Django 1.6.x or below
 If you're adding Sorting to an existing model, it is recommended that you use [django-south](http://south.areacode.com/) to create a schema migration to add the "order" field to your model. You will also need to create a data migration in order to add the appropriate values for the `order` column.
 
 Example assuming a model named "Category":
@@ -183,7 +185,10 @@ Example assuming a model named "Category":
             category.save()
 
 See: [this link](http://south.readthedocs.org/en/latest/tutorial/part3.html) for more
-information on Data Migrations.
+information on South Data Migrations.
+
+#### Django 1.7.x or higher
+Since schema migrations are built into Django 1.7, you don't have to use south, but the process of adding and running migrations is nearly identical. Take a look at the [Migrations](https://docs.djangoproject.com/en/1.7/topics/migrations/) documentation to get started.
 
 
 ### Django Admin Integration
