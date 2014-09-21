@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 1.7.3
+Current version: 1.7.4
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -15,6 +15,8 @@ For Django 1.5.x or higher, use the latest version of django-admin-sortable.
 django-admin-sortable 1.5.2 introduced backward-incompatible changes for Django 1.4.x
 
 django-admin-sortable 1.6.6 introduced a backward-incompatible change for the `sorting_filters` attribute. Please convert your attributes to the new tuple-based format.
+
+django-admin-sortable 1.7.1 and higher are compatible with Python 3.
 
 
 ## Installation
@@ -33,6 +35,7 @@ Download django-admin-sortable from [source](https://github.com/iambrandontaylor
 1. Add `adminsortable` to your `INSTALLED_APPS`.
 2. Ensure `django.core.context_processors.static` is in your `TEMPLATE_CONTEXT_PROCESSORS`.
 
+
 ### Static Media
 Preferred:
 Use the [staticfiles app](https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/)
@@ -40,6 +43,7 @@ Use the [staticfiles app](https://docs.djangoproject.com/en/1.6/ref/contrib/stat
 Alternate:
 Copy the `adminsortable` folder from the `static` folder to the
 location you serve static files from.
+
 
 ### Testing
 Have a look at the included sample_project to see working examples.
@@ -70,15 +74,14 @@ have an inner Meta class that inherits from `Sortable.Meta`
         def __unicode__(self):
             return self.title
 
+A common use case is to have child objects that are sortable relative to a parent. If your parent object is also sortable, here's how you would set up your models and admin options:
 
-It is also possible to order objects relative to another object that is a ForeignKey. A small caveat here is that `Category` must also either inherit from `Sortable` or include an `order` property which is a `PositiveSmallInteger` field. This is due to the way Django admin instantiates classes.
-
+    # models.py
     from adminsortable.fields import SortableForeignKey
 
-    #models.py
     class Category(Sortable):
         class Meta(Sortable.Meta):
-            pass
+            verbose_name_plural = 'Categories'
 
         title = models.CharField(max_length=50)
         ...
@@ -93,8 +96,53 @@ It is also possible to order objects relative to another object that is a Foreig
         def __unicode__(self):
             return self.title
 
+    # admin
+    from adminsortable.admin import SortableAdmin
 
-Sortable has one field: `order` and adds a default ordering value set to `order`.
+    from your_app.models import Category, Project
+
+    admin.site.register(Category, SortableAdmin)
+    admin.site.register(Project, SortableAdmin)
+
+
+Sometimes you might have a parent model that is not sortable, but has inline child models that are. In that case define your models and admin options as such:
+
+    from adminsortable.fields import SortableForeignKey
+
+    # models.py
+    class Category(models.Model):
+        class Meta:
+            verbose_name_plural = 'Categories'
+
+        title = models.CharField(max_length=50)
+        ...
+
+    class Project(Sortable):
+        class Meta(Sortable.Meta):
+            pass
+
+        category = SortableForeignKey(Category)
+        title = models.CharField(max_length=50)
+
+        def __unicode__(self):
+            return self.title
+
+    # admin
+    from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
+
+    from your_app.models import Category, Project
+
+    class ProjectInline(SortableStackedInline):
+        model = Project
+        extra = 1
+
+    class CategoryAdmin(NonSortableParentAdmin):
+        inlines = [ProjectInline]
+
+    admin.site.register(Category, CategoryAdmin)
+
+The `NonSortableParentAdmin` class is necessary to wire up the additional URL patterns and JavaScript that Django Admin Sortable needs to make your inline models sortable.
+
 
 #### Model Instance Methods
 Each instance of a sortable model has two convenience methods to get the next or previous instance:
@@ -174,6 +222,18 @@ There are also generic equivalents that you can inherit from:
     from adminsortable.admin import (SortableGenericTabularInline,
         SortableGenericStackedInline)
         """Your generic inline options go here"""
+
+
+If your parent model is *not* sortable, but has child inlines that are, your parent model needs to inherit from `NonSortableParentAdmin`:
+
+    from adminsortable.admin import (NonSortableParentAdmin,
+        SortableTabularInline)
+
+    class ChildTabularInline(SortableTabularInline):
+        model = YourModel
+
+    class ParentAdmin(NonSortableParentAdmin):
+        inlines = [ChildTabularInline]
 
 
 #### Overriding `queryset()`
@@ -324,10 +384,6 @@ with:
     <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
 
 
-### Known Issue(s)
-Because of the way inline models are added to their parent model in the change form, it is not currently possible to have sortable inline models whose parent does not inhert from `Sortable`.
-
-
 ### Rationale
 Other projects have added drag-and-drop ordering to the ChangeList
 view, however this introduces a couple of problems...
@@ -345,9 +401,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.7.3?
-- Travis CI integration
-- get_next/previous instance methods
+### What's new in 1.7.4?
+- Non-sortable parent models can now have sortable child models without having to override templates thanks to the new `NonSortableParentAdmin` class.
 
 
 ### Future
