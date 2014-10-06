@@ -4,7 +4,7 @@ import json
 from django.contrib.auth.models import User
 from django.db import models
 from django.test import TestCase
-from django.test.client import Client, RequestFactory
+from django.test.client import Client
 
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
@@ -29,7 +29,6 @@ class SortableTestCase(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.factory = RequestFactory()
         self.user_raw_password = 'admin'
         self.user = User.objects.create_user('admin', 'admin@admin.com',
             self.user_raw_password)

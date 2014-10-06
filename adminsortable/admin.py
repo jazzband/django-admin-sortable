@@ -1,20 +1,22 @@
 import json
 
-from django import VERSION as DJANGO_VERSION
+from django import VERSION
 from django.contrib.contenttypes.generic import (GenericStackedInline,
     GenericTabularInline)
 
-DJANGO_MINOR_VERSION = DJANGO_VERSION[1]
-
 from django.conf import settings
 
-if DJANGO_MINOR_VERSION < 5:
+if VERSION < (1, 5):
     from django.conf.urls.defaults import patterns, url
 else:
     from django.conf.urls import patterns, url
 
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
+
+if VERSION >= (1, 8):
+    from django.contrib.auth import get_permission_codename
+
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -90,8 +92,13 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         """
 
         opts = self.model._meta
-        has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
-            opts.get_change_permission()))
+        if VERSION >= (1, 8):
+            codename = get_permission_codename('change', opts)
+            has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
+                codename))
+        else:
+            has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
+                opts.get_change_permission()))
 
         # get sort group index from querystring if present
         sort_filter_index = request.GET.get('sort_filter')
@@ -104,7 +111,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 pass
 
         # Apply any sort filters to create a subset of sortable objects
-        objects = self.queryset(request).filter(**filters)
+        qs_method = getattr(self, 'get_queryset', self.queryset)
+        objects = qs_method(request).filter(**filters)
 
         # Determine if we need to regroup objects relative to a
         # foreign key specified on the model class that is extending Sortable.
@@ -266,18 +274,21 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
             raise Warning(u'Models that are specified in SortableTabluarInline'
                 ' and SortableStackedInline must inherit from Sortable')
 
-    def queryset(self, request):
-        qs = super(SortableInlineBase, self).queryset(request)
+    def get_queryset(self, request):
+        qs = super(SortableInlineBase, self).get_queryset(request)
         if get_is_sortable(qs):
             self.model.is_sortable = True
         else:
             self.model.is_sortable = False
         return qs
 
+    if VERSION < (1, 6):
+        queryset = get_queryset
+
 
 class SortableTabularInline(TabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
-    if DJANGO_MINOR_VERSION <= 5:
+    if VERSION <= (1, 5):
         template = 'adminsortable/edit_inline/tabular-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/tabular.html'
@@ -285,7 +296,7 @@ class SortableTabularInline(TabularInline, SortableInlineBase):
 
 class SortableStackedInline(StackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
-    if DJANGO_MINOR_VERSION <= 5:
+    if VERSION <= (1, 5):
         template = 'adminsortable/edit_inline/stacked-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/stacked.html'
@@ -293,7 +304,7 @@ class SortableStackedInline(StackedInline, SortableInlineBase):
 
 class SortableGenericTabularInline(GenericTabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
-    if DJANGO_MINOR_VERSION <= 5:
+    if VERSION <= (1, 5):
         template = 'adminsortable/edit_inline/tabular-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/tabular.html'
@@ -301,7 +312,7 @@ class SortableGenericTabularInline(GenericTabularInline, SortableInlineBase):
 
 class SortableGenericStackedInline(GenericStackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
-    if DJANGO_MINOR_VERSION <= 5:
+    if VERSION <= (1, 5):
         template = 'adminsortable/edit_inline/stacked-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/stacked.html'
