@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 1.7.4
+Current version: 1.7.5
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -406,8 +406,18 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.7.4?
-- Non-sortable parent models can now have sortable child models without having to override templates thanks to the new `NonSortableParentAdmin` class.
+### What's new in 1.7.5?
+- Updated admin code to handle deprecated functions in Django 1.7 and above in a more elegant fashion.
+- Refactored all Django version checks.
+- Added new permissions check for 'change' model permissions for Django 1.8.
+
+
+### Deprecation warnings
+There are a couple of Django 1.8 deprecation warnings that will be shown when using Python 3.x. These are regarding the following classes in Django that django-admin-sortable extends:
+- django/forms/widgets.py: ComponentInline.queryset
+- django/forms/widgets.py: WidgetAdmin.queryset
+
+These do not currently affect the functionality of django-admin-sortable and should go away once the underlying classes have been updated.
 
 
 ### Future
