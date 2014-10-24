@@ -130,3 +130,11 @@ class SortableCategoryWidget(SimpleModel, Sortable):
         verbose_name_plural = 'Sortable Category Widgets'
 
     non_sortable_category = SortableForeignKey(NonSortableCategory)
+
+
+class SortableNonInlineCategory(SimpleModel, Sortable):
+    class Meta(Sortable.Meta):
+        verbose_name = 'Sortable Category Widget'
+        verbose_name_plural = 'Sortable Category Widgets'
+
+    non_sortable_category = SortableForeignKey(NonSortableCategory)
