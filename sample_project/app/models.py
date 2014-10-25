@@ -133,8 +133,12 @@ class SortableCategoryWidget(SimpleModel, Sortable):
 
 
 class SortableNonInlineCategory(SimpleModel, Sortable):
+    """Example of a model that is sortable, but has a SortableForeignKey
+    that is *not* sortable, and is also not defined as an inline of the
+    SortableForeignKey field."""
+
     class Meta(Sortable.Meta):
-        verbose_name = 'Sortable Category Widget'
-        verbose_name_plural = 'Sortable Category Widgets'
+        verbose_name = 'Sortable Non-Inline Category'
+        verbose_name_plural = 'Sortable Non-Inline Categories'
 
     non_sortable_category = SortableForeignKey(NonSortableCategory)
