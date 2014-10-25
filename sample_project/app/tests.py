@@ -6,15 +6,9 @@ from django.db import models
 from django.test import TestCase
 from django.test.client import Client
 
-from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
 from adminsortable.utils import get_is_sortable
-from app.models import Category, Credit, Note, Person
-
-
-class BadSortableModel(models.Model):
-    note = SortableForeignKey(Note)
-    credit = SortableForeignKey(Credit)
+from app.models import Category, Person
 
 
 class TestSortableModel(Sortable):
@@ -25,8 +19,6 @@ class TestSortableModel(Sortable):
 
 
 class SortableTestCase(TestCase):
-    fixtures = ['initial_data.json']
-
     def setUp(self):
         self.client = Client()
         self.user_raw_password = 'admin'
@@ -35,6 +27,16 @@ class SortableTestCase(TestCase):
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
+
+        # create people
+        Person.objects.create(first_name='Bob', last_name='Smith',
+            is_board_member=True)
+        Person.objects.create(first_name='Sally', last_name='Sue',
+            is_board_member=False)
+        Person.objects.create(first_name='Mike', last_name='Wilson',
+            is_board_member=True)
+        Person.objects.create(first_name='Robert', last_name='Roberts',
+            is_board_member=True)
 
         people = Person.objects.all()
         self.first_person = people[0]
