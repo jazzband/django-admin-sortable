@@ -5,7 +5,8 @@ from adminsortable.admin import (SortableAdmin, SortableTabularInline,
     NonSortableParentAdmin)
 from adminsortable.utils import get_is_sortable
 from app.models import (Category, Widget, Project, Credit, Note, GenericNote,
-    Component, Person, NonSortableCategory, SortableCategoryWidget)
+    Component, Person, NonSortableCategory, SortableCategoryWidget,
+    SortableNonInlineCategory)
 
 
 admin.site.register(Category, SortableAdmin)
@@ -77,3 +78,6 @@ class NonSortableCategoryAdmin(NonSortableParentAdmin):
     inlines = [SortableCategoryWidgetInline]
 
 admin.site.register(NonSortableCategory, NonSortableCategoryAdmin)
+
+
+admin.site.register(SortableNonInlineCategory, SortableAdmin)
