@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 1.7.5
+Current version: 1.7.6
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -105,7 +105,7 @@ A common use case is to have child objects that are sortable relative to a paren
     admin.site.register(Project, SortableAdmin)
 
 
-Sometimes you might have a parent model that is not sortable, but has inline child models that are. In that case define your models and admin options as such:
+Sometimes you might have a parent model that is not sortable, but has child models that are. In that case define your models and admin options as such:
 
     from adminsortable.fields import SortableForeignKey
 
@@ -141,7 +141,7 @@ Sometimes you might have a parent model that is not sortable, but has inline chi
 
     admin.site.register(Category, CategoryAdmin)
 
-The `NonSortableParentAdmin` class is necessary to wire up the additional URL patterns and JavaScript that Django Admin Sortable needs to make your inline models sortable.
+The `NonSortableParentAdmin` class is necessary to wire up the additional URL patterns and JavaScript that Django Admin Sortable needs to make your models sortable. The child model does not have to be an inline model, it can be wired directly to Django admin and the objects will be grouped by the non-sortable foreign key when sorting.
 
 
 #### Model Instance Methods
@@ -406,10 +406,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.7.5?
-- Updated admin code to handle deprecated functions in Django 1.7 and above in a more elegant fashion.
-- Refactored all Django version checks.
-- Added new permissions check for 'change' model permissions for Django 1.8.
+### What's new in 1.7.6?
+- Enabled sorting of child models with a non-sortable parent model, that are not defined as inlines. Fixes issue [#93](https://github.com/iambrandontaylor/django-admin-sortable/issues/93)
 
 
 ### Deprecation warnings
