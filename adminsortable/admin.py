@@ -22,7 +22,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 
-from adminsortable.utils import get_is_sortable
+from adminsortable.utils import get_is_sortable, check_model_is_sortable
 from adminsortable.models import Sortable
 
 STATIC_URL = settings.STATIC_URL
@@ -74,12 +74,12 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         urls = super(SortableAdmin, self).get_urls()
         admin_urls = patterns('',
 
-            # this view changes the order
+            # this ajax view changes the order
             url(r'^sorting/do-sorting/(?P<model_type_id>\d+)/$',
                 self.admin_site.admin_view(self.do_sorting_view),
                 name='admin_do_sorting'),
 
-            # this view shows a link to the drag-and-drop view
+            # this view displays the sortable objects
             url(r'^sort/$', self.admin_site.admin_view(self.sort_view),
                 name='admin_sort'),
         )
@@ -121,7 +121,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         # `sortable_by` defined as a SortableForeignKey
         sortable_by_fk = self.model.sortable_foreign_key
-        sortable_by_class_is_sortable = get_is_sortable(objects)
+
+        sortable_by_class_is_sortable = check_model_is_sortable(sortable_by_fk)
 
         if sortable_by_property:
             # backwards compatibility for < 1.1.1, where sortable_by was a
