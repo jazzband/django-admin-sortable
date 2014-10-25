@@ -32,6 +32,7 @@ class Sortable(models.Model):
 
     # legacy support
     sortable_by = None
+
     sortable_foreign_key = None
 
     class Meta:
