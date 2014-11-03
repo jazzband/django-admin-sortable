@@ -3,22 +3,25 @@
 {% if regrouped_objects %}
     <ul {% if sortable_by_class_is_sortable %}class="sortable"{% endif %}>
         {% for regrouped_object in regrouped_objects %}
-            <li>
-                {% with object=regrouped_object.grouper %}
-                    {% if sortable_by_class_is_sortable %}
-                        {% render_object_rep object %}
-                    {% else %}
-                        {{ object }}
-                    {% endif %}
-                {% endwith %}
-                {% if regrouped_object.list %}
-                    {% with regrouped_object_list_length=regrouped_object.list|length %}
-                    <ul {% if regrouped_object_list_length > 1 %}class="sortable"{% endif %}>
-                        {% render_list_items regrouped_object.list %}
-                    </ul>
-                    {% endwith %}
+            {% with object=regrouped_object.grouper %}
+                {% if object %}
+                    <li>
+                        {% if sortable_by_class_is_sortable %}
+                            {% render_object_rep object %}
+                        {% else %}
+                            {{ object }}
+                        {% endif %}
+
+                        {% if regrouped_object.list %}
+                            {% with regrouped_object_list_length=regrouped_object.list|length %}
+                            <ul {% if regrouped_object_list_length > 1 %}class="sortable"{% endif %}>
+                                {% render_list_items regrouped_object.list %}
+                            </ul>
+                            {% endwith %}
+                        {% endif %}
+                    </li>
                 {% endif %}
-            </li>
+            {% endwith %}
         {% endfor %}
     </ul>
 {% endif %}
