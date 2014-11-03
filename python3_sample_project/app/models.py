@@ -149,4 +149,6 @@ class SelfReferentialCategory(SimpleModel, Sortable):
     child = SortableForeignKey('self', blank=True, null=True)
 
     def __str__(self):
+        if self.child:
+            return '{} - {}'.format(self.child, self.title)
         return self.title
