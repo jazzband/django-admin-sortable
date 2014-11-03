@@ -284,8 +284,11 @@ if the inline model is sortable from here, which is why we have to set the
 #### Sorting subsets of objects
 It is also possible to sort a subset of objects in your model by adding a `sorting_filters` tuple. This works exactly the same as `.filter()` on a QuerySet, and is applied *after* `get_queryset()` on the admin class, allowing you to override the queryset as you would normally in admin but apply additional filters for sorting. The text "Change Order of" will appear before each filter in the Change List template, and the filter groups are displayed from left to right in the order listed. If no `sorting_filters` are specified, the text "Change Order" will be displayed for the link.
 
+#### Self-Referential SortableForeignKey
+You can specify a self-referential SortableForeignKey field, however the admin interface will currently show a model that is a grandchild at the same level as a child. I'm working to resolve this issue.
+
 #####Important!
-django-admin-sortable 1.6.6 introduces a backwards-incompatible change for `sorting_filters`. Previously this attribute was defined as a dictionary, so you'll need to change your values over to the new tuple-based format.
+django-admin-sortable 1.6.6 introduced a backwards-incompatible change for `sorting_filters`. Previously this attribute was defined as a dictionary, so you'll need to change your values over to the new tuple-based format.
 
 An example of sorting subsets would be a "Board of Directors". In this use case, you have a list of "People" objects. Some of these people are on the Board of Directors and some not, and you need to sort them independently.
 
@@ -406,8 +409,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.7.6?
-- Enabled sorting of child models with a non-sortable parent model, that are not defined as inlines. Fixes issue [#93](https://github.com/iambrandontaylor/django-admin-sortable/issues/93)
+### What's new in 1.7.7?
+- Limited support for self-referential SortableForeignKeys
 
 
 ### Deprecation warnings
