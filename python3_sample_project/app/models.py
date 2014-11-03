@@ -139,3 +139,14 @@ class SortableCategoryWidget(SimpleModel, Sortable):
 
     def __str__(self):
         return self.title
+
+
+class SelfReferentialCategory(SimpleModel, Sortable):
+    class Meta(Sortable.Meta):
+        verbose_name = 'Sortable Referential Category'
+        verbose_name_plural = 'Sortable Referential Categories'
+
+    child = SortableForeignKey('self', blank=True, null=True)
+
+    def __str__(self):
+        return self.title
