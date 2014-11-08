@@ -6,7 +6,7 @@ from adminsortable.admin import (SortableAdmin, SortableTabularInline,
 from adminsortable.utils import get_is_sortable
 from app.models import (Category, Widget, Project, Credit, Note, GenericNote,
     Component, Person, NonSortableCategory, SortableCategoryWidget,
-    SelfReferentialCategory)
+    SortableNonInlineCategory, SelfReferentialCategory)
 
 
 admin.site.register(Category, SortableAdmin)
@@ -79,5 +79,6 @@ class NonSortableCategoryAdmin(NonSortableParentAdmin):
 
 admin.site.register(NonSortableCategory, NonSortableCategoryAdmin)
 
+admin.site.register(SortableNonInlineCategory, SortableAdmin)
 
 admin.site.register(SelfReferentialCategory, SortableAdmin)

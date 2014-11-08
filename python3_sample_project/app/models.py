@@ -141,6 +141,21 @@ class SortableCategoryWidget(SimpleModel, Sortable):
         return self.title
 
 
+class SortableNonInlineCategory(SimpleModel, Sortable):
+    """Example of a model that is sortable, but has a SortableForeignKey
+    that is *not* sortable, and is also not defined as an inline of the
+    SortableForeignKey field."""
+
+    class Meta(Sortable.Meta):
+        verbose_name = 'Sortable Non-Inline Category'
+        verbose_name_plural = 'Sortable Non-Inline Categories'
+
+    non_sortable_category = SortableForeignKey(NonSortableCategory)
+
+    def __str__(self):
+        return self.title
+
+
 class SelfReferentialCategory(SimpleModel, Sortable):
     class Meta(Sortable.Meta):
         verbose_name = 'Sortable Referential Category'

@@ -123,6 +123,9 @@ class NonSortableCategory(SimpleModel):
         verbose_name = 'Non-Sortable Category'
         verbose_name_plural = 'Non-Sortable Categories'
 
+    def __unicode__(self):
+        return self.title
+
 
 class SortableCategoryWidget(SimpleModel, Sortable):
     class Meta(Sortable.Meta):
@@ -130,6 +133,9 @@ class SortableCategoryWidget(SimpleModel, Sortable):
         verbose_name_plural = 'Sortable Category Widgets'
 
     non_sortable_category = SortableForeignKey(NonSortableCategory)
+
+    def __unicode__(self):
+        return self.title
 
 
 class SortableNonInlineCategory(SimpleModel, Sortable):
@@ -142,3 +148,6 @@ class SortableNonInlineCategory(SimpleModel, Sortable):
         verbose_name_plural = 'Sortable Non-Inline Categories'
 
     non_sortable_category = SortableForeignKey(NonSortableCategory)
+
+    def __unicode__(self):
+        return self.title
