@@ -71,6 +71,25 @@ class Note(Sortable):
         return self.text
 
 
+# Registered as a tabular inline on `Project` which can't be sorted
+class NonSortableCredit(models.Model):
+    project = models.ForeignKey(Project)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return '{0} {1}'.format(self.first_name, self.last_name)
+
+
+# Registered as a stacked inline on `Project` which can't be sorted
+class NonSortableNote(models.Model):
+    project = models.ForeignKey(Project)
+    text = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.text
+
+
 # A generic bound model
 class GenericNote(SimpleModel, Sortable):
     content_type = models.ForeignKey(ContentType,
@@ -95,6 +114,7 @@ class Component(SimpleModel, Sortable):
 
     def __unicode__(self):
         return self.title
+
 
 
 class Person(Sortable):

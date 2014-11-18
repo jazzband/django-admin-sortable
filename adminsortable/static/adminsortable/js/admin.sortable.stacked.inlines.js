@@ -1,12 +1,16 @@
 (function($){
 
     $(function() {
-        if ($(':hidden[name="admin_sorting_url"]').length > 0)
+        var sorting_urls = $(':hidden[name="admin_sorting_url"]');
+        if (sorting_urls.length > 0)
         {
-            var sortable_inline_rows = $('.inline-group .inline-related');
+            var sortable_inline_groups = sorting_urls.closest('.inline-group')
+            var sortable_inline_rows = sortable_inline_groups.find('.inline-related');
+
+            sortable_inline_groups.addClass('sortable')
             sortable_inline_rows.addClass('sortable');
 
-            $('.inline-group').sortable({
+            sortable_inline_groups.sortable({
                 axis : 'y',
                 containment : 'parent',
                 create: function(event, ui) {
