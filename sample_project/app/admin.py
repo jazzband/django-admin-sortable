@@ -6,7 +6,7 @@ from adminsortable.admin import (SortableAdmin, SortableTabularInline,
 from adminsortable.utils import get_is_sortable
 from app.models import (Category, Widget, Project, Credit, Note, GenericNote,
     Component, Person, NonSortableCategory, SortableCategoryWidget,
-    SortableNonInlineCategory)
+    SortableNonInlineCategory, NonSortableCredit, NonSortableNote)
 
 
 admin.site.register(Category, SortableAdmin)
@@ -56,8 +56,21 @@ class GenericNoteInline(SortableGenericStackedInline):
     extra = 0
 
 
+class NonSortableCreditInline(admin.TabularInline):
+    model = NonSortableCredit
+    extra = 1
+
+
+class NonSortableNoteInline(admin.StackedInline):
+    model = NonSortableNote
+    extra = 0
+
+
 class ProjectAdmin(SortableAdmin):
-    inlines = [CreditInline, NoteInline, GenericNoteInline]
+    inlines = [
+        CreditInline, NoteInline, GenericNoteInline,
+        NonSortableCreditInline, NonSortableNoteInline
+    ]
     list_display = ['__unicode__', 'category']
 
 admin.site.register(Project, ProjectAdmin)
