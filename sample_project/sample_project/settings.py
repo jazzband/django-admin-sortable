@@ -1,5 +1,11 @@
 # Django settings for test_project project.
-from utils import map_path
+import os
+
+
+def map_path(directory_name):
+    return os.path.join(os.path.dirname(__file__),
+        '../' + directory_name).replace('\\', '/')
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

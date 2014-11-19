@@ -1,4 +1,8 @@
-import httplib
+try:
+    import httplib
+except ImportError:
+    import http.client as httplib
+
 import json
 
 from django.contrib.auth.models import User
@@ -118,7 +122,8 @@ class SortableTestCase(TestCase):
         #make a normal POST
         response = self.client.post(self.get_sorting_url(),
             data=self.get_category_indexes(category1, category2, category3))
-        content = json.loads(response.content)
+        content = json.loads(response.content.decode(encoding='UTF-8'),
+            'latin-1')
         self.assertFalse(content.get('objects_sorted'),
             'Objects should not have been sorted. An ajax post is required.')
 
@@ -134,7 +139,8 @@ class SortableTestCase(TestCase):
         response = self.client.post(self.get_sorting_url(),
             data=self.get_category_indexes(category3, category2, category1),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        content = json.loads(response.content)
+        content = json.loads(response.content.decode(encoding='UTF-8'),
+            'latin-1')
         self.assertTrue(content.get('objects_sorted'),
             'Objects should have been sorted.')
 
