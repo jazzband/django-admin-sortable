@@ -1,7 +1,6 @@
 language: python
 
 python:
-    - "2.6"
     - "2.7"
     - "3.4"
 
@@ -9,7 +8,6 @@ env:
     - DJANGO_VERSION=1.5.10 SAMPLE_PROJECT=sample_project
     - DJANGO_VERSION=1.6.7 SAMPLE_PROJECT=sample_project
     - DJANGO_VERSION=1.7 SAMPLE_PROJECT=sample_project
-    - DJANGO_VERSION=1.7 SAMPLE_PROJECT=python3_sample_project
 
 branches:
     only:
@@ -17,18 +15,6 @@ branches:
 
 matrix:
     exclude:
-        -
-            python: "2.6"
-            env: DJANGO_VERSION=1.5.10 SAMPLE_PROJECT=sample_project
-
-        -
-            python: "2.6"
-            env: DJANGO_VERSION=1.7 SAMPLE_PROJECT=sample_project
-
-        -
-            python: "2.6"
-            env: DJANGO_VERSION=1.7 SAMPLE_PROJECT=python3_sample_project
-
         -
             python: "2.7"
             env: DJANGO_VERSION=1.5.10 SAMPLE_PROJECT=sample_project
