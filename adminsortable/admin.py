@@ -278,7 +278,11 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
                 ' and SortableStackedInline must inherit from Sortable')
 
     def get_queryset(self, request):
-        qs = super(SortableInlineBase, self).get_queryset(request)
+        if VERSION < (1, 6):
+            qs = super(SortableInlineBase, self).queryset(request)
+        else:
+            qs = super(SortableInlineBase, self).get_queryset(request)
+        
         if get_is_sortable(qs):
             self.model.is_sortable = True
         else:
