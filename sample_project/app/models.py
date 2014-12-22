@@ -181,10 +181,5 @@ class SortableNonInlineCategory(SimpleModel, Sortable):
         verbose_name = 'Sortable Non-Inline Category'
         verbose_name_plural = 'Sortable Non-Inline Categories'
 
-<<<<<<< HEAD
-=======
-    non_sortable_category = SortableForeignKey(NonSortableCategory)
-
->>>>>>> e83e31cb22c681d4ddd954e993a9c2a129486ad4
     def __str__(self):
         return self.title
