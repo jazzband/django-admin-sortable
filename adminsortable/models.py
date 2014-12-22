@@ -80,7 +80,7 @@ class Sortable(models.Model):
                 {self.sortable_foreign_key.name: sfk_obj.id})
 
         try:
-            obj = self._meta.model.objects.filter(**filters)[:1][0]
+            obj = self.__class__.objects.filter(**filters)[:1][0]
         except IndexError:
             obj = None
 
