@@ -25,6 +25,5 @@ def check_model_is_sortable(cls):
         else:
             objects = cls.objects
 
-        if objects.count() > 1:
-            return True
+        return get_is_sortable(objects.all())
     return False
