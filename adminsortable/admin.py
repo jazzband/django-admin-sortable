@@ -291,7 +291,7 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
 
 class SortableTabularInline(TabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
-    if VERSION <= (1, 5):
+    if VERSION < (1, 6):
         template = 'adminsortable/edit_inline/tabular-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/tabular.html'
@@ -299,7 +299,7 @@ class SortableTabularInline(TabularInline, SortableInlineBase):
 
 class SortableStackedInline(StackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
-    if VERSION <= (1, 5):
+    if VERSION < (1, 6):
         template = 'adminsortable/edit_inline/stacked-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/stacked.html'
@@ -307,7 +307,7 @@ class SortableStackedInline(StackedInline, SortableInlineBase):
 
 class SortableGenericTabularInline(GenericTabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
-    if VERSION <= (1, 5):
+    if VERSION < (1, 6):
         template = 'adminsortable/edit_inline/tabular-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/tabular.html'
@@ -315,7 +315,7 @@ class SortableGenericTabularInline(GenericTabularInline, SortableInlineBase):
 
 class SortableGenericStackedInline(GenericStackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
-    if VERSION <= (1, 5):
+    if VERSION < (1, 6):
         template = 'adminsortable/edit_inline/stacked-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/stacked.html'
