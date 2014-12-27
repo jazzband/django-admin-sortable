@@ -123,7 +123,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         # `sortable_by` defined as a SortableForeignKey
         sortable_by_fk = self.model.sortable_foreign_key
-        print('sortable_by_fk: {}, {}'.format(sortable_by_fk, type(sortable_by_fk)))
         sortable_by_class_is_sortable = check_model_is_sortable(sortable_by_fk)
 
         if sortable_by_property:
@@ -176,7 +175,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'sortable_by_class_is_sortable': sortable_by_class_is_sortable,
             'sortable_by_class_display_name': sortable_by_class_display_name
         }
-        print(context['sortable_by_class_is_sortable'])
         return render(request, self.sortable_change_list_template, context)
 
     def add_view(self, request, form_url='', extra_context=None):
