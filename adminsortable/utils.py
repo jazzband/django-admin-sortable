@@ -30,5 +30,5 @@ def check_model_is_sortable(cls):
                 objects = cls.model.objects
             else:
                 objects = cls.objects
-        return get_is_sortable(objects.all())
+            return get_is_sortable(objects.all())
     return False

@@ -12,7 +12,7 @@ from django.test.client import Client
 
 from adminsortable.models import Sortable
 from adminsortable.utils import get_is_sortable
-from app.models import Category, Person
+from app.models import Category, Person, Project
 
 
 class TestSortableModel(Sortable):
@@ -176,3 +176,13 @@ class SortableTestCase(TestCase):
 
         self.assertEqual(self.first_person, result, 'Previous person should '
             'be "{0}"'.format(self.first_person))
+
+    def test_adminsortable_change_list_view_loads_with_sortable_fk(self):
+        category1 = self.create_category(title='Category 3')
+        Project.objects.create(category=category1, description="foo")
+
+        self.client.login(username=self.user.username,
+            password=self.user_raw_password)
+        response = self.client.get('/admin/app/project/sort/')
+        self.assertEquals(response.status_code, httplib.OK,
+            'Unable to reach sort view.')
