@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 1.7.9.1
+Current version: 1.8.0
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -409,8 +409,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.7.9?
-- Improved support for Django 1.5.x
+### What's new in 1.8.0?
+- Fixed an edge case for object assignment with self-referential models. Thanks [@tomd-aptivate](https://github.com/tomd-aptivate)
 
 
 ### Deprecation warnings
@@ -422,7 +422,7 @@ These do not currently affect the functionality of django-admin-sortable and sho
 
 
 ### Future
-- Support for foreign keys that are self referential
+- Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
 
 
 ### License
