@@ -1,8 +1,6 @@
 import json
 
 from django import VERSION
-from django.contrib.contenttypes.generic import (GenericStackedInline,
-    GenericTabularInline)
 
 from django.conf import settings
 
@@ -16,6 +14,11 @@ from django.contrib.admin.options import InlineModelAdmin
 
 if VERSION >= (1, 8):
     from django.contrib.auth import get_permission_codename
+    from django.contrib.contenttypes.admin import (GenericStackedInline,
+        GenericTabularInline)
+else:
+    from django.contrib.contenttypes.generic import (GenericStackedInline,
+        GenericTabularInline)
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
