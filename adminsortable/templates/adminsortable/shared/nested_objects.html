@@ -5,9 +5,7 @@
         {% for regrouped_object in regrouped_objects %}
             {% with object=regrouped_object.grouper %}
                 {% if object %}
-                    <li>
-                        sortable fk is sortable: {{ sortable_by_class_is_sortable }}
-                        {% if sortable_by_class_is_sortable %}
+                    <li>{% if sortable_by_class_is_sortable %}
                             {% render_object_rep object %}
                         {% else %}
                             {{ object }}
