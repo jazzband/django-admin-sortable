@@ -1,0 +1,109 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: django-adminsortable 1.8.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-03-30 18:37+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Tomasz Gabrysiak <tomsonwch@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: templates/adminsortable/change_form.html:32
+msgid ""
+"There are unsaved changes on this page. Please save your changes before "
+"reordering."
+msgstr "Na stronie są niezapisane zmiany. Proszę zapisać zmiany przed "
+"zmianą kolejności."
+
+#: templates/adminsortable/change_list.html:19
+#, python-format
+msgid "Drag and drop %(model)s to change display order"
+msgstr "Przeciągnij i upuść %(model)s aby zmienić kolejność wyświetlania"
+
+#: templates/adminsortable/change_list.html:19
+msgid "Django site admin"
+msgstr ""
+
+#: templates/adminsortable/change_list.html:24
+msgid "Home"
+msgstr ""
+
+#: templates/adminsortable/change_list.html:31
+msgid "Reorder"
+msgstr "Zmień kolejność"
+
+#: templates/adminsortable/change_list.html:38
+#, python-format
+msgid "Drag and drop %(sort_type)s %(model)s to change their order."
+msgstr "Przeciągnij i upuść %(sort_type)s %(model)s aby zmienić kolejność."
+
+#: templates/adminsortable/change_list.html:40
+#, python-format
+msgid "Drag and drop %(model)s to change their order."
+msgstr "Przeciągnij i upuść %(model)s aby zmienić ich kolejność."
+
+#: templates/adminsortable/change_list.html:45
+#, python-format
+msgid ""
+"You may also drag and drop %(sortable_by_class_display_name)s to change "
+"their order."
+msgstr "Możesz też przeciągnąć i upuścić %(sortable_by_class_display_name)s aby zmienić "
+"ich kolejność"
+
+#: templates/adminsortable/change_list.html:56
+#, python-format
+msgid "Return to %(model)s"
+msgstr "Wróć do %(model)s"
+
+#: templates/adminsortable/change_list_with_sort_link.html:7
+msgid "Change Order of"
+msgstr "Zmień kolejność"
+
+#: templates/adminsortable/change_list_with_sort_link.html:11
+msgid "Change Order"
+msgstr "Zmień kolejność"
+
+#: templates/adminsortable/edit_inline/stacked-1.5.x.html:4
+#: templates/adminsortable/edit_inline/stacked.html:3
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:7
+#: templates/adminsortable/edit_inline/tabular.html:6
+msgid "drag and drop to change order"
+msgstr "przeciągnij i upuść aby zmienić kolejność"
+
+#: templates/adminsortable/edit_inline/stacked-1.5.x.html:10
+#: templates/adminsortable/edit_inline/stacked.html:9
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:30
+#: templates/adminsortable/edit_inline/tabular.html:30
+msgid "View on site"
+msgstr "Zobacz na stronie"
+
+#: templates/adminsortable/edit_inline/stacked-1.5.x.html:71
+#: templates/adminsortable/edit_inline/stacked.html:30
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:118
+#: templates/adminsortable/edit_inline/tabular.html:78
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr "Dodaj kolejne %(verbose_name)s"
+
+#: templates/adminsortable/edit_inline/stacked-1.5.x.html:74
+#: templates/adminsortable/edit_inline/stacked.html:29
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:121
+#: templates/adminsortable/edit_inline/tabular.html:79
+msgid "Remove"
+msgstr "Usuń"
+
+#: templates/adminsortable/edit_inline/tabular-1.5.x.html:16
+#: templates/adminsortable/edit_inline/tabular.html:17
+msgid "Delete?"
+msgstr "Usunąć?"
