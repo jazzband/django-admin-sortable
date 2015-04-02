@@ -47,9 +47,7 @@ class SortableAdminBase(object):
         object_tools block to take people to the view to change the sorting.
         """
 
-        qs_method = getattr(self, 'get_queryset', self.queryset)
-
-        if get_is_sortable(qs_method(request)):
+        if get_is_sortable(self.get_queryset(request)):
             self.change_list_template = \
                 self.sortable_change_list_with_sort_link_template
             self.is_sortable = True
@@ -284,7 +282,7 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
             qs = super(SortableInlineBase, self).queryset(request)
         else:
             qs = super(SortableInlineBase, self).get_queryset(request)
-        
+
         if get_is_sortable(qs):
             self.model.is_sortable = True
         else:
