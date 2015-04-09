@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 1.8.2
+Current version: 1.8.3
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -409,16 +409,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.8.2?
-- Added Polish translations. Thanks [@TomaszGabrysiak](https://github.com/TomaszGabrysiak).
-
-
-### Deprecation warnings
-There are a couple of Django 1.8 deprecation warnings that will be shown when using Python 3.x. These are regarding the following classes in Django that django-admin-sortable extends:
-- django/forms/widgets.py: ComponentInline.queryset
-- django/forms/widgets.py: WidgetAdmin.queryset
-
-These do not currently affect the functionality of django-admin-sortable and should go away once the underlying classes have been updated.
+### What's new in 1.8.3?
+- Django 1.8 compatibility.
 
 
 ### Future
