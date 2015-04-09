@@ -47,7 +47,10 @@ class SortableAdminBase(object):
         object_tools block to take people to the view to change the sorting.
         """
 
-        qs_method = getattr(self, 'get_queryset', self.queryset)
+        try:
+            qs_method = getattr(self, 'get_queryset', self.queryset)
+        except AttributeError:
+            qs_method = self.get_queryset
 
         if get_is_sortable(qs_method(request)):
             self.change_list_template = \
@@ -116,7 +119,10 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 pass
 
         # Apply any sort filters to create a subset of sortable objects
-        qs_method = getattr(self, 'get_queryset', self.queryset)
+        try:
+            qs_method = getattr(self, 'get_queryset', self.queryset)
+        except AttributeError:
+            qs_method = self.get_queryset
         objects = qs_method(request).filter(**filters)
 
         # Determine if we need to regroup objects relative to a
