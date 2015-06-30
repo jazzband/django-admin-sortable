@@ -42,9 +42,11 @@ class SortableTestCase(TestCase):
         Person.objects.create(first_name='Robert', last_name='Roberts',
             is_board_member=True)
 
-        people = Person.objects.all()
-        self.first_person = people[0]
-        self.second_person = people[1]
+        self.people = Person.objects.all()
+        self.first_person = self.people[0]
+        self.second_person = self.people[1]
+        self.third_person = self.people[2]
+        self.fourth_person = self.people[3]
 
     def create_category(self, title='Category 1'):
         category = Category.objects.create(title=title)
@@ -166,16 +168,29 @@ class SortableTestCase(TestCase):
             'Category ID 1 should have been third in queryset')
 
     def test_get_next(self):
-        result = self.first_person.get_next()
+        for index, person in enumerate(self.people):
+            next_index = index + 1
+            next_person = self.people[index].get_next()
 
-        self.assertEqual(self.second_person, result, 'Next person should '
-            'be "{0}"'.format(self.second_person))
+            if next_index < len(self.people):
+                self.assertEqual(next_person, self.people[next_index],
+                    'Next person should be "{0}"'.format(
+                        self.people[next_index]))
 
     def test_get_previous(self):
-        result = self.second_person.get_previous()
+        for person in self.people.order_by('-order'):
+            previous_person = person.get_previous()
 
-        self.assertEqual(self.first_person, result, 'Previous person should '
-            'be "{0}"'.format(self.first_person))
+            # get_previous() returns `None` if there isn't a previous object
+            if previous_person:
+                previous_order = previous_person.order - 1
+
+                # only check for a matching previous record if the order is
+                # greater than 0
+                if previous_order > 0:
+                    self.assertEqual(previous_person,
+                        self.people.get(order=previous_person.order - 1),
+                        'Previous person should be "{0}"'.format(previous_person))
 
     def test_adminsortable_change_list_view_loads_with_sortable_fk(self):
         category1 = self.create_category(title='Category 3')
