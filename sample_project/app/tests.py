@@ -178,19 +178,16 @@ class SortableTestCase(TestCase):
                         self.people[next_index]))
 
     def test_get_previous(self):
-        for person in self.people.order_by('-order'):
+        for person in self.people:
             previous_person = person.get_previous()
 
             # get_previous() returns `None` if there isn't a previous object
             if previous_person:
-                previous_order = previous_person.order - 1
-
-                # only check for a matching previous record if the order is
-                # greater than 0
-                if previous_order > 0:
-                    self.assertEqual(previous_person,
-                        self.people.get(order=previous_person.order - 1),
-                        'Previous person should be "{0}"'.format(previous_person))
+                self.assertEqual(previous_person,
+                    self.people.get(order=person.order - 1),
+                    'Previous person for "{0}" (order: {1}) should be "{2}"'
+                    '(order: {3})'.format(person, person.order,
+                        previous_person, previous_person.order))
 
     def test_adminsortable_change_list_view_loads_with_sortable_fk(self):
         category1 = self.create_category(title='Category 3')
