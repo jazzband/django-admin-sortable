@@ -290,7 +290,7 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
             qs = super(SortableInlineBase, self).queryset(request)
         else:
             qs = super(SortableInlineBase, self).get_queryset(request)
-        
+
         if get_is_sortable(qs):
             self.model.is_sortable = True
         else:

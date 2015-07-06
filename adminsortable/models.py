@@ -80,7 +80,8 @@ class Sortable(models.Model):
                 {self.sortable_foreign_key.name: sfk_obj.id})
 
         try:
-            obj = self.__class__.objects.filter(**filters)[:1][0]
+            order_by = '-order' if 'order__lt' in filters.keys() else 'order'
+            obj = self.__class__.objects.filter(**filters).order_by(order_by)[:1][0]
         except IndexError:
             obj = None
 
