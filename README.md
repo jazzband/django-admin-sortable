@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 1.8.3
+Current version: 1.8.4
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -409,8 +409,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.8.3?
-- Django 1.8 compatibility.
+### What's new in 1.8.4?
+- Fixed a [bug](https://github.com/iambrandontaylor/django-admin-sortable/issues/108) with get_previous() not returning the expected object. Thanks to [@dvkovner](https://github.com/dvkovner) for reporting.
 
 
 ### Future
