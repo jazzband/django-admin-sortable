@@ -10,13 +10,18 @@ from django.db import models
 from django.test import TestCase
 from django.test.client import Client
 
-from adminsortable.models import Sortable
+from adminsortable.models import SortableMixin
 from adminsortable.utils import get_is_sortable
 from app.models import Category, Person, Project
 
 
-class TestSortableModel(Sortable):
+class TestSortableModel(SortableMixin):
     title = models.CharField(max_length=100)
+
+    order = models.PositiveIntegerField(default=0, editable=False)
+
+    class Meta:
+        ordering = ['order']
 
     def __unicode__(self):
         return self.title
@@ -110,7 +115,7 @@ class SortableTestCase(TestCase):
         self.assertEqual(response.status_code, httplib.OK,
             'Admin sort request failed.')
 
-        #assert adminsortable change list templates are used
+        # assert adminsortable change list templates are used
         template_names = [t.name for t in response.templates]
         self.assertTrue('adminsortable/change_list.html' in template_names,
                         'adminsortable/change_list.html was not rendered')
@@ -121,7 +126,7 @@ class SortableTestCase(TestCase):
         self.assertTrue(logged_in, 'User is not logged in')
 
         category1, category2, category3 = self.make_test_categories()
-        #make a normal POST
+        # make a normal POST
         response = self.client.post(self.get_sorting_url(),
             data=self.get_category_indexes(category1, category2, category3))
         content = json.loads(response.content.decode(encoding='UTF-8'),
@@ -134,10 +139,10 @@ class SortableTestCase(TestCase):
             password=self.user_raw_password)
         self.assertTrue(logged_in, 'User is not logged in')
 
-        #make categories
+        # make categories
         category1, category2, category3 = self.make_test_categories()
 
-        #make an Ajax POST
+        # make an Ajax POST
         response = self.client.post(self.get_sorting_url(),
             data=self.get_category_indexes(category3, category2, category1),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
@@ -146,7 +151,7 @@ class SortableTestCase(TestCase):
         self.assertTrue(content.get('objects_sorted'),
             'Objects should have been sorted.')
 
-        #assert order is correct
+        # assert order is correct
         categories = Category.objects.all()
         cat1 = categories[0]
         cat2 = categories[1]
