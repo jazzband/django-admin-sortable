@@ -7,7 +7,7 @@ from adminsortable.utils import get_is_sortable
 from app.models import (Category, Widget, Project, Credit, Note, GenericNote,
     Component, Person, NonSortableCategory, SortableCategoryWidget,
     SortableNonInlineCategory, NonSortableCredit, NonSortableNote,
-    CustomWidget, CustomWidgetComponent)
+    CustomWidget, CustomWidgetComponent, BackwardCompatibleWidget)
 
 
 admin.site.register(Category, SortableAdmin)
@@ -105,3 +105,4 @@ class CustomWidgetAdmin(SortableAdmin):
 
 admin.site.register(SortableNonInlineCategory, SortableAdmin)
 admin.site.register(CustomWidget, CustomWidgetAdmin)
+admin.site.register(BackwardCompatibleWidget, SortableAdmin)

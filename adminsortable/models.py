@@ -124,8 +124,12 @@ class SortableMixin(models.Model):
             extra_filters, filter_on_sortable_fk)
 
 
-# for easier legacy support of existing implementations
+# for legacy support of existing implementations
 class Sortable(SortableMixin):
 
     class Meta:
         abstract = True
+        ordering = ['order']
+
+    order = models.PositiveIntegerField(default=0, editable=False,
+        db_index=True)

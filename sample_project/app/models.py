@@ -240,3 +240,14 @@ class CustomWidgetComponent(SortableMixin, SimpleModel):
 
     def __str__(self):
         return self.title
+
+
+@python_2_unicode_compatible
+class BackwardCompatibleWidget(Sortable, SimpleModel):
+
+    class Meta(Sortable.Meta):
+        verbose_name = 'Backward Compatible Widget'
+        verbose_name_plural = 'Backward Compatible Widgets'
+
+    def __str__(self):
+        return self.title

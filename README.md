@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 1.8.5
+Current version: 2.0.0
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -92,7 +92,11 @@ Sample Model:
         def __unicode__(self):
             return self.title
 
+#### Important Note About Ordering...
+If you do not set the `Meta` `ordering` option to the same value as `order_field_name`, your objects will not be sorted/ordered correctly.
 
+
+#### Common Use Case
 A common use case is to have child objects that are sortable relative to a parent. If your parent object is also sortable, here's how you would set up your models and admin options:
 
     # models.py
@@ -175,6 +179,24 @@ Sometimes you might have a parent model that is not sortable, but has child mode
 The `NonSortableParentAdmin` class is necessary to wire up the additional URL patterns and JavaScript that Django Admin Sortable needs to make your models sortable. The child model does not have to be an inline model, it can be wired directly to Django admin and the objects will be grouped by the non-sortable foreign key when sorting.
 
 
+### Backwards Compatibility
+If you previously used Django Admin Sortable, **DON'T PANIC** - everything will still work exactly as before ***without any changes to your code***. Going forward, it is recommended that you use the new `SortableMixin` on your models, as pre-2.0 compatibility might not be a permanent thing.
+
+Please note however that the `Sortable` class still contains the hard-coded `order` field, and meta inheritance requirements:
+
+    # legacy model definition
+
+    from adminsortable.models import Sortable
+
+    class Project(Sortable):
+        class Meta(Sortable.Meta):
+            pass
+        title = models.CharField(max_length=50)
+
+        def __unicode__(self):
+            return self.title
+
+
 #### Model Instance Methods
 Each instance of a sortable model has two convenience methods to get the next or previous instance:
 
@@ -201,22 +223,6 @@ If you wish to override this behavior, pass in: `filter_on_sortable_fk=False`:
 You may also pass in additional ORM "extra_filters" as a dictionary, should you need to:
 
     your_instance.get_next(extra_filters={'title__icontains': 'blue'})
-
-
-### Backwards Compatibility
-If you previously used Django Admin Sortable, don't worry. Your models only require a very small change to work.
-
-Previously, the `Sortable` class defined a `PositiveIntegerField` called `order` and the `ordering` Meta option. The `Sortable` class is still available to import, so you don't have to change your model definitions, but now that `Sortable` is a mixin, you'll need to add this column and Meta option to your model:
-
-    class YourModel(Sortable):
-        . . .
-
-        order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
-
-        class Meta:
-            ordering = ['order']
-
-because your previous model defined this field, it's already in your database, so no migrations are necessary. The `order_field_name` also defaults to 'order', so if you defined an `order` field, you don't have to specify `order_field_name`.
 
 
 ### Adding Sorting to an existing model
@@ -456,7 +462,7 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.8.5?
+### What's new in 2.0.0?
 - Sortable class has become SortableMixin which is now unobtrusive, allowing you to create sortable abstract classes.
 
 
