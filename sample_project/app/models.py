@@ -202,3 +202,41 @@ class SortableNonInlineCategory(SimpleModel, SortableMixin):
 
     def __str__(self):
         return self.title
+
+
+@python_2_unicode_compatible
+class CustomWidget(SortableMixin, SimpleModel):
+
+    # custom field for ordering
+    custom_order_field = models.PositiveIntegerField(default=0, db_index=True,
+        editable=False)
+
+    order_field_name = 'custom_order_field'
+
+    class Meta:
+        ordering = ['custom_order_field']
+        verbose_name = 'Custom Widget'
+        verbose_name_plural = 'Custom Widgets'
+
+    def __str__(self):
+        return self.title
+
+
+@python_2_unicode_compatible
+class CustomWidgetComponent(SortableMixin, SimpleModel):
+
+    custom_widget = models.ForeignKey(CustomWidget)
+
+    # custom field for ordering
+    widget_order = models.PositiveIntegerField(default=0, db_index=True,
+        editable=False)
+
+    order_field_name = 'widget_order'
+
+    class Meta:
+        ordering = ['widget_order']
+        verbose_name = 'Custom Widget Component'
+        verbose_name_plural = 'Custom Widget Components'
+
+    def __str__(self):
+        return self.title
