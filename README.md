@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 1.8.4
+Current version: 1.8.5
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -59,39 +59,66 @@ Inlines may be drag-and-dropped into any order directly from the change form.
 ## Usage
 
 ### Models
-To add sorting to a model, your model needs to inherit from `Sortable` and
-have an inner Meta class that inherits from `Sortable.Meta`
+To add sortability to a model, you need to inherit `SortableMixin` and at minimum, define:
+
+- The field which should be used for ordering, which must be one of the integer fields defined in Django's ORM:
+ - `PositiveIntegerField`
+ - `IntegerField`
+ - `PositiveSmallIntegerField`
+ - `SmallIntegerField`
+ - `BigIntegerField`
+- An `order_field_name` string that is synonymous to the field used for ordering (defaults to 'order' for backwards compatibility). *This field is not required if your ordering field is named "order".*
+- The `ordering` option on your model's `Meta` class, which should be the same as the `order_field_name`
+
+For a smoother admin experience, I recommend setting the field to `editable=False` and adding indexing to the field you use for ordering.
+
+Sample Model:
 
     # models.py
-    from adminsortable.models import Sortable
+    from adminsortable.models import SortableMixin
 
-    class MySortableClass(Sortable):
-        class Meta(Sortable.Meta):
-            pass
+    class MySortableClass(SortableMixin):
+        class Meta:
+            verbose_name = 'My Sortable Class'
+            verbose_name_plural = 'My Sortable Classes'
+            ordering = ['the_order']
 
         title = models.CharField(max_length=50)
 
+        # define the field the model should be ordered by
+        the_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+        order_field_name = 'the_order'
+
         def __unicode__(self):
             return self.title
+
 
 A common use case is to have child objects that are sortable relative to a parent. If your parent object is also sortable, here's how you would set up your models and admin options:
 
     # models.py
     from adminsortable.fields import SortableForeignKey
 
-    class Category(Sortable):
-        class Meta(Sortable.Meta):
+    class Category(SortableMixin):
+        class Meta:
+            ordering = ['category_order']
             verbose_name_plural = 'Categories'
 
         title = models.CharField(max_length=50)
-        ...
 
-    class Project(Sortable):
-        class Meta(Sortable.Meta):
-            pass
+        # ordering field
+        category_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+        order_field_name = 'category_order'
+
+    class Project(SortableMixin):
+        class Meta:
+            ordering = ['project_order']
 
         category = SortableForeignKey(Category)
         title = models.CharField(max_length=50)
+
+        # ordering field
+        project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+        order_field_name = 'project_order'
 
         def __unicode__(self):
             return self.title
@@ -117,12 +144,16 @@ Sometimes you might have a parent model that is not sortable, but has child mode
         title = models.CharField(max_length=50)
         ...
 
-    class Project(Sortable):
-        class Meta(Sortable.Meta):
-            pass
+    class Project(SortableMixin):
+        class Meta:
+            ordering = ['project_order']
 
         category = SortableForeignKey(Category)
         title = models.CharField(max_length=50)
+
+        # ordering field
+        project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+        order_field_name = 'project_order'
 
         def __unicode__(self):
             return self.title
@@ -172,10 +203,26 @@ You may also pass in additional ORM "extra_filters" as a dictionary, should you 
     your_instance.get_next(extra_filters={'title__icontains': 'blue'})
 
 
-### Adding Sortable to an existing model
+### Backwards Compatibility
+If you previously used Django Admin Sortable, don't worry. Your models only require a very small change to work.
+
+Previously, the `Sortable` class defined a `PositiveIntegerField` called `order` and the `ordering` Meta option. The `Sortable` class is still available to import, so you don't have to change your model definitions, but now that `Sortable` is a mixin, you'll need to add this column and Meta option to your model:
+
+    class YourModel(Sortable):
+        . . .
+
+        order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+
+        class Meta:
+            ordering = ['order']
+
+because your previous model defined this field, it's already in your database, so no migrations are necessary. The `order_field_name` also defaults to 'order', so if you defined an `order` field, you don't have to specify `order_field_name`.
+
+
+### Adding Sorting to an existing model
 
 #### Django 1.6.x or below
-If you're adding Sorting to an existing model, it is recommended that you use [django-south](http://south.areacode.com/) to create a schema migration to add the "order" field to your model. You will also need to create a data migration in order to add the appropriate values for the `order` column.
+If you're adding Sorting to an existing model, it is recommended that you use [django-south](http://south.areacode.com/) to create a schema migration to add the "order" field to your model. You will also need to create a data migration in order to add the appropriate values for the "order" column.
 
 Example assuming a model named "Category":
 
@@ -409,8 +456,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 1.8.4?
-- Fixed a [bug](https://github.com/iambrandontaylor/django-admin-sortable/issues/108) with get_previous() not returning the expected object. Thanks to [@dvkovner](https://github.com/dvkovner) for reporting.
+### What's new in 1.8.5?
+- Sortable class has become SortableMixin which is now unobtrusive, allowing you to create sortable abstract classes.
 
 
 ### Future
