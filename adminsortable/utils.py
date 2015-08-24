@@ -1,8 +1,8 @@
-from .models import Sortable, SortableForeignKey
+from .models import SortableMixin, SortableForeignKey
 
 
 def check_inheritance(obj):
-    return issubclass(type(obj), Sortable)
+    return issubclass(type(obj), SortableMixin)
 
 
 def get_is_sortable(objects):
@@ -16,7 +16,6 @@ def get_is_sortable(objects):
 def is_self_referential(cls):
     cls_type = type(cls)
     sortable_subclass = check_inheritance(cls_type)
-    # sortable_subclass = issubclass(cls_type, Sortable)
     sortable_foreign_key_subclass = issubclass(cls_type, SortableForeignKey)
     if sortable_foreign_key_subclass and not sortable_subclass:
         return True

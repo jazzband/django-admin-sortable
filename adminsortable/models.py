@@ -12,39 +12,53 @@ class MultipleSortableForeignKeyException(Exception):
         return repr(self.value)
 
 
-class Sortable(models.Model):
+class SortableMixin(models.Model):
     """
     `is_sortable` determines whether or not the Model is sortable by
-    determining if the last value of `order` is greater than the default
-    of 1, which should be present if there is only one object.
+    determining if the last value of the field used to determine the order
+    of objects is greater than the default of 1, which should be present if
+    there is only one object.
 
     `model_type_id` returns the ContentType.id for the Model that
     inherits Sortable
 
     `save` the override of save increments the last/highest value of
-    order by 1
+    `order_field_name` by 1
     """
 
-    order = models.PositiveIntegerField(editable=False, default=1,
-        db_index=True)
+    # order = models.PositiveIntegerField(editable=False, default=1,
+    #     db_index=True)
+    order_field_name = 'order'
     is_sortable = False
     sorting_filters = ()
 
     # legacy support
     sortable_by = None
-
     sortable_foreign_key = None
 
     class Meta:
         abstract = True
-        ordering = ['order']
 
     @classmethod
     def model_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
 
     def __init__(self, *args, **kwargs):
-        super(Sortable, self).__init__(*args, **kwargs)
+        super(SortableMixin, self).__init__(*args, **kwargs)
+
+        # get the model field defined by `order_field_name`
+        self.order_field = self._meta.get_field(self.order_field_name)
+
+        integer_fields = (models.PositiveIntegerField, models.IntegerField,
+            models.PositiveSmallIntegerField, models.SmallIntegerField,
+            models.BigIntegerField,)
+        if not self.order_field or not isinstance(self.order_field,
+                integer_fields):
+            raise NotImplemented(u'You must define the field '
+                '`order_field_name` refers to, and it must be of type: '
+                'PositiveIntegerField, IntegerField, '
+                'PositiveSmallIntegerField, SmallIntegerField, '
+                'BigIntegerField')
 
         # Validate that model only contains at most one SortableForeignKey
         sortable_foreign_keys = []
@@ -59,15 +73,20 @@ class Sortable(models.Model):
         elif sortable_foreign_keys_length == 1:
             self.__class__.sortable_foreign_key = sortable_foreign_keys[0]
 
+    def _get_order_field_value(self):
+        return int(self.order_field.value_to_string(self))
+
     def save(self, *args, **kwargs):
         if not self.id:
             try:
-                self.order = self.__class__.objects.aggregate(
-                    models.Max('order'))['order__max'] + 1
+                current_max = self.__class__.objects.aggregate(
+                    models.Max(self.order_field_name))[self.order_field_name + '__max'] or 0
+
+                setattr(self, self.order_field_name, current_max + 1)
             except (TypeError, IndexError):
                 pass
 
-        super(Sortable, self).save(*args, **kwargs)
+        super(SortableMixin, self).save(*args, **kwargs)
 
     def _filter_objects(self, filters, extra_filters, filter_on_sortable_fk):
         if extra_filters:
@@ -80,17 +99,28 @@ class Sortable(models.Model):
                 {self.sortable_foreign_key.name: sfk_obj.id})
 
         try:
-            order_by = '-order' if 'order__lt' in filters.keys() else 'order'
-            obj = self.__class__.objects.filter(**filters).order_by(order_by)[:1][0]
+            order_by = '-{}'.format(self.order_field_name) \
+                if '{}__lt'.format(self.order_field_name) in filters.keys() else self.order_field_name
+            obj = self.__class__.objects.filter(
+                **filters).order_by(order_by)[:1][0]
         except IndexError:
             obj = None
 
         return obj
 
     def get_next(self, extra_filters={}, filter_on_sortable_fk=True):
-        return self._filter_objects({'order__gt': self.order},
+        return self._filter_objects(
+            {'{}__gt'.format(self.order_field_name): self._get_order_field_value},
             extra_filters, filter_on_sortable_fk)
 
     def get_previous(self, extra_filters={}, filter_on_sortable_fk=True):
-        return self._filter_objects({'order__lt': self.order},
+        return self._filter_objects(
+            {'{}__lt'.format(self.order_field_name): self._get_order_field_value},
             extra_filters, filter_on_sortable_fk)
+
+
+# for easier legacy support of existing implementations
+class Sortable(SortableMixin):
+
+    class Meta:
+        abstract = True

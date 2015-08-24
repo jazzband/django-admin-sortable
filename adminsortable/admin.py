@@ -26,7 +26,7 @@ from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 
 from adminsortable.utils import get_is_sortable, check_model_is_sortable
-from adminsortable.models import Sortable
+from adminsortable.models import SortableMixin
 
 STATIC_URL = settings.STATIC_URL
 
@@ -246,20 +246,21 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 objects_dict = dict([(str(obj.pk), obj) for obj in
                     klass.objects.filter(pk__in=indexes)])
 
-                if '-order' in klass._meta.ordering:
+                if '-{}'.format(klass.order_field_name) in klass._meta.ordering:
                     step = -1
                     start_object = max(objects_dict.values(),
-                        key=lambda x: getattr(x, 'order'))
+                        key=lambda x: getattr(x, klass.order_field_name))
                 else:
                     step = 1
                     start_object = min(objects_dict.values(),
-                        key=lambda x: getattr(x, 'order'))
+                        key=lambda x: getattr(x, klass.order_field_name))
 
-                start_index = getattr(start_object, 'order', len(indexes))
+                start_index = getattr(start_object, klass.order_field_name,
+                    len(indexes))
 
                 for index in indexes:
                     obj = objects_dict.get(index)
-                    setattr(obj, 'order', start_index)
+                    setattr(obj, klass.order_field_name, start_index)
                     obj.save()
                     start_index += step
                 response = {'objects_sorted': True}
@@ -281,9 +282,9 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
     def __init__(self, *args, **kwargs):
         super(SortableInlineBase, self).__init__(*args, **kwargs)
 
-        if not issubclass(self.model, Sortable):
+        if not issubclass(self.model, SortableMixin):
             raise Warning(u'Models that are specified in SortableTabluarInline'
-                ' and SortableStackedInline must inherit from Sortable')
+                ' and SortableStackedInline must inherit from SortableMixin')
 
     def get_queryset(self, request):
         if VERSION < (1, 6):
