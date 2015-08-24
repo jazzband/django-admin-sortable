@@ -284,7 +284,8 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
 
         if not issubclass(self.model, SortableMixin):
             raise Warning(u'Models that are specified in SortableTabluarInline'
-                ' and SortableStackedInline must inherit from SortableMixin')
+                ' and SortableStackedInline must inherit from SortableMixin'
+                ' (or Sortable for legacy implementations)')
 
     def get_queryset(self, request):
         if VERSION < (1, 6):

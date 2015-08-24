@@ -74,7 +74,11 @@ class SortableMixin(models.Model):
             self.__class__.sortable_foreign_key = sortable_foreign_keys[0]
 
     def _get_order_field_value(self):
-        return int(self.order_field.value_to_string(self))
+        try:
+            return int(self.order_field.value_to_string(self))
+        except ValueError:
+            raise u'The value from the specified order field could not be '
+            'typecast to an integer.'
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -99,8 +103,9 @@ class SortableMixin(models.Model):
                 {self.sortable_foreign_key.name: sfk_obj.id})
 
         try:
-            order_by = '-{}'.format(self.order_field_name) \
-                if '{}__lt'.format(self.order_field_name) in filters.keys() else self.order_field_name
+            order_by = '-{0}'.format(self.order_field_name) \
+                if '{0}__lt'.format(self.order_field_name) in filters.keys() \
+                else self.order_field_name
             obj = self.__class__.objects.filter(
                 **filters).order_by(order_by)[:1][0]
         except IndexError:
@@ -110,12 +115,12 @@ class SortableMixin(models.Model):
 
     def get_next(self, extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects(
-            {'{}__gt'.format(self.order_field_name): self._get_order_field_value},
+            {'{0}__gt'.format(self.order_field_name): self._get_order_field_value},
             extra_filters, filter_on_sortable_fk)
 
     def get_previous(self, extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects(
-            {'{}__lt'.format(self.order_field_name): self._get_order_field_value},
+            {'{0}__lt'.format(self.order_field_name): self._get_order_field_value},
             extra_filters, filter_on_sortable_fk)
 
 
