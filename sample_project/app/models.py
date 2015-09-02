@@ -24,7 +24,7 @@ class Category(SimpleModel, SortableMixin):
         verbose_name_plural = 'Categories'
         ordering = ['order']
 
-    order = models.PositiveIntegerField(default=0, editable=False)
+    order = models.PositiveIntegerField(default=0)
 
 
 # A model with an override of its queryset for admin
@@ -211,8 +211,6 @@ class CustomWidget(SortableMixin, SimpleModel):
     custom_order_field = models.PositiveIntegerField(default=0, db_index=True,
         editable=False)
 
-    order_field_name = 'custom_order_field'
-
     class Meta:
         ordering = ['custom_order_field']
         verbose_name = 'Custom Widget'
@@ -230,8 +228,6 @@ class CustomWidgetComponent(SortableMixin, SimpleModel):
     # custom field for ordering
     widget_order = models.PositiveIntegerField(default=0, db_index=True,
         editable=False)
-
-    order_field_name = 'widget_order'
 
     class Meta:
         ordering = ['widget_order']

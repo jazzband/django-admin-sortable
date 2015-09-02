@@ -23,12 +23,9 @@ class SortableMixin(models.Model):
     inherits Sortable
 
     `save` the override of save increments the last/highest value of
-    `order_field_name` by 1
+    `Meta.ordering` by 1
     """
 
-    # order = models.PositiveIntegerField(editable=False, default=1,
-    #     db_index=True)
-    order_field_name = 'order'
     is_sortable = False
     sorting_filters = ()
 
@@ -46,16 +43,25 @@ class SortableMixin(models.Model):
     def __init__(self, *args, **kwargs):
         super(SortableMixin, self).__init__(*args, **kwargs)
 
-        # get the model field defined by `order_field_name`
+        # Check that Meta.ordering contains one value
+        try:
+            self.order_field_name = self._meta.ordering[0].replace('-', '')
+        except IndexError:
+            raise ValueError(u'You must define the Meta.ordering '
+                u'property on your model.')
+
+        # get the model field defined by `Meta.ordering`
         self.order_field = self._meta.get_field(self.order_field_name)
 
         integer_fields = (models.PositiveIntegerField, models.IntegerField,
             models.PositiveSmallIntegerField, models.SmallIntegerField,
             models.BigIntegerField,)
+
+        # check that the order field is an integer type
         if not self.order_field or not isinstance(self.order_field,
                 integer_fields):
             raise NotImplemented(u'You must define the field '
-                '`order_field_name` refers to, and it must be of type: '
+                '`Meta.ordering` refers to, and it must be of type: '
                 'PositiveIntegerField, IntegerField, '
                 'PositiveSmallIntegerField, SmallIntegerField, '
                 'BigIntegerField')

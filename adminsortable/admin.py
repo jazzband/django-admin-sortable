@@ -246,21 +246,23 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 objects_dict = dict([(str(obj.pk), obj) for obj in
                     klass.objects.filter(pk__in=indexes)])
 
-                if '-{}'.format(klass.order_field_name) in klass._meta.ordering:
+                order_field_name = klass._meta.ordering[0]
+
+                if '-' in order_field_name:
                     step = -1
                     start_object = max(objects_dict.values(),
-                        key=lambda x: getattr(x, klass.order_field_name))
+                        key=lambda x: getattr(x, order_field_name))
                 else:
                     step = 1
                     start_object = min(objects_dict.values(),
-                        key=lambda x: getattr(x, klass.order_field_name))
+                        key=lambda x: getattr(x, order_field_name))
 
-                start_index = getattr(start_object, klass.order_field_name,
+                start_index = getattr(start_object, order_field_name,
                     len(indexes))
 
                 for index in indexes:
                     obj = objects_dict.get(index)
-                    setattr(obj, klass.order_field_name, start_index)
+                    setattr(obj, order_field_name, start_index)
                     obj.save()
                     start_index += step
                 response = {'objects_sorted': True}
