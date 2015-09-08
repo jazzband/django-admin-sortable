@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 2.0.0
+Current version: 2.0.1
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -61,16 +61,15 @@ Inlines may be drag-and-dropped into any order directly from the change form.
 ### Models
 To add sortability to a model, you need to inherit `SortableMixin` and at minimum, define:
 
-- The field which should be used for ordering, which must be one of the integer fields defined in Django's ORM:
+- The field which should be used for `Meta.ordering`, which must resolve to one of the integer fields defined in Django's ORM:
  - `PositiveIntegerField`
  - `IntegerField`
  - `PositiveSmallIntegerField`
  - `SmallIntegerField`
  - `BigIntegerField`
-- An `order_field_name` string that is synonymous to the field used for ordering (defaults to 'order' for backwards compatibility). *This field is not required if your ordering field is named "order".*
-- The `ordering` option on your model's `Meta` class, which should be the same as the `order_field_name`
 
-For a smoother admin experience, I recommend setting the field to `editable=False` and adding indexing to the field you use for ordering.
+- `Meta.ordering` **must only contain one value**, otherwise, your objects will not be sorted correctly.
+- It is recommended that you set `editable=False` and `db_index=True` on the field defined in `Meta.ordering` for a seamless Django admin experience and faster lookups on the objects.
 
 Sample Model:
 
@@ -87,13 +86,9 @@ Sample Model:
 
         # define the field the model should be ordered by
         the_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
-        order_field_name = 'the_order'
 
         def __unicode__(self):
             return self.title
-
-#### Important Note About Ordering...
-If you do not set the `Meta` `ordering` option to the same value as `order_field_name`, your objects will not be sorted/ordered correctly.
 
 
 #### Common Use Case
@@ -462,8 +457,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 2.0.0?
-- Sortable class has become SortableMixin which is now unobtrusive, allowing you to create sortable abstract classes.
+### What's new in 2.0.1?
+- Sortables now determine the field to use for sorting via the `Meta.ordering` definition rather than a separate string on the model.
 
 
 ### Future
