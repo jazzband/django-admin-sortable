@@ -248,7 +248,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
                 order_field_name = klass._meta.ordering[0]
 
-                if '-' in order_field_name:
+                if order_field_name.startswith('-'):
+                    order_field_name = order_field_name[1:]
                     step = -1
                     start_object = max(objects_dict.values(),
                         key=lambda x: getattr(x, order_field_name))
