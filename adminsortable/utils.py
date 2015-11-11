@@ -6,11 +6,13 @@ def check_inheritance(obj):
 
 
 def get_is_sortable(objects):
-    if objects:
-        if check_inheritance(objects[0]):
-            if objects.count() > 1:
-                return True
-    return False
+    if objects.count() < 2:
+        return False
+
+    if not check_inheritance(objects[:1][0]):
+        return False
+
+    return True
 
 
 def is_self_referential(cls):
