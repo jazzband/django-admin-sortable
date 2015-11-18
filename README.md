@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 2.0.6
+Current version: 2.0.7
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -457,8 +457,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 2.0.6?
-- Minor bugfix for stacked inlines that was causing blank rows to be displayed below fieldsets that were collapsible. Thanks [@cho-is](https://github.com/cho-is) for reporting.
+### What's new in 2.0.7?
+- Minor enhancement to determine which element to highlight on sortable stacked inlines when all fieldsets are set to collapse.
 
 
 ### Future
