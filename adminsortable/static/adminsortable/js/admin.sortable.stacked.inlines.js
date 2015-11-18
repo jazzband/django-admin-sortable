@@ -40,7 +40,7 @@
                         type: 'POST',
                         data: { indexes : indexes.join(',') },
                         success: function() {
-                            ui.item.find('.form-row').effect('highlight', {}, 1000);
+                            ui.item.find('.form-row').effect('highlight', {}, 1000).removeAttr('style');
                         }
                     });
                 }
