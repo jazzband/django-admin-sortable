@@ -40,7 +40,9 @@
                         type: 'POST',
                         data: { indexes : indexes.join(',') },
                         success: function() {
-                            ui.item.find('.form-row').effect('highlight', {}, 1000).removeAttr('style');
+                            var fieldsets = ui.item.find('fieldset'),
+                                highlightedSelector = fieldsets.filter('.collapsed').length === fieldsets.length ? 'h3' : '.form-row';
+                            ui.item.find(highlightedSelector).effect('highlight', {}, 1000);
                         }
                     });
                 }

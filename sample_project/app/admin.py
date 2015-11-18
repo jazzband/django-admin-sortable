@@ -14,6 +14,16 @@ admin.site.register(Category, SortableAdmin)
 
 
 class ComponentInline(SortableStackedInline):
+    # fieldsets = (
+    #     ('foo', {
+    #         'classes': ('collapse',),
+    #         'fields': ('title',)
+    #     }),
+    #     ('', {
+    #         'classes': ('collapse',),
+    #         'fields': ('widget',)
+    #     }),
+    # )
     model = Component
 
     def queryset(self, request):
