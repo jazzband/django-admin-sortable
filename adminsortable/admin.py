@@ -108,6 +108,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
                 opts.get_change_permission()))
 
+        jquery_lib_path = 'admin/js/jquery.js' if VERSION < (1, 9) \
+            else 'admin/js/vendor/jquery/jquery.js'
+
         # get sort group index from querystring if present
         sort_filter_index = request.GET.get('sort_filter')
 
@@ -182,7 +185,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'group_expression': sortable_by_expression,
             'sortable_by_class': sortable_by_class,
             'sortable_by_class_is_sortable': sortable_by_class_is_sortable,
-            'sortable_by_class_display_name': sortable_by_class_display_name
+            'sortable_by_class_display_name': sortable_by_class_display_name,
+            'jquery_lib_path': jquery_lib_path
         }
         return render(request, self.sortable_change_list_template, context)
 
