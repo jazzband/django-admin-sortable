@@ -1,4 +1,10 @@
-from django.contrib.contenttypes import generic
+from django import VERSION
+
+if VERSION < (1, 9):
+    from django.contrib.contenttypes.generic import GenericForeignKey
+else:
+    from django.contrib.contenttypes.fields import GenericForeignKey
+
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
@@ -109,7 +115,7 @@ class GenericNote(SimpleModel, SortableMixin):
     content_type = models.ForeignKey(ContentType,
         verbose_name=u"Content type", related_name="generic_notes")
     object_id = models.PositiveIntegerField(u"Content id")
-    content_object = generic.GenericForeignKey(ct_field='content_type',
+    content_object = GenericForeignKey(ct_field='content_type',
         fk_field='object_id')
 
     order = models.PositiveIntegerField(default=0, editable=False)

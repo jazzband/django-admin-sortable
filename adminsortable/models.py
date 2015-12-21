@@ -121,12 +121,12 @@ class SortableMixin(models.Model):
 
     def get_next(self, extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects(
-            {'{0}__gt'.format(self.order_field_name): self._get_order_field_value},
+            {'{0}__gt'.format(self.order_field_name): self._get_order_field_value()},
             extra_filters, filter_on_sortable_fk)
 
     def get_previous(self, extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects(
-            {'{0}__lt'.format(self.order_field_name): self._get_order_field_value},
+            {'{0}__lt'.format(self.order_field_name): self._get_order_field_value()},
             extra_filters, filter_on_sortable_fk)
 
 

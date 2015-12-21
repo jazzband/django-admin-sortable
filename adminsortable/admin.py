@@ -4,10 +4,12 @@ from django import VERSION
 
 from django.conf import settings
 
-if VERSION < (1, 5):
-    from django.conf.urls.defaults import patterns, url
-else:
+if VERSION > (1, 7):
+    from django.conf.urls import url
+elif VERSION > (1, 5):
     from django.conf.urls import patterns, url
+else:
+    from django.conf.urls.defaults import patterns, url
 
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
@@ -80,17 +82,27 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
-        admin_urls = patterns('',
 
-            # this ajax view changes the order
-            url(r'^sorting/do-sorting/(?P<model_type_id>\d+)/$',
-                self.admin_site.admin_view(self.do_sorting_view),
-                name='admin_do_sorting'),
+        # this ajax view changes the order
+        admin_do_sorting_url = url(r'^sorting/do-sorting/(?P<model_type_id>\d+)/$',
+            self.admin_site.admin_view(self.do_sorting_view),
+            name='admin_do_sorting')
 
-            # this view displays the sortable objects
-            url(r'^sort/$', self.admin_site.admin_view(self.sort_view),
-                name='admin_sort'),
-        )
+        # this view displays the sortable objects
+        admin_sort_url = url(r'^sort/$',
+            self.admin_site.admin_view(self.sort_view),
+            name='admin_sort')
+
+        if VERSION > (1, 7):
+            admin_urls = [
+                admin_do_sorting_url,
+                admin_sort_url
+            ]
+        else:
+            admin_urls = patterns('',
+                admin_do_sorting_url,
+                admin_sort_url,)
+
         return admin_urls + urls
 
     def sort_view(self, request):
