@@ -386,7 +386,7 @@ For Django 1.6.x, extend:
 The height of a stacked inline model can dynamically increase,
 which can make them difficult to sort. If you anticipate the height of a
 stacked inline is going to be very tall, I would suggest using
-TabularStackedInline instead.
+SortableTabularInline instead.
 
 ### Django-CMS integration
 Django-CMS plugins use their own change form, and thus won't automatically
