@@ -5,9 +5,9 @@ from django import VERSION
 from django.conf import settings
 
 if VERSION < (1, 5):
-    from django.conf.urls.defaults import patterns, url
+    from django.conf.urls.defaults import url
 else:
-    from django.conf.urls import patterns, url
+    from django.conf.urls import url
 
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
@@ -80,7 +80,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
-        admin_urls = patterns('',
+        admin_urls = [
 
             # this ajax view changes the order
             url(r'^sorting/do-sorting/(?P<model_type_id>\d+)/$',
@@ -90,7 +90,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             # this view displays the sortable objects
             url(r'^sort/$', self.admin_site.admin_view(self.sort_view),
                 name='admin_sort'),
-        )
+        ]
         return admin_urls + urls
 
     def sort_view(self, request):
