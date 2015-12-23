@@ -1,10 +1,11 @@
-{% load i18n admin_urls admin_static %}
+{% load i18n admin_urls admin_static django_template_additions %}
+{% get_django_version as django_version %}
 <div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
   <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }} {% if inline_admin_formset.formset.initial_form_count > 1 %} - {% trans "drag and drop to change order" %}{% endif %}</h2>
 {{ inline_admin_formset.formset.management_form }}
 {{ inline_admin_formset.formset.non_form_errors }}
 
-{% for inline_admin_form in inline_admin_formset %}<div class="inline-related{% if forloop.last %} empty-form last-related{% endif %} {% if inline_admin_form.original %} has_original{% endif %}" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
+{% for inline_admin_form in inline_admin_formset %}<div class="inline-related {% if django_version.major >= 1 and django_version.minor >= 9 %}flat-admin{% endif %} {% if forloop.last %} empty-form last-related{% endif %} {% if inline_admin_form.original %} has_original{% endif %}" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
   <h3><b>{{ inline_admin_formset.opts.verbose_name|title }}:</b>&nbsp;<span class="inline_label">{% if inline_admin_form.original %}{{ inline_admin_form.original }}{% if inline_admin_form.model_admin.show_change_link and inline_admin_form.model_admin.has_registered_model %} <a href="{% url inline_admin_form.model_admin.opts|admin_urlname:'change' inline_admin_form.original.pk|admin_urlquote %}" class="inlinechangelink">{% trans "Change" %}</a>{% endif %}
   {% else %}#{{ forloop.counter }}{% endif %}</span>
     {% if inline_admin_form.show_url %}<a href="{% url 'admin:view_on_site' inline_admin_form.original_content_type_id inline_admin_form.original.pk %}">{% trans "View on site" %}</a>{% endif %}

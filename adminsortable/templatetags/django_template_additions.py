@@ -1,4 +1,6 @@
 from itertools import groupby
+
+import django
 from django import template
 try:
     from django import TemplateSyntaxError
@@ -76,3 +78,9 @@ def dynamic_regroup(parser, token):
     #We also need to hand the parser to the node in order to convert the value
     #for `expression` to a FilterExpression.
     return DynamicRegroupNode(target, parser, expression, var_name)
+
+
+@register.assignment_tag
+def get_django_version():
+    version = django.VERSION
+    return {'major': version[0], 'minor': version[1]}

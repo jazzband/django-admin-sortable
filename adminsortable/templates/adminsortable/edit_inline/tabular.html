@@ -1,5 +1,6 @@
-{% load i18n admin_urls admin_static admin_modify %}{% load cycle from future %}
-<div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
+{% load i18n admin_urls admin_static admin_modify django_template_additions %}{% load cycle from future %}
+{% get_django_version as django_version %}
+<div class="inline-group {% if django_version.major >= 1 and django_version.minor >= 9 %}flat-admin{% endif %}" id="{{ inline_admin_formset.formset.prefix }}-group">
   <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
 {{ inline_admin_formset.formset.management_form }}
 <fieldset class="module">

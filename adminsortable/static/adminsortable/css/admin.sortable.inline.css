@@ -9,9 +9,17 @@
 }
 
 .sortable .inline-related .module.aligned .fa {
+    margin: 5px 10px 0 0;
+}
+
+.sortable .inline-related.flat-admin .module.aligned .fa {
     margin: 9px 10px 0 0;
 }
 
 .sortable.inline-group .module .fa {
+	margin: 26px -10px 0 10px;
+}
+
+.sortable.inline-group.flat-admin .module .fa {
 	margin: 34px -10px 0 10px;
 }
