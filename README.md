@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 2.0.8
+Current version: 2.0.9
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -335,7 +335,7 @@ It is also possible to sort a subset of objects in your model by adding a `sorti
 #### Self-Referential SortableForeignKey
 You can specify a self-referential SortableForeignKey field, however the admin interface will currently show a model that is a grandchild at the same level as a child. I'm working to resolve this issue.
 
-#####Important!
+##### Important!
 django-admin-sortable 1.6.6 introduced a backwards-incompatible change for `sorting_filters`. Previously this attribute was defined as a dictionary, so you'll need to change your values over to the new tuple-based format.
 
 An example of sorting subsets would be a "Board of Directors". In this use case, you have a list of "People" objects. Some of these people are on the Board of Directors and some not, and you need to sort them independently.
@@ -457,11 +457,9 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 2.0.8?
-- Refactored admin url patterns to be compatible with Django 1.8 or higher.
-- Refactored import paths on generics in `sample_project` to be compatible with Django 1.9.
-- Fixed typo in documentation.
-- Updated unit tests for get_next/previous.
+### What's new in 2.0.9?
+- Added icons for sortable elements
+- Refactored determination of sortability of fields that are instances of `SortableForeignKey` in admin
 
 
 ### Future
