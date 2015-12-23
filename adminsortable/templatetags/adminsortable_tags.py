@@ -28,8 +28,8 @@ def render_list_items(context, list_objects,
 
 
 @register.simple_tag(takes_context=True)
-def render_object_rep(context, obj,
+def render_object_rep(context, obj, forloop,
         sortable_object_rep_template='adminsortable/shared/object_rep.html'):
-    context.update({'object': obj})
+    context.update({'object': obj, 'forloop': forloop})
     tmpl = template.loader.get_template(sortable_object_rep_template)
     return tmpl.render(context)

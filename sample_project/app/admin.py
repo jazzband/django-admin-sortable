@@ -59,7 +59,7 @@ class CreditInline(SortableTabularInline):
 
 class NoteInline(SortableStackedInline):
     model = Note
-    extra = 0
+    extra = 2
 
 
 class GenericNoteInline(SortableGenericStackedInline):

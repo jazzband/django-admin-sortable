@@ -48,6 +48,7 @@
           {% for line in fieldset %}
             {% for field in line %}
               <td class="{{ field.field.name }}">
+                  {% if inline_admin_form.original and forloop.parentloop.counter == 1  %}<i class="fa fa-arrows-v"></i>{% endif %}
               {% if field.is_readonly %}
                   <p>{{ field.contents }}</p>
               {% else %}

@@ -38,7 +38,23 @@
                         type: 'POST',
                         data: { indexes : indexes.join(',') },
                         success: function() {
-                            //highlight sorted row, then re-stripe table
+                            // set icons based on position
+                            var icons = ui.item.parent().find('.fa');
+                            icons.removeClass('fa-sort-desc fa-sort-asc fa-sort');
+                            icons.each(function(index, element) {
+                                var icon = $(element);
+                                if (index === 0) {
+                                    icon.addClass('fa fa-sort-desc');
+                                }
+                                else if (index == icons.length - 1) {
+                                    icon.addClass('fa fa-sort-asc');
+                                }
+                                else  {
+                                    icon.addClass('fa fa-sort');
+                                }
+                            });
+
+                            // highlight sorted row, then re-stripe table
                             ui.item.effect('highlight', {}, 1000);
                             tabular_inline_rows.removeClass('row1 row2');
                             $('.tabular table tbody tr:odd').addClass('row2');

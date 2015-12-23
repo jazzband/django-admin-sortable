@@ -3,7 +3,7 @@
     {% for object in list_objects %}
         <li>
             {% if list_objects_length > 1 %}
-                {% render_object_rep object %}
+                {% render_object_rep object forloop %}
             {% else %}
                 {{ object }}
             {% endif %}

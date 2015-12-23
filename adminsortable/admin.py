@@ -27,8 +27,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 
-from adminsortable.utils import get_is_sortable, check_model_is_sortable
+from adminsortable.fields import SortableForeignKey
 from adminsortable.models import SortableMixin
+from adminsortable.utils import get_is_sortable, check_model_is_sortable
 
 STATIC_URL = settings.STATIC_URL
 
@@ -145,9 +146,17 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         # Legacy support for 'sortable_by' defined as a model property
         sortable_by_property = getattr(self.model, 'sortable_by', None)
 
-        # `sortable_by` defined as a SortableForeignKey
-        sortable_by_fk = self.model.sortable_foreign_key
-        sortable_by_class_is_sortable = check_model_is_sortable(sortable_by_fk)
+        # see if our model is sortable by a SortableForeignKey field
+        # and that the number of objects available is >= 2
+        sortable_by_fk = None
+        sortable_by_field_name = None
+        sortable_by_class_is_sortable = False
+
+        for field in self.model._meta.fields:
+            if isinstance(field, SortableForeignKey):
+                sortable_by_fk = field.rel.to
+                sortable_by_field_name = field.name.lower()
+                sortable_by_class_is_sortable = sortable_by_fk.objects.count() >= 2
 
         if sortable_by_property:
             # backwards compatibility for < 1.1.1, where sortable_by was a
@@ -165,10 +174,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         elif sortable_by_fk:
             # get sortable by properties from the SortableForeignKey
             # field - supported in 1.3+
-            sortable_by_class_display_name = sortable_by_fk.rel.to \
-                ._meta.verbose_name_plural
-            sortable_by_class = sortable_by_fk.rel.to
-            sortable_by_expression = sortable_by_fk.name.lower()
+            sortable_by_class_display_name = sortable_by_fk._meta.verbose_name_plural
+            sortable_by_class = sortable_by_fk
+            sortable_by_expression = sortable_by_field_name
 
         else:
             # model is not sortable by another model

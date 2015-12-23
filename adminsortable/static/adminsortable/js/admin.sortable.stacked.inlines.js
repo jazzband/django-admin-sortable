@@ -41,7 +41,24 @@
                         data: { indexes : indexes.join(',') },
                         success: function() {
                             var fieldsets = ui.item.find('fieldset'),
-                                highlightedSelector = fieldsets.filter('.collapsed').length === fieldsets.length ? 'h3' : '.form-row';
+                                highlightedSelector = fieldsets.filter('.collapsed').length === fieldsets.length ? 'h3' : '.form-row',
+                                icons = ui.item.parent().find(highlightedSelector).find('.fa');
+
+                            // set icons based on position
+                            icons.removeClass('fa-sort-desc fa-sort-asc fa-sort');
+                            icons.each(function(index, element) {
+                                var icon = $(element);
+                                if (index === 0) {
+                                    icon.addClass('fa fa-sort-desc');
+                                }
+                                else if (index == icons.length - 1) {
+                                    icon.addClass('fa fa-sort-asc');
+                                }
+                                else  {
+                                    icon.addClass('fa fa-sort');
+                                }
+                            });
+
                             ui.item.find(highlightedSelector).effect('highlight', {}, 1000);
                         }
                     });

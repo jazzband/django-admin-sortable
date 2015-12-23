@@ -5,8 +5,8 @@
         {% for regrouped_object in regrouped_objects %}
             {% with object=regrouped_object.grouper %}
                 {% if object %}
-                    <li>{% if sortable_by_class_is_sortable %}
-                            {% render_object_rep object %}
+                    <li class="parent">{% if sortable_by_class_is_sortable %}
+                            {% render_object_rep object forloop %}
                         {% else %}
                             {{ object }}
                         {% endif %}

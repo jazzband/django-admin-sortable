@@ -4,6 +4,7 @@
 
 {% block extrastyle %}
 	{{ block.super }}
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="{% static 'adminsortable/css/admin.sortable.css' %}" />
 {% endblock %}
 
@@ -40,8 +41,8 @@
     	{% blocktrans with opts.verbose_name_plural|capfirst as model %}Drag and drop {{ model }} to change their order.{% endblocktrans %}
     	{% endif %}
 	</h1>
-	{% if sortable_by_class.is_sortable %}
-	<p>
+	{% if sortable_by_class_is_sortable %}
+	<p class="sortable-help-text">
 	{% blocktrans %}You may also drag and drop {{ sortable_by_class_display_name }} to change their order.{% endblocktrans %}
 	</p>
 	{% endif %}

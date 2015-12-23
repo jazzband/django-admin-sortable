@@ -25,6 +25,11 @@
         <tr class="form-row {% cycle "row1" "row2" %} {% if inline_admin_form.original or inline_admin_form.show_url %}has_original{% endif %}{% if forloop.last %} empty-form{% endif %}"
              id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
         <td class="original">
+            {% with initial_forms=inline_admin_form.formset.management_form.initial.INITIAL_FORMS %}
+            {% if forloop.counter <= initial_forms %}
+            <i class="fa fa-{% if forloop.first %}sort-desc{% elif forloop.counter == initial_forms %}sort-asc{% else %}sort{% endif %}"></i>
+            {% endif %}
+            {% endwith %}
           {% if inline_admin_form.original or inline_admin_form.show_url %}<p>
           {% if inline_admin_form.original %}
               {{ inline_admin_form.original }}

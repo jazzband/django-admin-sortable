@@ -1,8 +1,9 @@
 from .models import SortableMixin, SortableForeignKey
 
 
-def check_inheritance(obj):
-    return issubclass(type(obj), SortableMixin)
+def check_inheritance(cls):
+    print 'check_inheritance: {}'.format(issubclass(type(cls), SortableMixin))
+    return issubclass(type(cls), SortableMixin)
 
 
 def get_is_sortable(objects):

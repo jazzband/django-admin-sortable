@@ -3,4 +3,4 @@
 <form>
     <input name="pk" type="hidden" value="{{ object.pk }}" />
 </form>
-<a href="{% url 'admin:admin_do_sorting' object.model_type_id %}" class="admin_sorting_url">{{ object }}</a>
+<a href="{% url 'admin:admin_do_sorting' object.model_type_id %}" class="admin_sorting_url"><i class="fa fa-{% if forloop.first %}sort-desc{% elif forloop.last %}sort-asc{% else %}sort{% endif %}"></i> {{ object }}</a>

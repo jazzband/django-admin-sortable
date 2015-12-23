@@ -42,7 +42,16 @@
 	margin-bottom: 0;
 }
 
+.sortable-help-text {
+	color: #999;
+	font-size: 13px;
+}
+
 .sortable a:hover
 {
 	color: #003366;
+}
+
+.sortable .fa {
+	margin-right: 7px;
 }
