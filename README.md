@@ -59,7 +59,7 @@ Inlines may be drag-and-dropped into any order directly from the change form.
 ## Usage
 
 ### Models
-To add sortability to a model, you need to inherit `SortableMixin` and at minimum, define:
+To add "sortability" to a model, you need to inherit `SortableMixin` and at minimum, define:
 
 - The field which should be used for `Meta.ordering`, which must resolve to one of the integer fields defined in Django's ORM:
  - `PositiveIntegerField`
@@ -106,7 +106,6 @@ A common use case is to have child objects that are sortable relative to a paren
 
         # ordering field
         category_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
-        order_field_name = 'category_order'
 
     class Project(SortableMixin):
         class Meta:
@@ -117,7 +116,6 @@ A common use case is to have child objects that are sortable relative to a paren
 
         # ordering field
         project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
-        order_field_name = 'project_order'
 
         def __unicode__(self):
             return self.title
@@ -152,7 +150,6 @@ Sometimes you might have a parent model that is not sortable, but has child mode
 
         # ordering field
         project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
-        order_field_name = 'project_order'
 
         def __unicode__(self):
             return self.title
@@ -429,15 +426,13 @@ the extrahead block with:
         <link rel="stylesheet" type="text/css" href="{% static 'adminsortable/css/admin.sortable.inline.css' %}" />
     {% endblock extrahead %}
 
-Sorting within Django-CMS is really only feasible for inline models of a
-plugin as Django-CMS already includes sorting for plugin instances. For tabular inlines,
-just substitute:
+Sorting within Django-CMS is really only feasible for inline models of a plugin as Django-CMS already includes sorting for plugin instances. For tabular inlines, just substitute:
 
-    <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
+    <script src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
 
 with:
 
-    <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
+    <script src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
 
 
 ### Rationale
