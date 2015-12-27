@@ -8,6 +8,14 @@ This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
 enabling individual items or groups of items to be sortable.
 
+Sorting model instances with a sortable parent:
+
+![sortable-models](http://res.cloudinary.com/alsoicode/image/upload/v1451237555/django-admin-sortable/sortable-models.jpg)
+
+Sorting inlines:
+
+![sortable-inlines](http://res.cloudinary.com/alsoicode/image/upload/v1451237555/django-admin-sortable/sortable-inlines.jpg)
+
 ## Supported Django Versions
 If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
 For Django 1.5.x or higher, use the latest version of django-admin-sortable.
