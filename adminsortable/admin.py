@@ -29,7 +29,7 @@ from django.template.defaultfilters import capfirst
 
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import SortableMixin
-from adminsortable.utils import get_is_sortable, check_model_is_sortable
+from adminsortable.utils import get_is_sortable
 
 STATIC_URL = settings.STATIC_URL
 
@@ -188,7 +188,16 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             # Order the objects by the property they are sortable by,
             # then by the order, otherwise the regroup
             # template tag will not show the objects correctly
-            objects = objects.order_by(sortable_by_expression, 'order')
+
+            try:
+                order_field_name = opts.model._meta.ordering[0]
+            except (AttributeError, IndexError):
+                # for Django 1.5.x
+                order_field_name = opts.ordering[0]
+            finally:
+                order_field_name = 'order'
+
+            objects = objects.order_by(sortable_by_expression, order_field_name)
 
         try:
             verbose_name_plural = opts.verbose_name_plural.__unicode__()
