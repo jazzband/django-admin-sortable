@@ -191,7 +191,10 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
             try:
                 order_field_name = opts.model._meta.ordering[0]
-            except IndexError:
+            except (AttributeError, IndexError):
+                # for Django 1.5.x
+                order_field_name = opts.ordering[0]
+            finally:
                 order_field_name = 'order'
 
             objects = objects.order_by(sortable_by_expression, order_field_name)
