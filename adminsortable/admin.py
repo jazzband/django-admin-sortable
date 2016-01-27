@@ -188,7 +188,13 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             # Order the objects by the property they are sortable by,
             # then by the order, otherwise the regroup
             # template tag will not show the objects correctly
-            objects = objects.order_by(sortable_by_expression, 'order')
+
+            try:
+                order_field_name = opts.model._meta.ordering[0]
+            except IndexError:
+                order_field_name = 'order'
+
+            objects = objects.order_by(sortable_by_expression, order_field_name)
 
         try:
             verbose_name_plural = opts.verbose_name_plural.__unicode__()
