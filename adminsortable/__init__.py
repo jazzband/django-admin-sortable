@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-VERSION = (2, 0, 8)  # following PEP 386
-=======
-VERSION = (2, 0, 10)  # following PEP 386
->>>>>>> Stashed changes
+VERSION = (2, 0, 10)
 DEV_N = None
 
 

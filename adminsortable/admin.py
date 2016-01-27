@@ -29,7 +29,7 @@ from django.template.defaultfilters import capfirst
 
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import SortableMixin
-from adminsortable.utils import get_is_sortable, check_model_is_sortable
+from adminsortable.utils import get_is_sortable
 
 STATIC_URL = settings.STATIC_URL
 
