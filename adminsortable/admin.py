@@ -319,7 +319,7 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
         super(SortableInlineBase, self).__init__(*args, **kwargs)
 
         if not issubclass(self.model, SortableMixin):
-            raise Warning(u'Models that are specified in SortableTabluarInline'
+            raise Warning(u'Models that are specified in SortableTabularInline'
                 ' and SortableStackedInline must inherit from SortableMixin'
                 ' (or Sortable for legacy implementations)')
 
