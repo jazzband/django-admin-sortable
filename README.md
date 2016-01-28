@@ -81,23 +81,26 @@ To add "sortability" to a model, you need to inherit `SortableMixin` and at mini
 
 Sample Model:
 
-    # models.py
-    from adminsortable.models import SortableMixin
+```python
+# models.py
+from adminsortable.models import SortableMixin
 
-    class MySortableClass(SortableMixin):
-        class Meta:
-            verbose_name = 'My Sortable Class'
-            verbose_name_plural = 'My Sortable Classes'
-            ordering = ['the_order']
+class MySortableClass(SortableMixin):
+    title = models.CharField(max_length=50)
+    
+    class Meta:
+        verbose_name = 'My Sortable Class'
+        verbose_name_plural = 'My Sortable Classes'
+        ordering = ['the_order']
 
-        title = models.CharField(max_length=50)
+    
 
-        # define the field the model should be ordered by
-        the_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+    # define the field the model should be ordered by
+    the_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
-        def __unicode__(self):
-            return self.title
-
+    def __unicode__(self):
+        return self.title
+```
 
 #### Common Use Case
 A common use case is to have child objects that are sortable relative to a parent. If your parent object is also sortable, here's how you would set up your models and admin options:
