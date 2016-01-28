@@ -81,100 +81,106 @@ To add "sortability" to a model, you need to inherit `SortableMixin` and at mini
 
 Sample Model:
 
-    # models.py
-    from adminsortable.models import SortableMixin
+```python
+# models.py
+from adminsortable.models import SortableMixin
 
-    class MySortableClass(SortableMixin):
-        class Meta:
-            verbose_name = 'My Sortable Class'
-            verbose_name_plural = 'My Sortable Classes'
-            ordering = ['the_order']
+class MySortableClass(SortableMixin):
+    title = models.CharField(max_length=50)
+    
+    class Meta:
+        verbose_name = 'My Sortable Class'
+        verbose_name_plural = 'My Sortable Classes'
+        ordering = ['the_order']
 
-        title = models.CharField(max_length=50)
+    
 
-        # define the field the model should be ordered by
-        the_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+    # define the field the model should be ordered by
+    the_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
-        def __unicode__(self):
-            return self.title
-
+    def __unicode__(self):
+        return self.title
+```
 
 #### Common Use Case
 A common use case is to have child objects that are sortable relative to a parent. If your parent object is also sortable, here's how you would set up your models and admin options:
 
-    # models.py
-    from adminsortable.fields import SortableForeignKey
+```python
+# models.py
+from adminsortable.fields import SortableForeignKey
 
-    class Category(SortableMixin):
-        class Meta:
-            ordering = ['category_order']
-            verbose_name_plural = 'Categories'
+class Category(SortableMixin):
+    class Meta:
+        ordering = ['category_order']
+        verbose_name_plural = 'Categories'
 
-        title = models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
 
-        # ordering field
-        category_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+    # ordering field
+    category_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
-    class Project(SortableMixin):
-        class Meta:
-            ordering = ['project_order']
+class Project(SortableMixin):
+    class Meta:
+        ordering = ['project_order']
 
-        category = SortableForeignKey(Category)
-        title = models.CharField(max_length=50)
+    category = SortableForeignKey(Category)
+    title = models.CharField(max_length=50)
 
-        # ordering field
-        project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+    # ordering field
+    project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
-        def __unicode__(self):
-            return self.title
+    def __unicode__(self):
+        return self.title
 
-    # admin.py
-    from adminsortable.admin import SortableAdmin
+# admin.py
+from adminsortable.admin import SortableAdmin
 
-    from your_app.models import Category, Project
+from your_app.models import Category, Project
 
-    admin.site.register(Category, SortableAdmin)
-    admin.site.register(Project, SortableAdmin)
-
+admin.site.register(Category, SortableAdmin)
+admin.site.register(Project, SortableAdmin)
+```
 
 Sometimes you might have a parent model that is not sortable, but has child models that are. In that case define your models and admin options as such:
 
-    from adminsortable.fields import SortableForeignKey
+```python
+from adminsortable.fields import SortableForeignKey
 
-    # models.py
-    class Category(models.Model):
-        class Meta:
-            verbose_name_plural = 'Categories'
+# models.py
+class Category(models.Model):
+    class Meta:
+        verbose_name_plural = 'Categories'
 
-        title = models.CharField(max_length=50)
-        ...
+    title = models.CharField(max_length=50)
+    ...
 
-    class Project(SortableMixin):
-        class Meta:
-            ordering = ['project_order']
+class Project(SortableMixin):
+    class Meta:
+        ordering = ['project_order']
 
-        category = SortableForeignKey(Category)
-        title = models.CharField(max_length=50)
+    category = SortableForeignKey(Category)
+    title = models.CharField(max_length=50)
 
-        # ordering field
-        project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+    # ordering field
+    project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
-        def __unicode__(self):
-            return self.title
+    def __unicode__(self):
+        return self.title
 
-    # admin
-    from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
+# admin
+from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
 
-    from your_app.models import Category, Project
+from your_app.models import Category, Project
 
-    class ProjectInline(SortableStackedInline):
-        model = Project
-        extra = 1
+class ProjectInline(SortableStackedInline):
+    model = Project
+    extra = 1
 
-    class CategoryAdmin(NonSortableParentAdmin):
-        inlines = [ProjectInline]
+class CategoryAdmin(NonSortableParentAdmin):
+    inlines = [ProjectInline]
 
-    admin.site.register(Category, CategoryAdmin)
+admin.site.register(Category, CategoryAdmin)
+```
 
 The `NonSortableParentAdmin` class is necessary to wire up the additional URL patterns and JavaScript that Django Admin Sortable needs to make your models sortable. The child model does not have to be an inline model, it can be wired directly to Django admin and the objects will be grouped by the non-sortable foreign key when sorting.
 
@@ -184,6 +190,7 @@ If you previously used Django Admin Sortable, **DON'T PANIC** - everything will 
 
 Please note however that the `Sortable` class still contains the hard-coded `order` field, and meta inheritance requirements:
 
+```python
     # legacy model definition
 
     from adminsortable.models import Sortable
@@ -195,13 +202,15 @@ Please note however that the `Sortable` class still contains the hard-coded `ord
 
         def __unicode__(self):
             return self.title
-
+```
 
 #### Model Instance Methods
 Each instance of a sortable model has two convenience methods to get the next or previous instance:
 
+```python
     .get_next()
     .get_previous()
+```
 
 By default, these methods will respect their order in relation to a `SortableForeignKey` field, if present. Meaning, that given the following data:
 
@@ -218,12 +227,15 @@ By default, these methods will respect their order in relation to a `SortableFor
 
 If you wish to override this behavior, pass in: `filter_on_sortable_fk=False`:
 
+```python
     your_instance.get_next(filter_on_sortable_fk=False)
+```
 
 You may also pass in additional ORM "extra_filters" as a dictionary, should you need to:
 
+```python
     your_instance.get_next(extra_filters={'title__icontains': 'blue'})
-
+```
 
 ### Adding Sorting to an existing model
 
@@ -232,10 +244,12 @@ If you're adding Sorting to an existing model, it is recommended that you use [d
 
 Example assuming a model named "Category":
 
-    def forwards(self, orm):
-        for index, category in enumerate(orm.Category.objects.all()):
-            category.order = index + 1
-            category.save()
+```python
+def forwards(self, orm):
+    for index, category in enumerate(orm.Category.objects.all()):
+        category.order = index + 1
+        category.save()
+```
 
 See: [this link](http://south.readthedocs.org/en/latest/tutorial/part3.html) for more
 information on South Data Migrations.
@@ -247,52 +261,58 @@ Since schema migrations are built into Django 1.7, you don't have to use south, 
 ### Django Admin Integration
 To enable sorting in the admin, you need to inherit from `SortableAdmin`:
 
-    from django.contrib import admin
-    from myapp.models import MySortableClass
-    from adminsortable.admin import SortableAdmin
 
-    class MySortableAdminClass(SortableAdmin):
-        """Any admin options you need go here"""
+```python
+from django.contrib import admin
+from myapp.models import MySortableClass
+from adminsortable.admin import SortableAdmin
 
-    admin.site.register(MySortableClass, MySortableAdminClass)
+class MySortableAdminClass(SortableAdmin):
+    """Any admin options you need go here"""
 
+admin.site.register(MySortableClass, MySortableAdminClass)
+```
 
 To enable sorting on TabularInline models, you need to inherit from
 SortableTabularInline:
 
-    from adminsortable.admin import SortableTabularInline
+```python
+from adminsortable.admin import SortableTabularInline
 
-    class MySortableTabularInline(SortableTabularInline):
-       """Your inline options go here"""
-
+class MySortableTabularInline(SortableTabularInline):
+    """Your inline options go here"""
+```
 
 To enable sorting on StackedInline models, you need to inherit from
 SortableStackedInline:
 
-    from adminsortable.admin import SortableStackedInline
+```python
+from adminsortable.admin import SortableStackedInline
 
-    class MySortableStackedInline(SortableStackedInline):
-       """Your inline options go here"""
-
+class MySortableStackedInline(SortableStackedInline):
+   """Your inline options go here"""
+```
 
 There are also generic equivalents that you can inherit from:
 
-    from adminsortable.admin import (SortableGenericTabularInline,
-        SortableGenericStackedInline)
-        """Your generic inline options go here"""
-
+```python
+from adminsortable.admin import (SortableGenericTabularInline,
+    SortableGenericStackedInline)
+    """Your generic inline options go here"""
+```
 
 If your parent model is *not* sortable, but has child inlines that are, your parent model needs to inherit from `NonSortableParentAdmin`:
 
-    from adminsortable.admin import (NonSortableParentAdmin,
-        SortableTabularInline)
+```python
+from adminsortable.admin import (NonSortableParentAdmin,
+    SortableTabularInline)
 
-    class ChildTabularInline(SortableTabularInline):
-        model = YourModel
+class ChildTabularInline(SortableTabularInline):
+    model = YourModel
 
-    class ParentAdmin(NonSortableParentAdmin):
-        inlines = [ChildTabularInline]
-
+class ParentAdmin(NonSortableParentAdmin):
+    inlines = [ChildTabularInline]
+```
 
 #### Overriding `queryset()`
 django-admin-sortable supports custom queryset overrides on admin models
@@ -309,25 +329,27 @@ an admin class with a custom `queryset()` override.
 This is a special case, which requires a few lines of extra code to properly
 determine the sortability of your model. Example:
 
-    # add this import to your admin.py
-    from adminsortable.utils import get_is_sortable
+```python
+# add this import to your admin.py
+from adminsortable.utils import get_is_sortable
 
 
-    class ComponentInline(SortableStackedInline):
-        model = Component
+class ComponentInline(SortableStackedInline):
+    model = Component
 
-        def queryset(self, request):
-            qs = super(ComponentInline, self).queryset(request).filter(
-                title__icontains='foo')
+    def queryset(self, request):
+        qs = super(ComponentInline, self).queryset(request).filter(
+            title__icontains='foo')
 
-            # You'll need to add these lines to determine if your model
-            # is sortable once we hit the change_form() for the parent model.
+        # You'll need to add these lines to determine if your model
+        # is sortable once we hit the change_form() for the parent model.
 
-            if get_is_sortable(qs):
-                self.model.is_sortable = True
-            else:
-                self.model.is_sortable = False
-            return qs
+        if get_is_sortable(qs):
+            self.model.is_sortable = True
+        else:
+            self.model.is_sortable = False
+        return qs
+```
 
 If you override the queryset of an inline, the number of objects present
 may change, and adminsortable won't be able to automatically determine
@@ -345,21 +367,23 @@ django-admin-sortable 1.6.6 introduced a backwards-incompatible change for `sort
 
 An example of sorting subsets would be a "Board of Directors". In this use case, you have a list of "People" objects. Some of these people are on the Board of Directors and some not, and you need to sort them independently.
 
-    class Person(Sortable):
-        class Meta(Sortable.Meta):
-            verbose_name_plural = 'People'
+```python
+class Person(Sortable):
+    class Meta(Sortable.Meta):
+        verbose_name_plural = 'People'
 
-        first_name = models.CharField(max_length=50)
-        last_name = models.CharField(max_length=50)
-        is_board_member = models.BooleanField('Board Member', default=False)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    is_board_member = models.BooleanField('Board Member', default=False)
 
-        sorting_filters = (
-            ('Board Members', {'is_board_member': True}),
-            ('Non-Board Members', {'is_board_member': False}),
-        )
+    sorting_filters = (
+        ('Board Members', {'is_board_member': True}),
+        ('Non-Board Members', {'is_board_member': False}),
+    )
 
-        def __unicode__(self):
-            return '{} {}'.format(self.first_name, self.last_name)
+    def __unicode__(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+```
 
 #### Extending custom templates
 By default, adminsortable's change form and change list views inherit from
@@ -369,13 +393,17 @@ inline models that are sortable for example.
 
 SortableAdmin has two attributes you can override for this use case:
 
-    change_form_template_extends
-    change_list_template_extends
+```python
+change_form_template_extends
+change_list_template_extends
+```
 
 These attributes have default values of:
 
+```python
     change_form_template_extends = 'admin/change_form.html'
     change_list_template_extends = 'admin/change_list.html'
+```
 
 If you need to extend the inline change form templates, you'll need to select the right one, depending on your version of Django. For Django 1.5.x or below, you'll need to extend one of the following:
 
@@ -399,49 +427,56 @@ include the necessary JavaScript for django-admin-sortable to work. Fortunately,
 this is easy to resolve, as the `CMSPlugin` class allows a change form template to be
 specified:
 
-    # example plugin
-    from cms.plugin_base import CMSPluginBase
+```python
+# example plugin
+from cms.plugin_base import CMSPluginBase
 
-    class CMSCarouselPlugin(CMSPluginBase):
-        admin_preview = False
-        change_form_template = 'cms/sortable-stacked-inline-change-form.html'
-        inlines = [SlideInline]
-        model = Carousel
-        name = _('Carousel')
-        render_template = 'carousels/carousel.html'
+class CMSCarouselPlugin(CMSPluginBase):
+    admin_preview = False
+    change_form_template = 'cms/sortable-stacked-inline-change-form.html'
+    inlines = [SlideInline]
+    model = Carousel
+    name = _('Carousel')
+    render_template = 'carousels/carousel.html'
 
-        def render(self, context, instance, placeholder):
-            context.update({
-                'carousel': instance,
-                'placeholder': placeholder
-            })
-            return context
+    def render(self, context, instance, placeholder):
+        context.update({
+            'carousel': instance,
+            'placeholder': placeholder
+        })
+        return context
 
-    plugin_pool.register_plugin(CMSCarouselPlugin)
+plugin_pool.register_plugin(CMSCarouselPlugin)
+```
 
 The contents of `sortable-stacked-inline-change-form.html` at a minimum need to extend
 the extrahead block with:
 
-    {% extends "admin/cms/page/plugin_change_form.html" %}
-    {% load static from staticfiles %}
+```html
+{% extends "admin/cms/page/plugin_change_form.html" %}
+{% load static from staticfiles %}
 
-    {% block extrahead %}
-        {{ block.super }}
-        <script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
-        <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
+    <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
 
-        <link rel="stylesheet" type="text/css" href="{% static 'adminsortable/css/admin.sortable.inline.css' %}" />
-    {% endblock extrahead %}
+    <link rel="stylesheet" type="text/css" href="{% static 'adminsortable/css/admin.sortable.inline.css' %}" />
+{% endblock extrahead %}
+```
 
 Sorting within Django-CMS is really only feasible for inline models of a plugin as Django-CMS already includes sorting for plugin instances. For tabular inlines, just substitute:
 
+```html
     <script src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
+```
 
 with:
 
+```html
     <script src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
-
+```
 
 ### Rationale
 Other projects have added drag-and-drop ordering to the ChangeList
