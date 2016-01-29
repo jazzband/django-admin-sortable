@@ -63,6 +63,8 @@ Configuration
 1. Add ``adminsortable`` to your ``INSTALLED_APPS``.
 2. Ensure ``django.core.context_processors.static`` is in your
    ``TEMPLATE_CONTEXT_PROCESSORS``.
+3. Ensure that ``CSRF_COOKIE_HTTPONLY`` has not been set to ``True``, as
+   django-admin-sortable is currently incompatible with that setting.
 
 Static Media
 ~~~~~~~~~~~~
