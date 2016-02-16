@@ -215,7 +215,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'sortable_by_class': sortable_by_class,
             'sortable_by_class_is_sortable': sortable_by_class_is_sortable,
             'sortable_by_class_display_name': sortable_by_class_display_name,
-            'jquery_lib_path': jquery_lib_path
+            'jquery_lib_path': jquery_lib_path,
+            'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken')
         }
         return render(request, self.sortable_change_list_template, context)
 
