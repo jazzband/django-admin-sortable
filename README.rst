@@ -3,7 +3,7 @@ Django Admin Sortable
 
 |Build Status|
 
-Current version: 2.0.10
+Current version: 2.0.11
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -596,11 +596,13 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What's new in 2.0.10?
+What's new in 2.0.11?
 ~~~~~~~~~~~~~~~~~~~~~
 
--  Bugfix for accessing custom ``order`` property of model. Thanks
-   [@theithec](https://github.com/theithec) for reporting the issue.
+-  Custom
+   `CSRF\_COOKIE\_NAME <https://docs.djangoproject.com/en/1.9/ref/settings/#csrf-cookie-name>`__
+   is now supported. Thanks [@BUHARDI](https://github.com/BUHARDI) for
+   reporting the issue.
 
 Future
 ~~~~~~
