@@ -87,7 +87,7 @@ class SortableMixin(models.Model):
             'typecast to an integer.'
 
     def save(self, *args, **kwargs):
-        if not self.id:
+        if not self.pk:
             try:
                 current_max = self.__class__.objects.aggregate(
                     models.Max(self.order_field_name))[self.order_field_name + '__max'] or 0
