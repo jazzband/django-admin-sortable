@@ -238,7 +238,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             extra_context = {}
 
         extra_context.update({
-            'change_form_template_extends': self.change_form_template_extends
+            'change_form_template_extends': self.change_form_template_extends,
+            'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken')
         })
 
         for klass in self.inlines:
