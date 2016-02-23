@@ -66,7 +66,7 @@ class SortableAdminBase(object):
         extra_context.update({
             'change_list_template_extends': self.change_list_template_extends,
             'sorting_filters': [sort_filter[0] for sort_filter
-                in getattr(self.model, 'sorting_filters', [])],
+                in getattr(self.model, 'sorting_filters', [])]
         })
         return super(SortableAdminBase, self).changelist_view(request,
             extra_context=extra_context)
