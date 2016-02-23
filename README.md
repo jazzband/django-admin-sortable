@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 2.0.11
+Current version: 2.0.12
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -89,13 +89,13 @@ from adminsortable.models import SortableMixin
 
 class MySortableClass(SortableMixin):
     title = models.CharField(max_length=50)
-    
+
     class Meta:
         verbose_name = 'My Sortable Class'
         verbose_name_plural = 'My Sortable Classes'
         ordering = ['the_order']
 
-    
+
 
     # define the field the model should be ordered by
     the_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
@@ -497,8 +497,8 @@ ordering on top of that just seemed a little much in my opinion.
 django-admin-sortable is currently used in production.
 
 
-### What's new in 2.0.11?
-- Custom [CSRF_COOKIE_NAME](https://docs.djangoproject.com/en/1.9/ref/settings/#csrf-cookie-name) is now supported. Thanks [@BUHARDI](https://github.com/BUHARDI) for reporting the issue.
+### What's new in 2.0.12?
+- Fixed an issue with CSRF_COOKIE_NAME not being passed correctly to inlines. Thanks [@Hovercross](https://github.com/Hovercross) for reporting the issue.
 
 
 ### Future
