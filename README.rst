@@ -9,6 +9,20 @@ This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
 enabling individual items or groups of items to be sortable.
 
+Sorting model instances with a sortable parent:
+
+.. figure:: http://res.cloudinary.com/alsoicode/image/upload/v1451237555/django-admin-sortable/sortable-models.jpg
+   :alt: sortable-models
+
+   sortable-models
+
+Sorting inlines:
+
+.. figure:: http://res.cloudinary.com/alsoicode/image/upload/v1451237555/django-admin-sortable/sortable-inlines.jpg
+   :alt: sortable-inlines
+
+   sortable-inlines
+
 Supported Django Versions
 -------------------------
 
@@ -49,6 +63,8 @@ Configuration
 1. Add ``adminsortable`` to your ``INSTALLED_APPS``.
 2. Ensure ``django.core.context_processors.static`` is in your
    ``TEMPLATE_CONTEXT_PROCESSORS``.
+3. Ensure that ``CSRF_COOKIE_HTTPONLY`` has not been set to ``True``, as
+   django-admin-sortable is currently incompatible with that setting.
 
 Static Media
 ~~~~~~~~~~~~
@@ -78,8 +94,8 @@ Usage
 Models
 ~~~~~~
 
-To add sortability to a model, you need to inherit ``SortableMixin`` and
-at minimum, define:
+To add "sortability" to a model, you need to inherit ``SortableMixin``
+and at minimum, define:
 
 -  The field which should be used for ``Meta.ordering``, which must
    resolve to one of the integer fields defined in Django's ORM:
@@ -137,7 +153,6 @@ set up your models and admin options:
 
         # ordering field
         category_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
-        order_field_name = 'category_order'
 
     class Project(SortableMixin):
         class Meta:
@@ -148,7 +163,6 @@ set up your models and admin options:
 
         # ordering field
         project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
-        order_field_name = 'project_order'
 
         def __unicode__(self):
             return self.title
@@ -186,7 +200,6 @@ as such:
 
         # ordering field
         project_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
-        order_field_name = 'project_order'
 
         def __unicode__(self):
             return self.title
@@ -568,13 +581,13 @@ tabular inlines, just substitute:
 
 ::
 
-    <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
+    <script src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
 
 with:
 
 ::
 
-    <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
+    <script src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
 
 Rationale
 ~~~~~~~~~

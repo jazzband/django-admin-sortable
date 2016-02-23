@@ -238,7 +238,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             extra_context = {}
 
         extra_context.update({
-            'change_form_template_extends': self.change_form_template_extends
+            'change_form_template_extends': self.change_form_template_extends,
+            'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken')
         })
 
         for klass in self.inlines:
@@ -320,7 +321,7 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
         super(SortableInlineBase, self).__init__(*args, **kwargs)
 
         if not issubclass(self.model, SortableMixin):
-            raise Warning(u'Models that are specified in SortableTabluarInline'
+            raise Warning(u'Models that are specified in SortableTabularInline'
                 ' and SortableStackedInline must inherit from SortableMixin'
                 ' (or Sortable for legacy implementations)')
 
