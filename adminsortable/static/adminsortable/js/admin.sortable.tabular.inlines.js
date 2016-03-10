@@ -27,7 +27,7 @@
                     var indexes = [];
                     ui.item.parent().children('tr').each(function(i)
                     {
-                        var index_value = $(this).find('.original :hidden:first').val();
+                        var index_value = $(this).find('.original :input:first').val();
                         if (index_value !== '' && index_value !== undefined) {
                             indexes.push(index_value);
                         }
