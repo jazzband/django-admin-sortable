@@ -4,7 +4,7 @@
         var sorting_urls = $(':hidden[name="admin_sorting_url"]');
         if (sorting_urls.length)
         {
-            var sortable_inline_group = sorting_urls.closest('.inline-group')
+            var sortable_inline_group = sorting_urls.closest('.inline-group');
             var tabular_inline_rows = sortable_inline_group.find('.tabular table tbody tr');
 
             tabular_inline_rows.addClass('sortable');
@@ -27,7 +27,7 @@
                     var indexes = [];
                     ui.item.parent().children('tr').each(function(i)
                     {
-                        var index_value = $(this).find('.original').find(':input').first().val();
+                        var index_value = $(this).find('.original :input:first').val();
                         if (index_value !== '' && index_value !== undefined) {
                             indexes.push(index_value);
                         }
