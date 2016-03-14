@@ -3,7 +3,7 @@ Django Admin Sortable
 
 |Build Status|
 
-Current version: 2.0.14
+Current version: 2.0.15
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -612,7 +612,7 @@ Status
 django-admin-sortable is currently used in production.
 
 
-What's new in 2.0.14?
+What's new in 2.0.15?
 ~~~~~~~~~~~~~~~~~~~~~
 
 -  Refactored exception handling when determining ``order_field_name``
