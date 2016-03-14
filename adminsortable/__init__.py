@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 VERSION = (2, 0, 12)
+=======
+VERSION = (2, 0, 14)
+>>>>>>> Stashed changes
 DEV_N = None
 
 
