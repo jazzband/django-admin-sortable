@@ -4,12 +4,11 @@ from django import VERSION
 
 from django.conf import settings
 
-if VERSION > (1, 7):
+try:
     from django.conf.urls import url
-elif VERSION > (1, 5):
-    from django.conf.urls import patterns, url
-else:
-    from django.conf.urls.defaults import patterns, url
+except ImportError:
+    # Django < 1.4
+    from django.conf.urls.defaults import url
 
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
@@ -94,17 +93,11 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             self.admin_site.admin_view(self.sort_view),
             name='admin_sort')
 
-        if VERSION > (1, 7):
-            admin_urls = [
-                admin_do_sorting_url,
-                admin_sort_url
-            ]
-        else:
-            admin_urls = patterns('',
-                admin_do_sorting_url,
-                admin_sort_url,)
-
-        return admin_urls + urls
+        urls = [
+            admin_do_sorting_url,
+            admin_sort_url
+        ] + urls
+        return urls
 
     def sort_view(self, request):
         """
