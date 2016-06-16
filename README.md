@@ -2,11 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-<<<<<<< Updated upstream
-Current version: 2.0.12
-=======
-Current version: 2.0.14
->>>>>>> Stashed changes
+Current version: 2.0.15
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -500,19 +496,11 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-
-<<<<<<< Updated upstream
-### What's new in 2.0.12?
-- Fixed an issue with CSRF_COOKIE_NAME not being passed correctly to inlines. Thanks [@Hovercross](https://github.com/Hovercross) for reporting the issue.
-=======
-### What's new in 2.0.14?
+### What's new in 2.0.15?
 - Refactored exception handling when determining `order_field_name`
->>>>>>> Stashed changes
-
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
-
 
 ### License
 django-admin-sortable is released under the Apache Public License v2.
