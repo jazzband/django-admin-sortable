@@ -24,7 +24,7 @@
                     {
                         // set icons based on position
                         lineItems.each(function(index, element) {
-                            var icon = $(element).find('> a .fa');
+                            var icon = $(element).find('a.admin_sorting_url .fa');
                             icon.removeClass('fa-sort-desc fa-sort-asc fa-sort');
 
                             if (index === 0) {
