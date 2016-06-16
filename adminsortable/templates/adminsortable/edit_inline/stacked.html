@@ -16,7 +16,7 @@
     {% include "adminsortable/shared/fieldset.html" with inline_admin_form_forloop=forloop.parentloop initial_forms_count=inline_admin_formset.formset.management_form.initial.INITIAL_FORMS %}
   {% endfor %}
   {% if inline_admin_form.original %}
-  <input type="hidden" name="admin_sorting_url" value="{% url 'admin:admin_do_sorting' inline_admin_form.original.model_type_id %}" />
+  <input type="hidden" name="admin_sorting_url" value="{% url opts|admin_urlname:'do_sorting' inline_admin_form.original.model_type_id %}" />
   {% endif %}
   {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
   {{ inline_admin_form.fk_field.field }}

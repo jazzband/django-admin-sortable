@@ -13,18 +13,21 @@ except ImportError:
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
 
-if VERSION >= (1, 8):
-    from django.contrib.auth import get_permission_codename
+try:
     from django.contrib.contenttypes.admin import (GenericStackedInline,
-        GenericTabularInline)
-else:
+                                                   GenericTabularInline)
+except:
+    # Django < 1.7
     from django.contrib.contenttypes.generic import (GenericStackedInline,
-        GenericTabularInline)
+                                                     GenericTabularInline)
 
 from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, Http404
+from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import capfirst
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST
 
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import SortableMixin
@@ -82,18 +85,33 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
+        opts = self.model._meta
+        try:
+            info = opts.app_label, opts.model_name
+        except AttributeError:
+            # Django < 1.7
+            info = opts.app_label, opts.modul_name
 
-        # this ajax view changes the order
-        admin_do_sorting_url = url(r'^sorting/do-sorting/(?P<model_type_id>\d+)/$',
+        # this ajax view changes the order of instances of self.model
+        admin_do_sorting_url = url(
+            r'^sort/do-sorting/$',
             self.admin_site.admin_view(self.do_sorting_view),
-            name='admin_do_sorting')
+            name='%s_%s_do_sorting' % info)
+
+        # this ajax view changes the order of instances of inline models
+        admin_do_inline_sorting_url = url(
+            r'^sort/do-sorting/(?P<model_type_id>\d+)/$',
+            self.admin_site.admin_view(self.do_sorting_view),
+            name='%s_%s_do_sorting' % info)
 
         # this view displays the sortable objects
-        admin_sort_url = url(r'^sort/$',
+        admin_sort_url = url(
+            r'^sort/$',
             self.admin_site.admin_view(self.sort_view),
-            name='admin_sort')
+            name='%s_%s_sort' % info)
 
         urls = [
+            admin_do_inline_sorting_url,
             admin_do_sorting_url,
             admin_sort_url
         ] + urls
@@ -104,15 +122,10 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         Custom admin view that displays the objects as a list whose sort
         order can be changed via drag-and-drop.
         """
+        if not self.has_change_permission(request):
+            raise PermissionDenied
 
         opts = self.model._meta
-        if VERSION >= (1, 8):
-            codename = get_permission_codename('change', opts)
-            has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
-                codename))
-        else:
-            has_perm = request.user.has_perm('{0}.{1}'.format(opts.app_label,
-                opts.get_change_permission()))
 
         jquery_lib_path = 'admin/js/jquery.js' if VERSION < (1, 9) \
             else 'admin/js/vendor/jquery/jquery.js'
@@ -202,7 +215,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 capfirst(verbose_name_plural)),
             'opts': opts,
             'app_label': opts.app_label,
-            'has_perm': has_perm,
+            'has_perm': True,
             'objects': objects,
             'group_expression': sortable_by_expression,
             'sortable_by_class': sortable_by_class,
@@ -258,19 +271,31 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         return super(SortableAdmin, self).change_view(request, object_id,
             form_url='', extra_context=extra_context)
 
+    @method_decorator(require_POST)
     def do_sorting_view(self, request, model_type_id=None):
         """
         This view sets the ordering of the objects for the model type
         and primary keys passed in. It must be an Ajax POST.
         """
+        if not self.has_change_permission(request):
+            raise PermissionDenied
+
         response = {'objects_sorted': False}
 
-        if request.is_ajax() and request.method == 'POST':
+        if request.is_ajax():
             try:
+                if model_type_id is None:
+                    klass = self.model
+                else:
+                    klass = get_object_or_404(ContentType,
+                                              id=model_type_id).model_class()
+                    if klass not in (inline.model for inline in self.inlines):
+                        raise Http404(
+                            'There is no inline model with type id: {0}'.format(
+                                model_type_id))
+
                 indexes = list(map(str,
                     request.POST.get('indexes', []).split(',')))
-                klass = ContentType.objects.get(
-                    id=model_type_id).model_class()
                 objects_dict = dict([(str(obj.pk), obj) for obj in
                     klass.objects.filter(pk__in=indexes)])
 

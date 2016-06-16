@@ -1,4 +1,4 @@
-{% load i18n admin_modify adminsortable_tags %}
+{% load i18n admin_modify adminsortable_tags admin_urls %}
 {% load static from staticfiles %}
 <div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
   <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }} {% if inline_admin_formset.formset.initial_form_count > 1 %} - {% trans "drag and drop to change order" %}{% endif %}</h2>
@@ -17,7 +17,7 @@
   {% if inline_admin_form.has_auto_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
   {{ inline_admin_form.fk_field.field }}
   {% if inline_admin_form.original %}
-  <input type="hidden" name="admin_sorting_url" value="{% url 'admin:admin_do_sorting' inline_admin_form.original.model_type_id %}" />
+  <input type="hidden" name="admin_sorting_url" value="{% url opts|admin_urlname:'do_sorting' inline_admin_form.original.model_type_id %}" />
   {% endif %}
 </div>{% endfor %}
 </div>

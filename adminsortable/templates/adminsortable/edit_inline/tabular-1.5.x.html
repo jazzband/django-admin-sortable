@@ -1,4 +1,4 @@
-{% load i18n admin_modify adminsortable_tags %}
+{% load i18n admin_modify adminsortable_tags admin_urls %}
 {% load static from staticfiles %}
 <div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
   <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
@@ -41,7 +41,7 @@
           {% endfor %}
           {% endspaceless %}
           {% if inline_admin_form.original %}
-          <input type="hidden" name="admin_sorting_url" value="{% url 'admin:admin_do_sorting' inline_admin_form.original.model_type_id %}" />
+          <input type="hidden" name="admin_sorting_url" value="{% url opts|admin_urlname:'do_sorting' inline_admin_form.original.model_type_id %}" />
           {% endif %}
         </td>
         {% for fieldset in inline_admin_form %}
