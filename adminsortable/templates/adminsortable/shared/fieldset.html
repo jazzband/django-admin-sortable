@@ -10,7 +10,7 @@
             {% for field in line %}
                 <div{% if not line.fields|length_is:'1' %} class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %} class="checkbox-row"{% endif %}>
                     {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
-                    {% if forloop.first  %}
+                    {% if forloop.parentloop.first  %}
                         {% if inline_admin_form_forloop.counter <= initial_forms_count %}
                         <i class="fa fa-{% if inline_admin_form_forloop.first %}sort-desc{% elif inline_admin_form_forloop.counter == initial_forms_count %}sort-asc{% else %}sort{% endif %}"></i>
                         {% endif %}
