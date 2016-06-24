@@ -26,6 +26,9 @@
         <td class="original">
 
           {% if inline_admin_form.original or inline_admin_form.show_url %}<p>
+          {% with initial_forms_count=inline_admin_form.formset.management_form.INITIAL_FORMS.value %}
+            <i class="fa fa-{% if forloop.first %}sort-desc{% elif forloop.counter == initial_forms_count %}sort-asc{% else %}sort{% endif %}"></i>
+          {% endwith %}
           {% if inline_admin_form.original %} {{ inline_admin_form.original }}{% endif %}
           {% if inline_admin_form.show_url %}<a href="../../../r/{{ inline_admin_form.original_content_type_id }}/{{ inline_admin_form.original.id }}/">{% trans "View on site" %}</a>{% endif %}
             </p>{% endif %}
@@ -48,7 +51,6 @@
           {% for line in fieldset %}
             {% for field in line %}
               <td class="{{ field.field.name }}">
-                  {% if inline_admin_form.original and forloop.parentloop.counter == 1  %}<i class="fa fa-arrows-v"></i>{% endif %}
               {% if field.is_readonly %}
                   <p>{{ field.contents }}</p>
               {% else %}
