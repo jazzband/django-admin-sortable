@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 2.0.16
+Current version: 2.0.17
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -496,9 +496,9 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.0.16?
-- Simplification of admin url patterns
-- Fixes for sortable lists when using Django CMS
+### What's new in 2.0.17?
+- Fixed placement of icons for inline sortables
+- Update to allow django-admin-sortable to play nice with other apps that define `change_form_template` value as a `@property`
 
 Thanks to [@vstoykov](https://github.com/vstoykov) for both contributions.
 
