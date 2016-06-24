@@ -42,7 +42,7 @@
                         success: function() {
                             var fieldsets = ui.item.find('fieldset'),
                                 highlightedSelector = fieldsets.filter('.collapsed').length === fieldsets.length ? 'h3' : '.form-row',
-                                icons = ui.item.parent().find(highlightedSelector).find('.fa');
+                                icons = ui.item.parent().find('h3 > .fa');
 
                             // set icons based on position
                             icons.removeClass('fa-sort-desc fa-sort-asc fa-sort');
