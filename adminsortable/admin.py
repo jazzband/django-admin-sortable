@@ -80,6 +80,22 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
     class Meta:
         abstract = True
 
+    @property
+    def has_sortable_tabular_inlines(self):
+        base_classes = (SortableTabularInline, SortableGenericTabularInline)
+        return any(issubclass(klass, base_classes) for klass in self.inlines)
+
+    @property
+    def has_sortable_stacked_inlines(self):
+        base_classes = (SortableStackedInline, SortableGenericStackedInline)
+        return any(issubclass(klass, base_classes) for klass in self.inlines)
+
+    @property
+    def change_form_template(self):
+        if self.has_sortable_tabular_inlines or self.has_sortable_stacked_inlines:
+            return self.sortable_change_form_template
+        return super(SortableAdmin, self).change_form_template
+
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
 
@@ -224,36 +240,16 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             extra_context=extra_context)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
-        self.has_sortable_tabular_inlines = False
-        self.has_sortable_stacked_inlines = False
 
         if extra_context is None:
             extra_context = {}
 
         extra_context.update({
             'change_form_template_extends': self.change_form_template_extends,
+            'has_sortable_tabular_inlines': self.has_sortable_tabular_inlines,
+            'has_sortable_stacked_inlines': self.has_sortable_stacked_inlines,
             'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken')
         })
-
-        for klass in self.inlines:
-            if issubclass(klass, SortableTabularInline) or issubclass(klass,
-                    SortableGenericTabularInline):
-                self.has_sortable_tabular_inlines = True
-            if issubclass(klass, SortableStackedInline) or issubclass(klass,
-                    SortableGenericStackedInline):
-                self.has_sortable_stacked_inlines = True
-
-        if self.has_sortable_tabular_inlines or \
-                self.has_sortable_stacked_inlines:
-
-            self.change_form_template = self.sortable_change_form_template
-
-            extra_context.update({
-                'has_sortable_tabular_inlines':
-                self.has_sortable_tabular_inlines,
-                'has_sortable_stacked_inlines':
-                self.has_sortable_stacked_inlines
-            })
 
         return super(SortableAdmin, self).change_view(request, object_id,
             form_url='', extra_context=extra_context)
