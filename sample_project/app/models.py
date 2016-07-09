@@ -64,8 +64,8 @@ class Credit(SortableMixin):
         ordering = ['order']
 
     project = models.ForeignKey(Project)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30, help_text="Given name")
+    last_name = models.CharField(max_length=30, help_text="Family name")
 
     order = models.PositiveIntegerField(default=0, editable=False)
 
@@ -92,8 +92,8 @@ class Note(SortableMixin):
 @python_2_unicode_compatible
 class NonSortableCredit(models.Model):
     project = models.ForeignKey(Project)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30, help_text="Given name")
+    last_name = models.CharField(max_length=30, help_text="Family name")
 
     def __str__(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
