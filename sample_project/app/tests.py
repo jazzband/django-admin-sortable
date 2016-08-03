@@ -32,10 +32,16 @@ class SortableTestCase(TestCase):
         self.client = Client()
         self.user_raw_password = 'admin'
         self.user = User.objects.create_user('admin', 'admin@admin.com',
-            self.user_raw_password)
+                                             self.user_raw_password)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
+        self.staff_raw_password = 'staff'
+        self.staff = User.objects.create_user('staff', 'staff@staff.com',
+                                              self.staff_raw_password)
+        self.staff.is_staff = True
+        self.user.is_superuser = False
+        self.staff.save()
 
         # create people
         Person.objects.create(first_name='Bob', last_name='Smith',
@@ -63,6 +69,9 @@ class SortableTestCase(TestCase):
 
     def test_new_user_is_staff(self):
         self.assertEqual(self.user.is_staff, True, 'User is not staff')
+
+    def test_new_staff_is_staff(self):
+        self.assertEqual(self.staff.is_staff, True, 'Staff User is not staff')
 
     def test_is_not_sortable(self):
         """
@@ -100,8 +109,11 @@ class SortableTestCase(TestCase):
         return category1, category2, category3
 
     def get_sorting_url(self):
-        return '/admin/app/category/sorting/do-sorting/{0}/'.format(
-            Category.model_type_id())
+        return '/admin/app/category/sort/do-sorting/'
+
+    def get_inline_sorting_url(self, model):
+        return '/admin/app/project/sort/do-sorting/{0}/'.format(
+            model.model_type_id())
 
     def get_category_indexes(self, *categories):
         return {'indexes': ','.join([str(c.id) for c in categories])}
@@ -119,6 +131,38 @@ class SortableTestCase(TestCase):
         template_names = [t.name for t in response.templates]
         self.assertTrue('adminsortable/change_list.html' in template_names,
                         'adminsortable/change_list.html was not rendered')
+
+    def test_adminsortable_change_list_sorting_fails_if_not_post(self):
+        logged_in = self.client.login(username=self.user.username,
+                                      password=self.user_raw_password)
+        self.assertTrue(logged_in, 'User is not logged in')
+
+        category1, category2, category3 = self.make_test_categories()
+        # make a normal GET
+        response = self.client.get(
+            self.get_sorting_url(),
+            data=self.get_category_indexes(category1, category2, category3))
+
+        self.assertEqual(
+            response.status_code,
+            httplib.METHOD_NOT_ALLOWED,
+            'Objects should not have been sorted. A POST method is required.')
+
+    def test_adminsortable_change_list_sorting_fails_permission_denied(self):
+        logged_in = self.client.login(username=self.staff.username,
+                                      password=self.staff_raw_password)
+        self.assertTrue(logged_in, 'User is not logged in')
+
+        category1, category2, category3 = self.make_test_categories()
+        # make a normal POST
+        response = self.client.post(
+            self.get_sorting_url(),
+            data=self.get_category_indexes(category1, category2, category3))
+
+        self.assertEqual(
+            response.status_code,
+            httplib.FORBIDDEN,
+            'Objects should not have been sorted. User is not allowed.')
 
     def test_adminsortable_change_list_sorting_fails_if_not_ajax(self):
         logged_in = self.client.login(username=self.user.username,
@@ -203,3 +247,81 @@ class SortableTestCase(TestCase):
         response = self.client.get('/admin/app/project/sort/')
         self.assertEquals(response.status_code, httplib.OK,
             'Unable to reach sort view.')
+
+    def test_adminsortable_change_list_view_permission_denied(self):
+        category1 = self.create_category(title='Category 3')
+        Project.objects.create(category=category1, description="foo")
+
+        self.client.login(username=self.staff.username,
+                          password=self.staff_raw_password)
+        response = self.client.get('/admin/app/project/sort/')
+        self.assertEquals(response.status_code, httplib.FORBIDDEN,
+                          'Sort view must be forbidden.')
+
+    def test_adminsortable_inline_changelist_not_found(self):
+        self.client.login(username=self.user.username,
+                          password=self.user_raw_password)
+
+        project = Project.objects.create(
+            category=self.create_category(),
+            description='Test project'
+        )
+        note1 = project.note_set.create(text='note 1')
+        note2 = project.note_set.create(text='note 2')
+
+        response = self.client.post(
+            self.get_inline_sorting_url(Category),
+            data=self.get_category_indexes(note2, note1),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(
+            response.status_code,
+            httplib.NOT_FOUND,
+            'Categories must not be sortable trough ProjectAdmin')
+
+    def test_adminsortable_inline_changelist_success(self):
+        self.client.login(username=self.user.username,
+                          password=self.user_raw_password)
+
+        project = Project.objects.create(
+            category=self.create_category(),
+            description='Test project'
+        )
+        note1 = project.note_set.create(text='note 1')
+        note2 = project.note_set.create(text='note 2')
+        note3 = project.note_set.create(text='note 3')
+
+        response = self.client.post(
+            self.get_inline_sorting_url(project.note_set.model),
+            data=self.get_category_indexes(note3, note2, note1),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(
+            response.status_code,
+            httplib.OK,
+            'Note inline must be sortable in ProjectAdmin')
+        content = json.loads(response.content.decode(encoding='UTF-8'),
+                             'latin-1')
+        self.assertTrue(content.get('objects_sorted'),
+                        'Objects should have been sorted.')
+
+        notes = list(project.note_set.all().values('id', 'order', 'text'))
+        expected_notes = [
+            {
+                'id': note3.pk,
+                'order': 1,
+                'text': note3.text,
+            },
+            {
+                'id': note2.pk,
+                'order': 2,
+                'text': note2.text,
+            },
+            {
+                'id': note1.pk,
+                'order': 3,
+                'text': note1.text,
+            }
+        ]
+        self.assertEqual(notes, expected_notes)
+
