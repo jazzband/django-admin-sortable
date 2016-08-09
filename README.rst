@@ -3,7 +3,7 @@ Django Admin Sortable
 
 |Build Status|
 
-Current version: 2.0.18
+Current version: 2.0.19
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -27,15 +27,20 @@ Supported Django Versions
 -------------------------
 
 If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
-For Django 1.5.x or higher, use the latest version of
-django-admin-sortable.
+
+For Django 1.5.x to 1.9.x, use version 2.0.18 or below.
+
+For Django 1.10.x, use the latest version.
+
+Other notes of interest regarding versions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 django-admin-sortable 1.5.2 introduced backward-incompatible changes for
 Django 1.4.x
 
 django-admin-sortable 1.6.6 introduced a backward-incompatible change
 for the ``sorting_filters`` attribute. Please convert your attributes to
-the new tuple-based format.
+the new tuple-based format if you haven't already.
 
 django-admin-sortable 1.7.1 and higher are compatible with Python 3.
 
@@ -611,12 +616,12 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What's new in 2.0.18?
+What's new in 2.0.19?
 ~~~~~~~~~~~~~~~~~~~~~
 
--  Fix missing admin icons in Django 1.9
-
-Thanks to [@shjohnson-pi](https://github.com/shjohnson-pi)
+-  Dropped support for Django 1.5.x
+-  Updated change\_form, change\_list and edit inline templates for
+   Django 1.10 compatibility.
 
 Future
 ~~~~~~

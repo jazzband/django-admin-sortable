@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 2.0.18
+Current version: 2.0.19
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -18,11 +18,15 @@ Sorting inlines:
 
 ## Supported Django Versions
 If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
-For Django 1.5.x or higher, use the latest version of django-admin-sortable.
 
+For Django 1.5.x to 1.9.x, use version 2.0.18 or below.
+
+For Django 1.10.x, use the latest version. 
+
+### Other notes of interest regarding versions
 django-admin-sortable 1.5.2 introduced backward-incompatible changes for Django 1.4.x
 
-django-admin-sortable 1.6.6 introduced a backward-incompatible change for the `sorting_filters` attribute. Please convert your attributes to the new tuple-based format.
+django-admin-sortable 1.6.6 introduced a backward-incompatible change for the `sorting_filters` attribute. Please convert your attributes to the new tuple-based format if you haven't already.
 
 django-admin-sortable 1.7.1 and higher are compatible with Python 3.
 
@@ -496,10 +500,9 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.0.18?
-- Fix missing admin icons in Django 1.9 
-
-Thanks to [@shjohnson-pi](https://github.com/shjohnson-pi)
+### What's new in 2.0.19?
+- Dropped support for Django 1.5.x
+- Updated change_form, change_list and edit inline templates for Django 1.10 compatibility.
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
