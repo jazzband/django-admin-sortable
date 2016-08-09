@@ -6,13 +6,11 @@
             containment : 'parent',
             tolerance : 'pointer',
             items : 'li',
-            stop : function(event, ui)
-            {
+            stop : function(event, ui) {
                 var indexes = [],
                     lineItems = ui.item.parent().find('> li');
 
-                lineItems.each(function(i)
-                {
+                lineItems.each(function(i) {
                     indexes.push($(this).find(':hidden[name="pk"]').val());
                 });
 
@@ -20,8 +18,7 @@
                     url: ui.item.find('a.admin_sorting_url').attr('href'),
                     type: 'POST',
                     data: { indexes: indexes.join(',') },
-                    success: function()
-                    {
+                    success: function() {
                         // set icons based on position
                         lineItems.each(function(index, element) {
                             var icon = $(element).find('a.admin_sorting_url .fa');
