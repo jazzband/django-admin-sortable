@@ -4,6 +4,7 @@ except ImportError:
     import http.client as httplib
 
 import json
+import uuid
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -25,6 +26,14 @@ class TestSortableModel(SortableMixin):
 
     def __unicode__(self):
         return self.title
+
+
+class TestNonAutoFieldModel(SortableMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.PositiveIntegerField(editable=False, db_index=True)
+
+    class Meta:
+        ordering = ['order']
 
 
 class SortableTestCase(TestCase):
@@ -324,4 +333,8 @@ class SortableTestCase(TestCase):
             }
         ]
         self.assertEqual(notes, expected_notes)
+
+    def test_save_non_auto_field_model(self):
+        model = TestNonAutoFieldModel()
+        model.save()
 
