@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
 
-Current version: 2.0.19
+Current version: 2.0.20
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -17,11 +17,9 @@ Sorting inlines:
 ![sortable-inlines](http://res.cloudinary.com/alsoicode/image/upload/v1451237555/django-admin-sortable/sortable-inlines.jpg)
 
 ## Supported Django Versions
-If you're using Django 1.4.x, use django-admin-sortable 1.4.9 or below.
+For Django 1.5.x to 1.9.x, use version 2.0.18.
 
-For Django 1.5.x to 1.9.x, use version 2.0.18 or below.
-
-For Django 1.10.x, use the latest version. 
+For Django 1.10.x, use 2.0.19 or higher. 
 
 ### Other notes of interest regarding versions
 django-admin-sortable 1.5.2 introduced backward-incompatible changes for Django 1.4.x
@@ -107,6 +105,8 @@ class MySortableClass(SortableMixin):
     def __unicode__(self):
         return self.title
 ```
+
+Support for models that don't use an `AutoField` for their primary key are also supported in version 2.0.20 or higher.
 
 #### Common Use Case
 A common use case is to have child objects that are sortable relative to a parent. If your parent object is also sortable, here's how you would set up your models and admin options:
@@ -245,7 +245,7 @@ You may also pass in additional ORM "extra_filters" as a dictionary, should you 
 
 ### Adding Sorting to an existing model
 
-#### Django 1.6.x or below
+#### Django 1.5.x to 1.6.x
 If you're adding Sorting to an existing model, it is recommended that you use [django-south](http://south.areacode.com/) to create a schema migration to add the "order" field to your model. You will also need to create a data migration in order to add the appropriate values for the "order" column.
 
 Example assuming a model named "Category":
@@ -500,9 +500,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.0.19?
-- Dropped support for Django 1.5.x
-- Updated change_form, change_list and edit inline templates for Django 1.10 compatibility.
+### What's new in 2.0.20?
+- Support for models that use another type of field besides `AutoField` for their primary key. Thanks [@rubendura](https://github.com/rubendura).
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
