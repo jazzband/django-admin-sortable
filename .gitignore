@@ -10,3 +10,5 @@ atlassian-*
 .ropeproject
 .codeintel
 __pycache__
+.venv/
+build
