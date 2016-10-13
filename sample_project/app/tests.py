@@ -6,6 +6,7 @@ except ImportError:
 import json
 import uuid
 
+from django import VERSION
 from django.contrib.auth.models import User
 from django.db import models
 from django.test import TestCase
@@ -335,6 +336,8 @@ class SortableTestCase(TestCase):
         self.assertEqual(notes, expected_notes)
 
     def test_save_non_auto_field_model(self):
-        model = TestNonAutoFieldModel()
-        model.save()
-
+        if VERSION > (1, 7):
+            model = TestNonAutoFieldModel()
+            model.save()
+        else:
+            pass
