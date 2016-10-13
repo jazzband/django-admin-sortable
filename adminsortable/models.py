@@ -1,6 +1,6 @@
+from django import VERSION
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.utils import version
 
 from adminsortable.fields import SortableForeignKey
 
@@ -88,10 +88,7 @@ class SortableMixin(models.Model):
             'typecast to an integer.'
 
     def save(self, *args, **kwargs):
-        major, minor, _, _, _ = version.get_complete_version()
-        needs_default = (self._state.adding
-                         if major == 1 and minor >= 8
-                         else not self.pk)
+        needs_default = (self._state.adding if VERSION >= (1, 8) else not self.pk)
         if needs_default:
             try:
                 current_max = self.__class__.objects.aggregate(
