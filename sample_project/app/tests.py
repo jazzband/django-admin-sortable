@@ -336,7 +336,7 @@ class SortableTestCase(TestCase):
         self.assertEqual(notes, expected_notes)
 
     def test_save_non_auto_field_model(self):
-        if VERSION > (1, 7):
+        if VERSION > (1, 8):
             model = TestNonAutoFieldModel()
             model.save()
         else:
