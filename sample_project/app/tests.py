@@ -3,8 +3,12 @@ try:
 except ImportError:
     import http.client as httplib
 
+from django import VERSION
+
+if VERSION > (1, 8):
+    import uuid
+
 import json
-import uuid
 
 from django import VERSION
 from django.contrib.auth.models import User
