@@ -10,6 +10,7 @@ env:
     - DJANGO_VERSION=1.7.7 SAMPLE_PROJECT=sample_project
     - DJANGO_VERSION=1.8.7 SAMPLE_PROJECT=sample_project
     - DJANGO_VERSION=1.9 SAMPLE_PROJECT=sample_project
+    - DJANGO_VERSION=1.10 SAMPLE_PROJECT=sample_project
 
 branches:
     only:
