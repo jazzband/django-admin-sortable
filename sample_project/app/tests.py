@@ -33,12 +33,13 @@ class TestSortableModel(SortableMixin):
         return self.title
 
 
-class TestNonAutoFieldModel(SortableMixin):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    order = models.PositiveIntegerField(editable=False, db_index=True)
+if VERSION > (1, 8):
+    class TestNonAutoFieldModel(SortableMixin):
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        order = models.PositiveIntegerField(editable=False, db_index=True)
 
-    class Meta:
-        ordering = ['order']
+        class Meta:
+            ordering = ['order']
 
 
 class SortableTestCase(TestCase):
