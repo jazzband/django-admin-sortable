@@ -61,7 +61,7 @@ class SortableMixin(models.Model):
         # check that the order field is an integer type
         if not self.order_field or not isinstance(self.order_field,
                 integer_fields):
-            raise NotImplemented(u'You must define the field '
+            raise NotImplementedError(u'You must define the field '
                 '`Meta.ordering` refers to, and it must be of type: '
                 'PositiveIntegerField, IntegerField, '
                 'PositiveSmallIntegerField, SmallIntegerField, '
