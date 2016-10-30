@@ -123,10 +123,7 @@ class SortableTestCase(TestCase):
         category3 = self.create_category(title='Category 3')
         return category1, category2, category3
 
-    def get_sorting_url(self):
-        return '/admin/app/category/sort/do-sorting/'
-
-    def get_inline_sorting_url(self, model):
+    def get_sorting_url(self, model):
         return '/admin/app/project/sort/do-sorting/{0}/'.format(
             model.model_type_id())
 
@@ -155,7 +152,7 @@ class SortableTestCase(TestCase):
         category1, category2, category3 = self.make_test_categories()
         # make a normal GET
         response = self.client.get(
-            self.get_sorting_url(),
+            self.get_sorting_url(Category),
             data=self.get_category_indexes(category1, category2, category3))
 
         self.assertEqual(
@@ -171,7 +168,7 @@ class SortableTestCase(TestCase):
         category1, category2, category3 = self.make_test_categories()
         # make a normal POST
         response = self.client.post(
-            self.get_sorting_url(),
+            self.get_sorting_url(Category),
             data=self.get_category_indexes(category1, category2, category3))
 
         self.assertEqual(
@@ -186,7 +183,7 @@ class SortableTestCase(TestCase):
 
         category1, category2, category3 = self.make_test_categories()
         # make a normal POST
-        response = self.client.post(self.get_sorting_url(),
+        response = self.client.post(self.get_sorting_url(Category),
             data=self.get_category_indexes(category1, category2, category3))
         content = json.loads(response.content.decode(encoding='UTF-8'),
             'latin-1')
@@ -202,7 +199,7 @@ class SortableTestCase(TestCase):
         category1, category2, category3 = self.make_test_categories()
 
         # make an Ajax POST
-        response = self.client.post(self.get_sorting_url(),
+        response = self.client.post(self.get_sorting_url(Category),
             data=self.get_category_indexes(category3, category2, category1),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         content = json.loads(response.content.decode(encoding='UTF-8'),
@@ -273,27 +270,6 @@ class SortableTestCase(TestCase):
         self.assertEquals(response.status_code, httplib.FORBIDDEN,
                           'Sort view must be forbidden.')
 
-    def test_adminsortable_inline_changelist_not_found(self):
-        self.client.login(username=self.user.username,
-                          password=self.user_raw_password)
-
-        project = Project.objects.create(
-            category=self.create_category(),
-            description='Test project'
-        )
-        note1 = project.note_set.create(text='note 1')
-        note2 = project.note_set.create(text='note 2')
-
-        response = self.client.post(
-            self.get_inline_sorting_url(Category),
-            data=self.get_category_indexes(note2, note1),
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-
-        self.assertEqual(
-            response.status_code,
-            httplib.NOT_FOUND,
-            'Categories must not be sortable trough ProjectAdmin')
-
     def test_adminsortable_inline_changelist_success(self):
         self.client.login(username=self.user.username,
                           password=self.user_raw_password)
@@ -307,7 +283,7 @@ class SortableTestCase(TestCase):
         note3 = project.note_set.create(text='note 3')
 
         response = self.client.post(
-            self.get_inline_sorting_url(project.note_set.model),
+            self.get_sorting_url(project.note_set.model),
             data=self.get_category_indexes(note3, note2, note1),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
