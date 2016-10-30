@@ -106,16 +106,10 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             info = opts.app_label, opts.model_name
         except AttributeError:
             # Django < 1.7
-            info = opts.app_label, opts.modul_name
+            info = opts.app_label, opts.model_name
 
-        # this ajax view changes the order of instances of self.model
+        # this ajax view changes the order of instances of the model type
         admin_do_sorting_url = url(
-            r'^sort/do-sorting/$',
-            self.admin_site.admin_view(self.do_sorting_view),
-            name='%s_%s_do_sorting' % info)
-
-        # this ajax view changes the order of instances of inline models
-        admin_do_inline_sorting_url = url(
             r'^sort/do-sorting/(?P<model_type_id>\d+)/$',
             self.admin_site.admin_view(self.do_sorting_view),
             name='%s_%s_do_sorting' % info)
@@ -127,7 +121,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             name='%s_%s_sort' % info)
 
         urls = [
-            admin_do_inline_sorting_url,
             admin_do_sorting_url,
             admin_sort_url
         ] + urls
@@ -280,15 +273,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         if request.is_ajax():
             try:
-                if model_type_id is None:
-                    klass = self.model
-                else:
-                    klass = get_object_or_404(ContentType,
-                                              id=model_type_id).model_class()
-                    if klass not in (inline.model for inline in self.inlines):
-                        raise Http404(
-                            'There is no inline model with type id: {0}'.format(
-                                model_type_id))
+                klass = ContentType.objects.get(id=model_type_id).model_class()
 
                 indexes = list(map(str,
                     request.POST.get('indexes', []).split(',')))

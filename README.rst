@@ -3,7 +3,7 @@ Django Admin Sortable
 
 |Build Status|
 
-Current version: 2.0.20
+Current version: 2.0.21
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -617,12 +617,13 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What's new in 2.0.20?
+What's new in 2.0.21?
 ~~~~~~~~~~~~~~~~~~~~~
 
--  Support for models that use another type of field besides
-   ``AutoField`` for their primary key. Thanks
-   [@rubendura](https://github.com/rubendura).
+-  Fixed a regression introduced by `Pull Request
+   143 <https://github.com/iambrandontaylor/django-admin-sortable/pull/143>`__
+   which caused models sortable by a foriegn key to not persist the sort
+   order correctly.
 
 Future
 ~~~~~~
