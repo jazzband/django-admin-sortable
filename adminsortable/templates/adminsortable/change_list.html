@@ -37,12 +37,16 @@
 {% if not is_popup %}
 {% block breadcrumbs %}
     <div class="breadcrumbs">
-      <a href="../../../">
+      <a href="{% url 'admin:index' %}">
         {% trans "Home" %}
       </a>
-       &rsaquo;
-       <a href="../../">
-         {{ app_label|capfirst }}
+      &rsaquo;
+      <a href="{% url 'admin:app_list' app_label=opts.app_label %}">
+        {{ opts.app_config.verbose_name }}
+      </a>
+      &rsaquo;
+      <a href="{% url opts|admin_urlname:'changelist' %}">
+        {{ opts.verbose_name_plural|capfirst }}
       </a>
       &rsaquo;
       	{% trans 'Reorder' %}
@@ -72,7 +76,7 @@
 		{% block object-tools %}
 	        <ul class="object-tools">
 	            <li>
-                    <a href="../">
+                    <a href="{% url opts|admin_urlname:'changelist' %}">
                     {% blocktrans with opts.verbose_name_plural|capfirst as model %}Return to {{ model }}{% endblocktrans %}
                     </a>
                 </li>
