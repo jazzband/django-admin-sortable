@@ -219,11 +219,11 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         except AttributeError:
             verbose_name_plural = opts.verbose_name_plural
 
-        context = {
+        context = self.admin_site.each_context(request)
+        context.update({
             'title': u'Drag and drop {0} to change display order'.format(
                 capfirst(verbose_name_plural)),
             'opts': opts,
-            'app_label': opts.app_label,
             'has_perm': True,
             'objects': objects,
             'group_expression': sortable_by_expression,
@@ -232,7 +232,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'sortable_by_class_display_name': sortable_by_class_display_name,
             'jquery_lib_path': jquery_lib_path,
             'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken')
-        }
+        })
         return render(request, self.sortable_change_list_template, context)
 
     def add_view(self, request, form_url='', extra_context=None):
