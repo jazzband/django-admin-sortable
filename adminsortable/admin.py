@@ -219,7 +219,11 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         except AttributeError:
             verbose_name_plural = opts.verbose_name_plural
 
-        context = self.admin_site.each_context(request)
+        if VERSION <= (1, 7):
+            context = {}
+        else:
+            context = self.admin_site.each_context(request)
+
         context.update({
             'title': u'Drag and drop {0} to change display order'.format(
                 capfirst(verbose_name_plural)),
