@@ -81,6 +81,7 @@ To add "sortability" to a model, you need to inherit `SortableMixin` and at mini
  - `BigIntegerField`
 
 - `Meta.ordering` **must only contain one value**, otherwise, your objects will not be sorted correctly.
+- **IMPORTANT**: You must name the field you use for ordering something other than "order_field" as this name is reserved by the `SortableMixin` class.
 - It is recommended that you set `editable=False` and `db_index=True` on the field defined in `Meta.ordering` for a seamless Django admin experience and faster lookups on the objects.
 
 Sample Model:
