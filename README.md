@@ -485,6 +485,34 @@ with:
     <script src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
 ```
 
+### Notes
+From ``django-cms 3.x`` the path of change_form.html has changed. Replace the follwing line:
+
+```html
+    {% extends "admin/cms/page/plugin_change_form.html" %}
+```
+
+with
+
+```html
+    {% extends "admin/cms/page/plugin/change_form.html" %}
+```
+
+From ``django-admin-sortable 2.0.13`` the ``jquery.django-csrf.js`` was removed and you have to include the snippet-template.
+Change the following line:
+
+```html
+    <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
+```
+
+to
+
+```html
+    {% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name='csrftoken' %}
+```
+
+Please note, if you change the ``CSRF_COOKIE_NAME`` you have to adjust ``csrf_cookie_name='YOUR_CSRF_COOKIE_NAME'``
+
 ### Rationale
 Other projects have added drag-and-drop ordering to the ChangeList
 view, however this introduces a couple of problems...
