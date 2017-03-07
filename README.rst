@@ -1,9 +1,9 @@
 Django Admin Sortable
 =====================
 
+|PyPI version|
+|Python versions|
 |Build Status|
-
-Current version: 2.0.21
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -664,5 +664,9 @@ License
 
 django-admin-sortable is released under the Apache Public License v2.
 
+.. |PyPI version| image:: https://img.shields.io/pypi/v/django-admin-sortable.svg
+   :target: https://pypi.python.org/pypi/django-admin-sortable
+.. |Python versions| image:: https://img.shields.io/pypi/pyversions/django-admin-sortable.svg
+   :target: https://pypi.python.org/pypi/django-admin-sortable
 .. |Build Status| image:: https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master
    :target: https://travis-ci.org/iambrandontaylor/django-admin-sortable
