@@ -43,7 +43,8 @@ Download django-admin-sortable from [source](https://github.com/iambrandontaylor
 
 ## Configuration
 1. Add `adminsortable` to your `INSTALLED_APPS`.
-2. Ensure `django.core.context_processors.static` is in your `TEMPLATE_CONTEXT_PROCESSORS`.
+2. Ensure `django.template.context_processors.static` is in your `TEMPLATES["OPTIONS"]["context_processors"]`.
+    - (In older versions of Django, ensure `django.core.context_processors.static` is in `TEMPLATE_CONTEXT_PROCESSORS` instead.)
 3. Ensure that `CSRF_COOKIE_HTTPONLY` has not been set to `True`, as
 django-admin-sortable is currently incompatible with that setting.
 
