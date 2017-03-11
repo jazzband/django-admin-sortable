@@ -297,8 +297,11 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
                 for index in indexes:
                     obj = objects_dict.get(index)
-                    setattr(obj, order_field_name, start_index)
-                    obj.save()
+                    # perform the update only if the order field has changed
+                    if getattr(obj, order_field_name) != start_index:
+                        setattr(obj, order_field_name, start_index)
+                        # only update the object's order field
+                        obj.save(update_fields=(order_field_name,))
                     start_index += step
                 response = {'objects_sorted': True}
             except (KeyError, IndexError, klass.DoesNotExist,
