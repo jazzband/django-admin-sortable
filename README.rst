@@ -1,9 +1,7 @@
 Django Admin Sortable
 =====================
 
-|PyPI version|
-|Python versions|
-|Build Status|
+|PyPI version| |Python versions| |Build Status|
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -28,7 +26,7 @@ Supported Django Versions
 
 For Django 1.5.x to 1.9.x, use version 2.0.18.
 
-For Django 1.10.x, use 2.0.19 or higher.
+For Django 1.10.x or higher, use the latest version.
 
 Other notes of interest regarding versions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -53,7 +51,7 @@ Download django-admin-sortable from
 `source <https://github.com/iambrandontaylor/django-admin-sortable/archive/master.zip>`__
 
 1. Unzip the directory and cd into the uncompressed project directory
-2.
+2. 
 
    -  Optional: Enable your virtualenv
 
@@ -67,8 +65,9 @@ Configuration
 2. Ensure ``django.template.context_processors.static`` is in your
    ``TEMPLATES["OPTIONS"]["context_processors"]``.
 
-   - (In older versions of Django, ensure ``django.core.context_processors.static`` is in
-     ``TEMPLATE_CONTEXT_PROCESSORS`` instead.)
+   -  (In older versions of Django, ensure
+      ``django.core.context_processors.static`` is in
+      ``TEMPLATE_CONTEXT_PROCESSORS`` instead.)
 
 3. Ensure that ``CSRF_COOKIE_HTTPONLY`` has not been set to ``True``, as
    django-admin-sortable is currently incompatible with that setting.
@@ -114,6 +113,9 @@ and at minimum, define:
 
 -  ``Meta.ordering`` **must only contain one value**, otherwise, your
    objects will not be sorted correctly.
+-  **IMPORTANT**: You must name the field you use for ordering something
+   other than "order\_field" as this name is reserved by the
+   ``SortableMixin`` class.
 -  It is recommended that you set ``editable=False`` and
    ``db_index=True`` on the field defined in ``Meta.ordering`` for a
    seamless Django admin experience and faster lookups on the objects.
@@ -604,20 +606,25 @@ with:
 Notes
 ~~~~~
 
-From ``django-cms 3.x`` the path of change_form.html has changed. Replace the follwing line:
+From ``django-cms 3.x`` the path of change\_form.html has changed.
+Replace the follwing line:
 
 .. code:: html
+
         {% extends "admin/cms/page/plugin_change_form.html" %}
 
 with
 
 .. code:: html
+
         {% extends "admin/cms/page/plugin/change_form.html" %}
 
-From ``django-admin-sortable 2.0.13`` the ``jquery.django-csrf.js`` was removed and you have to include the snippet-template.
-Change the following line:
+From ``django-admin-sortable 2.0.13`` the ``jquery.django-csrf.js`` was
+removed and you have to include the snippet-template. Change the
+following line:
 
 .. code:: html
+
         <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
 
 to
@@ -626,7 +633,8 @@ to
 
         {% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name='csrftoken' %}
 
-Please note, if you change the ``CSRF_COOKIE_NAME`` you have to adjust ``csrf_cookie_name='YOUR_CSRF_COOKIE_NAME'``
+Please note, if you change the ``CSRF_COOKIE_NAME`` you have to adjust
+``csrf_cookie_name='YOUR_CSRF_COOKIE_NAME'``
 
 Rationale
 ~~~~~~~~~
@@ -648,13 +656,15 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What's new in 2.0.21?
+What's new in 2.0.22?
 ~~~~~~~~~~~~~~~~~~~~~
 
--  Fixed a regression introduced by `Pull Request
-   143 <https://github.com/iambrandontaylor/django-admin-sortable/pull/143>`__
-   which caused models sortable by a foriegn key to not persist the sort
-   order correctly.
+-  Improved saving `Pull Request
+   166 <https://github.com/iambrandontaylor/django-admin-sortable/pull/166>`__
+   thanks [@sushifan](https://github.com/sushifan)
+-  Django 1.11.x compatibility `Pull Request
+   167 <https://github.com/iambrandontaylor/django-admin-sortable/pull/16>`__
+   thanks [@camilonova](https://github.com/camilonova)
 
 Future
 ~~~~~~

@@ -19,7 +19,7 @@ Sorting inlines:
 ## Supported Django Versions
 For Django 1.5.x to 1.9.x, use version 2.0.18.
 
-For Django 1.10.x, use 2.0.19 or higher.
+For Django 1.10.x or higher, use the latest version.
 
 ### Other notes of interest regarding versions
 django-admin-sortable 1.5.2 introduced backward-incompatible changes for Django 1.4.x
@@ -530,8 +530,9 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.0.21?
-- Fixed a regression introduced by [ Pull Request 143](https://github.com/iambrandontaylor/django-admin-sortable/pull/143) which caused models sortable by a foriegn key to not persist the sort order correctly.
+### What's new in 2.0.22?
+- Improved saving [Pull Request 166](https://github.com/iambrandontaylor/django-admin-sortable/pull/166) thanks [@sushifan](https://github.com/sushifan)
+- Django 1.11.x compatibility [Pull Request 167](https://github.com/iambrandontaylor/django-admin-sortable/pull/16) thanks [@camilonova](https://github.com/camilonova)
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
