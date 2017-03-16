@@ -1,7 +1,7 @@
 try:
-    import httplib
+    import httplib  # Python 2
 except ImportError:
-    import http.client as httplib
+    import http.client as httplib  # Python 3
 
 import json
 import uuid
