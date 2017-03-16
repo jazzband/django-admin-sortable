@@ -6,15 +6,8 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
-
-try:
-    from django.contrib.contenttypes.admin import (GenericStackedInline,
-                                                   GenericTabularInline)
-except:
-    # Django < 1.7
-    from django.contrib.contenttypes.generic import (GenericStackedInline,
-                                                     GenericTabularInline)
-
+from django.contrib.contenttypes.admin import (GenericStackedInline,
+                                               GenericTabularInline)
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, Http404
