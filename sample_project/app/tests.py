@@ -6,6 +6,8 @@ except ImportError:
 import json
 import uuid
 
+import django
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.test import TestCase
@@ -73,8 +75,12 @@ class SortableTestCase(TestCase):
         return category
 
     def test_new_user_is_authenticated(self):
-        self.assertEqual(self.user.is_authenticated(), True,
-            'User is not authenticated')
+        if django.VERSION < (1, 10):
+            self.assertEqual(self.user.is_authenticated(), True,
+                'User is not authenticated')
+        else:
+            self.assertEqual(self.user.is_authenticated, True,
+                'User is not authenticated')
 
     def test_new_user_is_staff(self):
         self.assertEqual(self.user.is_staff, True, 'User is not staff')
