@@ -3,12 +3,8 @@ try:
 except ImportError:
     import http.client as httplib
 
-from django import VERSION
-
-if VERSION > (1, 8):
-    import uuid
-
 import json
+import uuid
 
 from django import VERSION
 from django.contrib.auth.models import User
@@ -33,13 +29,12 @@ class TestSortableModel(SortableMixin):
         return self.title
 
 
-if VERSION > (1, 8):
-    class TestNonAutoFieldModel(SortableMixin):
-        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        order = models.PositiveIntegerField(editable=False, db_index=True)
+class TestNonAutoFieldModel(SortableMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.PositiveIntegerField(editable=False, db_index=True)
 
-        class Meta:
-            ordering = ['order']
+    class Meta:
+        ordering = ['order']
 
 
 class SortableTestCase(TestCase):
