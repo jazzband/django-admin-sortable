@@ -8,7 +8,6 @@ def map_path(directory_name):
 
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -91,12 +90,6 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '8**a!c8$1x)p@j2pj0yq!*v+dzp24g*$918ws#x@k+gf%0%rct'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -112,14 +105,12 @@ ROOT_URLCONF = 'sample_project.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'sample_project.wsgi.application'
 
-TEMPLATE_DIRS = (
-    map_path('templates'),
-)
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': TEMPLATE_DIRS,
+        'DIRS': [
+            map_path('templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
