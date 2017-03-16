@@ -1,6 +1,8 @@
 # Django settings for test_project project.
 import os
 
+import django
+
 
 def map_path(directory_name):
     return os.path.join(os.path.dirname(__file__),
@@ -90,15 +92,19 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '8**a!c8$1x)p@j2pj0yq!*v+dzp24g*$918ws#x@k+gf%0%rct'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
+
+if django.VERSION < (1, 10):
+    MIDDLEWARE_CLASSES = MIDDLEWARE
 
 ROOT_URLCONF = 'sample_project.urls'
 
