@@ -38,13 +38,7 @@ class SortableAdminBase(object):
         its sort order can be changed. This view adds a link to the
         object_tools block to take people to the view to change the sorting.
         """
-
-        try:
-            qs_method = getattr(self, 'get_queryset', self.queryset)
-        except AttributeError:
-            qs_method = self.get_queryset
-
-        if get_is_sortable(qs_method(request)):
+        if get_is_sortable(self.get_queryset(request)):
             self.change_list_template = \
                 self.sortable_change_list_with_sort_link_template
             self.is_sortable = True
@@ -137,11 +131,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 pass
 
         # Apply any sort filters to create a subset of sortable objects
-        try:
-            qs_method = getattr(self, 'get_queryset', self.queryset)
-        except AttributeError:
-            qs_method = self.get_queryset
-        objects = qs_method(request).filter(**filters)
+        objects = self.get_queryset(request).filter(**filters)
 
         # Determine if we need to regroup objects relative to a
         # foreign key specified on the model class that is extending Sortable.
@@ -315,19 +305,12 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
                 ' (or Sortable for legacy implementations)')
 
     def get_queryset(self, request):
-        if VERSION < (1, 6):
-            qs = super(SortableInlineBase, self).queryset(request)
-        else:
-            qs = super(SortableInlineBase, self).get_queryset(request)
-
+        qs = super(SortableInlineBase, self).get_queryset(request)
         if get_is_sortable(qs):
             self.model.is_sortable = True
         else:
             self.model.is_sortable = False
         return qs
-
-    if VERSION < (1, 6):
-        queryset = get_queryset
 
 
 class SortableTabularInline(TabularInline, SortableInlineBase):
