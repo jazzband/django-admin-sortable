@@ -108,7 +108,7 @@ class SortableTestCase(TestCase):
         self.client.login(username=self.user.username,
             password=self.user_raw_password)
         response = self.client.get('/admin/app/category/sort/')
-        self.assertEquals(response.status_code, httplib.OK,
+        self.assertEqual(response.status_code, httplib.OK,
             'Unable to reach sort view.')
 
     def make_test_categories(self):
@@ -251,7 +251,7 @@ class SortableTestCase(TestCase):
         self.client.login(username=self.user.username,
             password=self.user_raw_password)
         response = self.client.get('/admin/app/project/sort/')
-        self.assertEquals(response.status_code, httplib.OK,
+        self.assertEqual(response.status_code, httplib.OK,
             'Unable to reach sort view.')
 
     def test_adminsortable_change_list_view_permission_denied(self):
@@ -261,8 +261,8 @@ class SortableTestCase(TestCase):
         self.client.login(username=self.staff.username,
                           password=self.staff_raw_password)
         response = self.client.get('/admin/app/project/sort/')
-        self.assertEquals(response.status_code, httplib.FORBIDDEN,
-                          'Sort view must be forbidden.')
+        self.assertEqual(response.status_code, httplib.FORBIDDEN,
+                         'Sort view must be forbidden.')
 
     def test_adminsortable_inline_changelist_success(self):
         self.client.login(username=self.user.username,
