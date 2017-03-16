@@ -3,13 +3,7 @@ import json
 from django import VERSION
 
 from django.conf import settings
-
-try:
-    from django.conf.urls import url
-except ImportError:
-    # Django < 1.4
-    from django.conf.urls.defaults import url
-
+from django.conf.urls import url
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
 
