@@ -82,12 +82,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
-        opts = self.model._meta
-        try:
-            info = opts.app_label, opts.model_name
-        except AttributeError:
-            # Django < 1.7
-            info = opts.app_label, opts.model_name
+        info = self.model._meta.app_label, self.model._meta.model_name
 
         # this ajax view changes the order of instances of the model type
         admin_do_sorting_url = url(
