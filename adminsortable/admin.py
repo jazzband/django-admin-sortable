@@ -141,7 +141,11 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         for field in self.model._meta.fields:
             if isinstance(field, SortableForeignKey):
-                sortable_by_fk = field.rel.to
+                try:
+                    sortable_by_fk = field.remote_field.model
+                except AttributeError:
+                    # Django < 1.9
+                    sortable_by_fk = field.rel.to
                 sortable_by_field_name = field.name.lower()
                 sortable_by_class_is_sortable = sortable_by_fk.objects.count() >= 2
 
