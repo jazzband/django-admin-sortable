@@ -656,15 +656,13 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What's new in 2.0.22?
-~~~~~~~~~~~~~~~~~~~~~
+What's new in 2.1?
+~~~~~~~~~~~~~~~~~~
 
--  Improved saving `Pull Request
-   166 <https://github.com/iambrandontaylor/django-admin-sortable/pull/166>`__
-   thanks [@sushifan](https://github.com/sushifan)
--  Django 1.11.x compatibility `Pull Request
-   167 <https://github.com/iambrandontaylor/django-admin-sortable/pull/16>`__
-   thanks [@camilonova](https://github.com/camilonova)
+-  Removed fallbacks for Django 1.8, Tox testing and many performance
+   improvements `Pull Request
+   168 <https://github.com/iambrandontaylor/django-admin-sortable/pull/168>`__
+   thanks [@sushifan](https://github.com/jaap3)
 
 Future
 ~~~~~~

@@ -530,9 +530,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.0.22?
-- Improved saving [Pull Request 166](https://github.com/iambrandontaylor/django-admin-sortable/pull/166) thanks [@sushifan](https://github.com/sushifan)
-- Django 1.11.x compatibility [Pull Request 167](https://github.com/iambrandontaylor/django-admin-sortable/pull/16) thanks [@camilonova](https://github.com/camilonova)
+### What's new in 2.1?
+- Removed fallbacks for Django 1.8, Tox testing and many performance improvements [Pull Request 168](https://github.com/iambrandontaylor/django-admin-sortable/pull/168) thanks [@sushifan](https://github.com/jaap3)
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
