@@ -2,7 +2,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/django-admin-sortable.svg)](https://pypi.python.org/pypi/django-admin-sortable)
 [![Python versions](https://img.shields.io/pypi/pyversions/django-admin-sortable.svg)](https://pypi.python.org/pypi/django-admin-sortable)
-[![Build Status](https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master)](https://travis-ci.org/iambrandontaylor/django-admin-sortable)
+[![Build Status](https://travis-ci.org/alsoicode/django-admin-sortable.svg?branch=master)](https://travis-ci.org/alsoicode/django-admin-sortable)
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
