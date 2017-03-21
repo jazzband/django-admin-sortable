@@ -17,9 +17,9 @@ Sorting inlines:
 ![sortable-inlines](http://res.cloudinary.com/alsoicode/image/upload/v1451237555/django-admin-sortable/sortable-inlines.jpg)
 
 ## Supported Django Versions
-For Django 1.5.x to 1.9.x, use version 2.0.18.
+For Django 1.5.x to 1.7.x, use version 2.0.18.
 
-For Django 1.10.x or higher, use the latest version.
+For Django 1.8.x or higher, use the latest version.
 
 ### Other notes of interest regarding versions
 django-admin-sortable 1.5.2 introduced backward-incompatible changes for Django 1.4.x

@@ -24,9 +24,9 @@ Sorting inlines:
 Supported Django Versions
 -------------------------
 
-For Django 1.5.x to 1.9.x, use version 2.0.18.
+For Django 1.5.x to 1.7.x, use version 2.0.18.
 
-For Django 1.10.x or higher, use the latest version.
+For Django 1.8.x or higher, use the latest version.
 
 Other notes of interest regarding versions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
