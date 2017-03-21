@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 try:
-    README = open('README').read()
+    README = open('README.rst').read()
 except:
     README = None
 
