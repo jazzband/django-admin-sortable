@@ -19,8 +19,13 @@
 #sortable ul li
 {
 	overflow: auto;
+	margin-bottom: 8px;
 	margin-left: 0;
 	display: block;
+}
+
+#sortable ul li:last-child {
+	margin-bottom: 0;
 }
 
 #sortable .sortable
