@@ -466,9 +466,10 @@ the extrahead block with:
 
 {% block extrahead %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
-    <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
+    <script src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
+    <script src="{% static 'adminsortable/js/jquery.ui.touch-punch.min.js' %}"></script>
+    <script src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
+    <script src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
 
     <link rel="stylesheet" type="text/css" href="{% static 'adminsortable/css/admin.sortable.inline.css' %}" />
 {% endblock extrahead %}
@@ -530,8 +531,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1?
-- Removed fallbacks for Django 1.8, Tox testing and many performance improvements [Pull Request 168](https://github.com/iambrandontaylor/django-admin-sortable/pull/168) thanks [@sushifan](https://github.com/jaap3)
+### What's new in 2.1.1?
+- Touch support
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
