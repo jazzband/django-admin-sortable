@@ -76,7 +76,7 @@ def dynamic_regroup(parser, token):
     return DynamicRegroupNode(target, parser, expression, var_name)
 
 
-@register.assignment_tag
+@register.simple_tag
 def get_django_version():
     version = django.VERSION
     return {'major': version[0], 'minor': version[1]}
