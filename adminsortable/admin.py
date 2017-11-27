@@ -11,6 +11,7 @@ from django.contrib.contenttypes.admin import (GenericStackedInline,
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, Http404
+from django.middleware.csrf import get_token
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import capfirst
 from django.utils.decorators import method_decorator
@@ -192,6 +193,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         except AttributeError:
             verbose_name_plural = opts.verbose_name_plural
 
+        csrf_token = get_token(self.request) if \
+            getattr(settings, 'CSRF_USE_SESSIONS', False) else None
+
         context = self.admin_site.each_context(request)
         context.update({
             'title': u'Drag and drop {0} to change display order'.format(
@@ -204,7 +208,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'sortable_by_class_is_sortable': sortable_by_class_is_sortable,
             'sortable_by_class_display_name': sortable_by_class_display_name,
             'jquery_lib_path': jquery_lib_path,
-            'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken')
+            'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken'),
+            'csrf_token': csrf_token
         })
         return render(request, self.sortable_change_list_template, context)
 
