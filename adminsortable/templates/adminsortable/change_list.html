@@ -27,7 +27,7 @@
 <script src="{% static 'admin/js/jquery.init.js' %}"></script>
 <script src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
 <script src="{% static 'adminsortable/js/jquery.ui.touch-punch.min.js' %}"></script>
-{% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name=csrf_cookie_name csrf_token=csrf_token %}
+{% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name=csrf_cookie_name %}
 <script src="{% static 'adminsortable/js/admin.sortable.js' %}"></script>
 {% endblock %}
 
