@@ -193,8 +193,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         except AttributeError:
             verbose_name_plural = opts.verbose_name_plural
 
-        csrf_token = get_token(self.request) if \
-            getattr(settings, 'CSRF_USE_SESSIONS', False) else ''
+        csrf_token = ''
+        if getattr(settings, 'CSRF_USE_SESSIONS', False):
+            csrf_token = get_token(self.request)
 
         context = self.admin_site.each_context(request)
         context.update({
