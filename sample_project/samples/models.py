@@ -24,7 +24,7 @@ class Category(SimpleModel, SortableMixin):
         verbose_name_plural = 'Categories'
         ordering = ['order']
 
-    order = models.PositiveIntegerField(default=0)
+    order = models.PositiveIntegerField(default=0, editable=False)
 
 
 # A model with an override of its queryset for admin

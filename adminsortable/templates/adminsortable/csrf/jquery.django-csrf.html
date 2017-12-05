@@ -16,7 +16,7 @@
         return cookieValue;
     }
 
-    var csrftoken = getCookie('{{ csrf_cookie_name }}');
+    var csrftoken = '{{ csrf_token }}' || getCookie('{{ csrf_cookie_name }}');
 
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
