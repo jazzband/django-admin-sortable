@@ -10,8 +10,8 @@ from django.contrib.contenttypes.admin import (GenericStackedInline,
                                                GenericTabularInline)
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
