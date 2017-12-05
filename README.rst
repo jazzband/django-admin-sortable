@@ -51,7 +51,7 @@ Download django-admin-sortable from
 `source <https://github.com/iambrandontaylor/django-admin-sortable/archive/master.zip>`__
 
 1. Unzip the directory and cd into the uncompressed project directory
-2. 
+2.
 
    -  Optional: Enable your virtualenv
 
@@ -657,10 +657,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What's new in 2.1.1?
+What's new in 2.1.2?
 ~~~~~~~~~~~~~~~~~~~~
 
--  Touch support
+-  Django 2 compatibility
 
 Future
 ~~~~~~

@@ -4,7 +4,7 @@ from adminsortable.admin import (SortableAdmin, SortableTabularInline,
     SortableStackedInline, SortableGenericStackedInline,
     NonSortableParentAdmin)
 from adminsortable.utils import get_is_sortable
-from app.models import (Category, Widget, Project, Credit, Note, GenericNote,
+from .models import (Category, Widget, Project, Credit, Note, GenericNote,
     Component, Person, NonSortableCategory, SortableCategoryWidget,
     SortableNonInlineCategory, NonSortableCredit, NonSortableNote,
     CustomWidget, CustomWidgetComponent, BackwardCompatibleWidget)

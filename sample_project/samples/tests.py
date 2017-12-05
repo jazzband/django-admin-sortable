@@ -15,7 +15,7 @@ from django.test.client import Client
 
 from adminsortable.models import SortableMixin
 from adminsortable.utils import get_is_sortable
-from app.models import Category, Person, Project
+from .models import Category, Person, Project
 
 
 class TestSortableModel(SortableMixin):
@@ -113,7 +113,7 @@ class SortableTestCase(TestCase):
     def test_adminsortable_change_list_view(self):
         self.client.login(username=self.user.username,
             password=self.user_raw_password)
-        response = self.client.get('/admin/app/category/sort/')
+        response = self.client.get('/admin/samples/category/sort/')
         self.assertEqual(response.status_code, httplib.OK,
             'Unable to reach sort view.')
 
@@ -124,7 +124,7 @@ class SortableTestCase(TestCase):
         return category1, category2, category3
 
     def get_sorting_url(self, model):
-        return '/admin/app/project/sort/do-sorting/{0}/'.format(
+        return '/admin/samples/project/sort/do-sorting/{0}/'.format(
             model.model_type_id())
 
     def get_category_indexes(self, *categories):
@@ -135,7 +135,7 @@ class SortableTestCase(TestCase):
             password=self.user_raw_password)
         self.assertTrue(logged_in, 'User is not logged in')
 
-        response = self.client.get('/admin/app/category/sort/')
+        response = self.client.get('/admin/samples/category/sort/')
         self.assertEqual(response.status_code, httplib.OK,
             'Admin sort request failed.')
 
@@ -185,8 +185,7 @@ class SortableTestCase(TestCase):
         # make a normal POST
         response = self.client.post(self.get_sorting_url(Category),
             data=self.get_category_indexes(category1, category2, category3))
-        content = json.loads(response.content.decode(encoding='UTF-8'),
-            'latin-1')
+        content = json.loads(response.content.decode(encoding='UTF-8'))
         self.assertFalse(content.get('objects_sorted'),
             'Objects should not have been sorted. An ajax post is required.')
 
@@ -202,8 +201,7 @@ class SortableTestCase(TestCase):
         response = self.client.post(self.get_sorting_url(Category),
             data=self.get_category_indexes(category3, category2, category1),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        content = json.loads(response.content.decode(encoding='UTF-8'),
-            'latin-1')
+        content = json.loads(response.content.decode(encoding='UTF-8'))
         self.assertTrue(content.get('objects_sorted'),
             'Objects should have been sorted.')
 
@@ -256,7 +254,7 @@ class SortableTestCase(TestCase):
 
         self.client.login(username=self.user.username,
             password=self.user_raw_password)
-        response = self.client.get('/admin/app/project/sort/')
+        response = self.client.get('/admin/samples/project/sort/')
         self.assertEqual(response.status_code, httplib.OK,
             'Unable to reach sort view.')
 
@@ -266,7 +264,7 @@ class SortableTestCase(TestCase):
 
         self.client.login(username=self.staff.username,
                           password=self.staff_raw_password)
-        response = self.client.get('/admin/app/project/sort/')
+        response = self.client.get('/admin/samples/project/sort/')
         self.assertEqual(response.status_code, httplib.FORBIDDEN,
                          'Sort view must be forbidden.')
 
@@ -291,8 +289,7 @@ class SortableTestCase(TestCase):
             response.status_code,
             httplib.OK,
             'Note inline must be sortable in ProjectAdmin')
-        content = json.loads(response.content.decode(encoding='UTF-8'),
-                             'latin-1')
+        content = json.loads(response.content.decode(encoding='UTF-8'))
         self.assertTrue(content.get('objects_sorted'),
                         'Objects should have been sorted.')
 
