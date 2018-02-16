@@ -199,17 +199,17 @@ If you previously used Django Admin Sortable, **DON'T PANIC** - everything will 
 Please note however that the `Sortable` class still contains the hard-coded `order` field, and meta inheritance requirements:
 
 ```python
-    # legacy model definition
+# legacy model definition
 
-    from adminsortable.models import Sortable
+from adminsortable.models import Sortable
 
-    class Project(Sortable):
-        class Meta(Sortable.Meta):
-            pass
-        title = models.CharField(max_length=50)
+class Project(Sortable):
+    class Meta(Sortable.Meta):
+        pass
+    title = models.CharField(max_length=50)
 
-        def __unicode__(self):
-            return self.title
+    def __unicode__(self):
+        return self.title
 ```
 
 #### Model Instance Methods
@@ -409,8 +409,8 @@ change_list_template_extends
 These attributes have default values of:
 
 ```python
-    change_form_template_extends = 'admin/change_form.html'
-    change_list_template_extends = 'admin/change_list.html'
+change_form_template_extends = 'admin/change_form.html'
+change_list_template_extends = 'admin/change_list.html'
 ```
 
 If you need to extend the inline change form templates, you'll need to select the right one, depending on your version of Django. For Django 1.5.x or below, you'll need to extend one of the following:
@@ -460,7 +460,7 @@ plugin_pool.register_plugin(CMSCarouselPlugin)
 The contents of `sortable-stacked-inline-change-form.html` at a minimum need to extend
 the extrahead block with:
 
-```html
+```html+django
 {% extends "admin/cms/page/plugin_change_form.html" %}
 {% load static from staticfiles %}
 
@@ -477,40 +477,40 @@ the extrahead block with:
 
 Sorting within Django-CMS is really only feasible for inline models of a plugin as Django-CMS already includes sorting for plugin instances. For tabular inlines, just substitute:
 
-```html
-    <script src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
+```html+django
+<script src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
 ```
 
 with:
 
-```html
-    <script src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
+```html+django
+<script src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
 ```
 
 ### Notes
 From ``django-cms 3.x`` the path of change_form.html has changed. Replace the follwing line:
 
-```html
-    {% extends "admin/cms/page/plugin_change_form.html" %}
+```html+django
+{% extends "admin/cms/page/plugin_change_form.html" %}
 ```
 
 with
 
-```html
-    {% extends "admin/cms/page/plugin/change_form.html" %}
+```html+django
+{% extends "admin/cms/page/plugin/change_form.html" %}
 ```
 
 From ``django-admin-sortable 2.0.13`` the ``jquery.django-csrf.js`` was removed and you have to include the snippet-template.
 Change the following line:
 
-```html
-    <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
+```html+django
+<script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
 ```
 
 to
 
-```html
-    {% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name='csrftoken' %}
+```html+django
+{% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name='csrftoken' %}
 ```
 
 Please note, if you change the ``CSRF_COOKIE_NAME`` you have to adjust ``csrf_cookie_name='YOUR_CSRF_COOKIE_NAME'``
