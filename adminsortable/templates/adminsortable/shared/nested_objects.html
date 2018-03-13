@@ -1,4 +1,4 @@
-{% load django_template_additions adminsortable_tags %}
+{% load django_template_additions %}
 {% dynamic_regroup objects by group_expression as regrouped_objects %}
 {% if regrouped_objects %}
     <ul {% if sortable_by_class_is_sortable %}class="sortable"{% endif %}>
@@ -6,7 +6,7 @@
             {% with object=regrouped_object.grouper %}
                 {% if object %}
                     <li class="parent">{% if sortable_by_class_is_sortable %}
-                            {% render_object_rep object forloop %}
+                            {% include "adminsortable/shared/object_rep.html" %}
                         {% else %}
                             {{ object }}
                         {% endif %}
@@ -14,7 +14,7 @@
                         {% if regrouped_object.list %}
                             {% with regrouped_object_list_length=regrouped_object.list|length %}
                             <ul {% if regrouped_object_list_length > 1 %}class="sortable"{% endif %}>
-                                {% render_list_items regrouped_object.list %}
+                                {% include "adminsortable/shared/list_items.html" with list_objects=regrouped_object.list %}
                             </ul>
                             {% endwith %}
                         {% endif %}

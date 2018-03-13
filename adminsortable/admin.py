@@ -102,6 +102,24 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         ] + urls
         return urls
 
+    def get_sort_view_queryset(self, request, sortable_by_expression):
+        """
+        Return a queryset, optionally filtered based on request and
+        `sortable_by_expression` to be used in the sort view.
+        """
+        # get sort group index from querystring if present
+        sort_filter_index = request.GET.get('sort_filter')
+        
+        filters = {}
+        if sort_filter_index:
+            try:
+                filters = self.model.sorting_filters[int(sort_filter_index)][1]
+            except (IndexError, ValueError):
+                pass
+
+        # Apply any sort filters to create a subset of sortable objects
+    return self.get_queryset(request).filter(**filters)
+
     def sort_view(self, request):
         """
         Custom admin view that displays the objects as a list whose sort
@@ -114,19 +132,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         jquery_lib_path = 'admin/js/jquery.js' if VERSION < (1, 9) \
             else 'admin/js/vendor/jquery/jquery.js'
-
-        # get sort group index from querystring if present
-        sort_filter_index = request.GET.get('sort_filter')
-
-        filters = {}
-        if sort_filter_index:
-            try:
-                filters = self.model.sorting_filters[int(sort_filter_index)][1]
-            except (IndexError, ValueError):
-                pass
-
-        # Apply any sort filters to create a subset of sortable objects
-        objects = self.get_queryset(request).filter(**filters)
 
         # Determine if we need to regroup objects relative to a
         # foreign key specified on the model class that is extending Sortable.
@@ -174,6 +179,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             sortable_by_class = sortable_by_expression = \
                 sortable_by_class_display_name = \
                 sortable_by_class_is_sortable = None
+
+        objects = self.get_sort_view_queryset(request, sortable_by_expression)
 
         if sortable_by_property or sortable_by_fk:
             # Order the objects by the property they are sortable by,
