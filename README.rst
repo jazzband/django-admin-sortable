@@ -51,7 +51,7 @@ Download django-admin-sortable from
 `source <https://github.com/iambrandontaylor/django-admin-sortable/archive/master.zip>`__
 
 1. Unzip the directory and cd into the uncompressed project directory
-2.
+2. 
 
    -  Optional: Enable your virtualenv
 
@@ -518,7 +518,9 @@ These attributes have default values of:
     change_form_template_extends = 'admin/change_form.html'
     change_list_template_extends = 'admin/change_list.html'
 
-If you need to extend the inline change form templates, you'll need to select the right one, depending on your version of Django. For 1.10.x or below, you'll need to extend one of the following:
+If you need to extend the inline change form templates, you’ll need to
+select the right one, depending on your version of Django. For 1.10.x or
+below, you’ll need to extend one of the following:
 
 ::
 
@@ -655,12 +657,11 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.1.3?
+What’s new in 2.1.4?
 ~~~~~~~~~~~~~~~~~~~~
 
--  Norwegian and Latvian translations. Credit to
-   `simenheg <https://github.com/simenheg>`__ and
-   `peterisb <https://github.com/peterisb>`__ respectively.
+-  Improved performance on large data sets. Credit to
+   `mrmachine <https://github.com/mrmachine>`__.
 
 Future
 ~~~~~~
