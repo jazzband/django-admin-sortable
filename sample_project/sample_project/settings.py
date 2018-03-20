@@ -1,6 +1,8 @@
 # Django settings for test_project project.
 import os
 
+import django
+
 
 def map_path(directory_name):
     return os.path.join(os.path.dirname(__file__),
@@ -8,7 +10,6 @@ def map_path(directory_name):
 
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -91,44 +92,36 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '8**a!c8$1x)p@j2pj0yq!*v+dzp24g*$918ws#x@k+gf%0%rct'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
+
+if django.VERSION < (1, 10):
+    MIDDLEWARE_CLASSES = MIDDLEWARE
 
 ROOT_URLCONF = 'sample_project.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'sample_project.wsgi.application'
 
-TEMPLATE_DIRS = (
-    map_path('templates'),
-)
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': TEMPLATE_DIRS,
+        'DIRS': [
+            map_path('templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.debug',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.media',
-                'django.template.context_processors.static',
-                'django.template.context_processors.tz',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -146,7 +139,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 
     'adminsortable',
-    'app',
+    'samples',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -177,3 +170,21 @@ LOGGING = {
         },
     }
 }
+
+# Password validation
+# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]

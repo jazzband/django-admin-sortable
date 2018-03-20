@@ -2,11 +2,6 @@ from itertools import groupby
 
 import django
 from django import template
-try:
-    from django import TemplateSyntaxError
-except ImportError:
-    #support for django 1.3
-    from django.template.base import TemplateSyntaxError
 
 register = template.Library()
 
@@ -64,14 +59,15 @@ def dynamic_regroup(parser, token):
     """
     firstbits = token.contents.split(None, 3)
     if len(firstbits) != 4:
-        raise TemplateSyntaxError("'regroup' tag takes five arguments")
+        raise template.TemplateSyntaxError("'regroup' tag takes five arguments")
     target = parser.compile_filter(firstbits[1])
     if firstbits[2] != 'by':
-        raise TemplateSyntaxError("second argument to 'regroup' tag must be 'by'")
+        raise template.TemplateSyntaxError(
+            "second argument to 'regroup' tag must be 'by'")
     lastbits_reversed = firstbits[3][::-1].split(None, 2)
     if lastbits_reversed[1][::-1] != 'as':
-        raise TemplateSyntaxError("next-to-last argument to 'regroup' tag must"
-                                  " be 'as'")
+        raise template.TemplateSyntaxError(
+            "next-to-last argument to 'regroup' tag must be 'as'")
 
     expression = lastbits_reversed[2][::-1]
     var_name = lastbits_reversed[0][::-1]
@@ -80,7 +76,7 @@ def dynamic_regroup(parser, token):
     return DynamicRegroupNode(target, parser, expression, var_name)
 
 
-@register.assignment_tag
+@register.simple_tag
 def get_django_version():
     version = django.VERSION
     return {'major': version[0], 'minor': version[1]}

@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls static admin_list adminsortable_tags %}
+{% load i18n admin_urls static admin_list %}
 
 {% block extrastyle %}
   {{ block.super }}
@@ -26,6 +26,7 @@
 <script src="{% static jquery_lib_path %}"></script>
 <script src="{% static 'admin/js/jquery.init.js' %}"></script>
 <script src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
+<script src="{% static 'adminsortable/js/jquery.ui.touch-punch.min.js' %}"></script>
 {% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name=csrf_cookie_name %}
 <script src="{% static 'adminsortable/js/admin.sortable.js' %}"></script>
 {% endblock %}
@@ -74,20 +75,20 @@
 {% block content %}
 	<div id="content-main">
 		{% block object-tools %}
-	        <ul class="object-tools">
-	            <li>
-                    <a href="{% url opts|admin_urlname:'changelist' %}">
-                    {% blocktrans with opts.verbose_name_plural|capfirst as model %}Return to {{ model }}{% endblocktrans %}
-                    </a>
-                </li>
-	        </ul>
-	    {% endblock %}
+      <ul class="object-tools">
+        <li>
+          <a href="{% url opts|admin_urlname:'changelist' %}">
+          {% blocktrans with opts.verbose_name_plural|capfirst as model %}Return to {{ model }}{% endblocktrans %}
+          </a>
+        </li>
+      </ul>
+    {% endblock %}
 		{% if objects %}
 		<div id="sortable">
 			{% if group_expression %}
-          {% render_nested_sortable_objects objects group_expression %}
+        {% include "adminsortable/shared/nested_objects.html" %}
 			{% else %}
-			    {% render_sortable_objects objects %}
+        {% include "adminsortable/shared/objects.html" %}
 			{% endif %}
       {% csrf_token %}
 		</div>

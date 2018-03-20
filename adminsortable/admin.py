@@ -3,24 +3,11 @@ import json
 from django import VERSION
 
 from django.conf import settings
-
-try:
-    from django.conf.urls import url
-except ImportError:
-    # Django < 1.4
-    from django.conf.urls.defaults import url
-
+from django.conf.urls import url
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
-
-try:
-    from django.contrib.contenttypes.admin import (GenericStackedInline,
-                                                   GenericTabularInline)
-except:
-    # Django < 1.7
-    from django.contrib.contenttypes.generic import (GenericStackedInline,
-                                                     GenericTabularInline)
-
+from django.contrib.contenttypes.admin import (GenericStackedInline,
+                                               GenericTabularInline)
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, Http404
@@ -51,13 +38,7 @@ class SortableAdminBase(object):
         its sort order can be changed. This view adds a link to the
         object_tools block to take people to the view to change the sorting.
         """
-
-        try:
-            qs_method = getattr(self, 'get_queryset', self.queryset)
-        except AttributeError:
-            qs_method = self.get_queryset
-
-        if get_is_sortable(qs_method(request)):
+        if get_is_sortable(self.get_queryset(request)):
             self.change_list_template = \
                 self.sortable_change_list_with_sort_link_template
             self.is_sortable = True
@@ -101,12 +82,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
     def get_urls(self):
         urls = super(SortableAdmin, self).get_urls()
-        opts = self.model._meta
-        try:
-            info = opts.app_label, opts.model_name
-        except AttributeError:
-            # Django < 1.7
-            info = opts.app_label, opts.model_name
+        info = self.model._meta.app_label, self.model._meta.model_name
 
         # this ajax view changes the order of instances of the model type
         admin_do_sorting_url = url(
@@ -126,6 +102,24 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         ] + urls
         return urls
 
+    def get_sort_view_queryset(self, request, sortable_by_expression):
+        """
+        Return a queryset, optionally filtered based on request and
+        `sortable_by_expression` to be used in the sort view.
+        """
+        # get sort group index from querystring if present
+        sort_filter_index = request.GET.get('sort_filter')
+
+        filters = {}
+        if sort_filter_index:
+            try:
+                filters = self.model.sorting_filters[int(sort_filter_index)][1]
+            except (IndexError, ValueError):
+                pass
+
+        # Apply any sort filters to create a subset of sortable objects
+        return self.get_queryset(request).filter(**filters)
+
     def sort_view(self, request):
         """
         Custom admin view that displays the objects as a list whose sort
@@ -138,23 +132,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         jquery_lib_path = 'admin/js/jquery.js' if VERSION < (1, 9) \
             else 'admin/js/vendor/jquery/jquery.js'
-
-        # get sort group index from querystring if present
-        sort_filter_index = request.GET.get('sort_filter')
-
-        filters = {}
-        if sort_filter_index:
-            try:
-                filters = self.model.sorting_filters[int(sort_filter_index)][1]
-            except (IndexError, ValueError):
-                pass
-
-        # Apply any sort filters to create a subset of sortable objects
-        try:
-            qs_method = getattr(self, 'get_queryset', self.queryset)
-        except AttributeError:
-            qs_method = self.get_queryset
-        objects = qs_method(request).filter(**filters)
 
         # Determine if we need to regroup objects relative to a
         # foreign key specified on the model class that is extending Sortable.
@@ -169,7 +146,11 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
         for field in self.model._meta.fields:
             if isinstance(field, SortableForeignKey):
-                sortable_by_fk = field.rel.to
+                try:
+                    sortable_by_fk = field.remote_field.model
+                except AttributeError:
+                    # Django < 1.9
+                    sortable_by_fk = field.rel.to
                 sortable_by_field_name = field.name.lower()
                 sortable_by_class_is_sortable = sortable_by_fk.objects.count() >= 2
 
@@ -199,6 +180,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 sortable_by_class_display_name = \
                 sortable_by_class_is_sortable = None
 
+        objects = self.get_sort_view_queryset(request, sortable_by_expression)
+
         if sortable_by_property or sortable_by_fk:
             # Order the objects by the property they are sortable by,
             # then by the order, otherwise the regroup
@@ -206,9 +189,6 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
             try:
                 order_field_name = opts.model._meta.ordering[0]
-            except (AttributeError, IndexError):
-                # for Django 1.5.x
-                order_field_name = opts.ordering[0]
             except (AttributeError, IndexError):
                 order_field_name = 'order'
 
@@ -301,8 +281,11 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
                 for index in indexes:
                     obj = objects_dict.get(index)
-                    setattr(obj, order_field_name, start_index)
-                    obj.save()
+                    # perform the update only if the order field has changed
+                    if getattr(obj, order_field_name) != start_index:
+                        setattr(obj, order_field_name, start_index)
+                        # only update the object's order field
+                        obj.save(update_fields=(order_field_name,))
                     start_index += step
                 response = {'objects_sorted': True}
             except (KeyError, IndexError, klass.DoesNotExist,
@@ -329,27 +312,18 @@ class SortableInlineBase(SortableAdminBase, InlineModelAdmin):
                 ' (or Sortable for legacy implementations)')
 
     def get_queryset(self, request):
-        if VERSION < (1, 6):
-            qs = super(SortableInlineBase, self).queryset(request)
-        else:
-            qs = super(SortableInlineBase, self).get_queryset(request)
-
+        qs = super(SortableInlineBase, self).get_queryset(request)
         if get_is_sortable(qs):
             self.model.is_sortable = True
         else:
             self.model.is_sortable = False
         return qs
 
-    if VERSION < (1, 6):
-        queryset = get_queryset
-
 
 class SortableTabularInline(TabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
     if VERSION >= (1, 10):
         template = 'adminsortable/edit_inline/tabular-1.10.x.html'
-    elif VERSION < (1, 6):
-        template = 'adminsortable/edit_inline/tabular-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/tabular.html'
 
@@ -358,8 +332,6 @@ class SortableStackedInline(StackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
     if VERSION >= (1, 10):
         template = 'adminsortable/edit_inline/stacked-1.10.x.html'
-    elif VERSION < (1, 6):
-        template = 'adminsortable/edit_inline/stacked-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/stacked.html'
 
@@ -368,8 +340,6 @@ class SortableGenericTabularInline(GenericTabularInline, SortableInlineBase):
     """Custom template that enables sorting for tabular inlines"""
     if VERSION >= (1, 10):
         template = 'adminsortable/edit_inline/tabular-1.10.x.html'
-    elif VERSION < (1, 6):
-        template = 'adminsortable/edit_inline/tabular-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/tabular.html'
 
@@ -378,7 +348,5 @@ class SortableGenericStackedInline(GenericStackedInline, SortableInlineBase):
     """Custom template that enables sorting for stacked inlines"""
     if VERSION >= (1, 10):
         template = 'adminsortable/edit_inline/stacked-1.10.x.html'
-    elif VERSION < (1, 6):
-        template = 'adminsortable/edit_inline/stacked-1.5.x.html'
     else:
         template = 'adminsortable/edit_inline/stacked.html'

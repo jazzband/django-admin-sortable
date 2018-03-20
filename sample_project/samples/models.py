@@ -1,10 +1,6 @@
-from django import VERSION
+import uuid
 
-if VERSION < (1, 9):
-    from django.contrib.contenttypes.generic import GenericForeignKey
-else:
-    from django.contrib.contenttypes.fields import GenericForeignKey
-
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
@@ -30,7 +26,7 @@ class Category(SimpleModel, SortableMixin):
         verbose_name_plural = 'Categories'
         ordering = ['order']
 
-    order = models.PositiveIntegerField(default=0)
+    order = models.PositiveIntegerField(default=0, editable=False)
 
 
 # A model with an override of its queryset for admin
@@ -51,7 +47,7 @@ class Project(SimpleModel, SortableMixin):
     class Meta:
         ordering = ['order']
 
-    category = SortableForeignKey(Category)
+    category = SortableForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField()
 
     order = models.PositiveIntegerField(default=0, editable=False)
@@ -63,7 +59,7 @@ class Credit(SortableMixin):
     class Meta:
         ordering = ['order']
 
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30, help_text="Given name")
     last_name = models.CharField(max_length=30, help_text="Family name")
 
@@ -79,7 +75,7 @@ class Note(SortableMixin):
     class Meta:
         ordering = ['order']
 
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
 
     order = models.PositiveIntegerField(default=0, editable=False)
@@ -91,7 +87,7 @@ class Note(SortableMixin):
 # Registered as a tabular inline on `Project` which can't be sorted
 @python_2_unicode_compatible
 class NonSortableCredit(models.Model):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30, help_text="Given name")
     last_name = models.CharField(max_length=30, help_text="Family name")
 
@@ -102,7 +98,7 @@ class NonSortableCredit(models.Model):
 # Registered as a stacked inline on `Project` which can't be sorted
 @python_2_unicode_compatible
 class NonSortableNote(models.Model):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
 
     def __str__(self):
@@ -112,7 +108,7 @@ class NonSortableNote(models.Model):
 # A generic bound model
 @python_2_unicode_compatible
 class GenericNote(SimpleModel, SortableMixin):
-    content_type = models.ForeignKey(ContentType,
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
         verbose_name=u"Content type", related_name="generic_notes")
     object_id = models.PositiveIntegerField(u"Content id")
     content_object = GenericForeignKey(ct_field='content_type',
@@ -133,7 +129,7 @@ class Component(SimpleModel, SortableMixin):
     class Meta:
         ordering = ['order']
 
-    widget = SortableForeignKey(Widget)
+    widget = SortableForeignKey(Widget, on_delete=models.CASCADE)
 
     order = models.PositiveIntegerField(default=0, editable=False)
 
@@ -183,7 +179,8 @@ class SortableCategoryWidget(SimpleModel, SortableMixin):
         verbose_name = 'Sortable Category Widget'
         verbose_name_plural = 'Sortable Category Widgets'
 
-    non_sortable_category = SortableForeignKey(NonSortableCategory)
+    non_sortable_category = SortableForeignKey(
+        NonSortableCategory, on_delete=models.CASCADE)
 
     order = models.PositiveIntegerField(default=0, editable=False)
 
@@ -197,7 +194,8 @@ class SortableNonInlineCategory(SimpleModel, SortableMixin):
     that is *not* sortable, and is also not defined as an inline of the
     SortableForeignKey field."""
 
-    non_sortable_category = SortableForeignKey(NonSortableCategory)
+    non_sortable_category = SortableForeignKey(
+        NonSortableCategory, on_delete=models.CASCADE)
 
     order = models.PositiveIntegerField(default=0, editable=False)
 
@@ -229,7 +227,7 @@ class CustomWidget(SortableMixin, SimpleModel):
 @python_2_unicode_compatible
 class CustomWidgetComponent(SortableMixin, SimpleModel):
 
-    custom_widget = models.ForeignKey(CustomWidget)
+    custom_widget = models.ForeignKey(CustomWidget, on_delete=models.CASCADE)
 
     # custom field for ordering
     widget_order = models.PositiveIntegerField(default=0, db_index=True,
@@ -253,3 +251,12 @@ class BackwardCompatibleWidget(Sortable, SimpleModel):
 
     def __str__(self):
         return self.title
+
+
+@python_2_unicode_compatible
+class TestNonAutoFieldModel(SortableMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.PositiveIntegerField(editable=False, db_index=True)
+
+    class Meta:
+        ordering = ['order']

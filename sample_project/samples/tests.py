@@ -1,16 +1,12 @@
 try:
-    import httplib
+    import httplib  # Python 2
 except ImportError:
-    import http.client as httplib
-
-from django import VERSION
-
-if VERSION > (1, 8):
-    import uuid
+    import http.client as httplib  # Python 3
 
 import json
 
-from django import VERSION
+import django
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.test import TestCase
@@ -18,28 +14,7 @@ from django.test.client import Client
 
 from adminsortable.models import SortableMixin
 from adminsortable.utils import get_is_sortable
-from app.models import Category, Person, Project
-
-
-class TestSortableModel(SortableMixin):
-    title = models.CharField(max_length=100)
-
-    order = models.PositiveIntegerField(default=0, editable=False)
-
-    class Meta:
-        ordering = ['order']
-
-    def __unicode__(self):
-        return self.title
-
-
-if VERSION > (1, 8):
-    class TestNonAutoFieldModel(SortableMixin):
-        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        order = models.PositiveIntegerField(editable=False, db_index=True)
-
-        class Meta:
-            ordering = ['order']
+from .models import Category, Person, Project, TestNonAutoFieldModel
 
 
 class SortableTestCase(TestCase):
@@ -79,8 +54,12 @@ class SortableTestCase(TestCase):
         return category
 
     def test_new_user_is_authenticated(self):
-        self.assertEqual(self.user.is_authenticated(), True,
-            'User is not authenticated')
+        if django.VERSION < (1, 10):
+            self.assertEqual(self.user.is_authenticated(), True,
+                'User is not authenticated')
+        else:
+            self.assertEqual(self.user.is_authenticated, True,
+                'User is not authenticated')
 
     def test_new_user_is_staff(self):
         self.assertEqual(self.user.is_staff, True, 'User is not staff')
@@ -113,8 +92,8 @@ class SortableTestCase(TestCase):
     def test_adminsortable_change_list_view(self):
         self.client.login(username=self.user.username,
             password=self.user_raw_password)
-        response = self.client.get('/admin/app/category/sort/')
-        self.assertEquals(response.status_code, httplib.OK,
+        response = self.client.get('/admin/samples/category/sort/')
+        self.assertEqual(response.status_code, httplib.OK,
             'Unable to reach sort view.')
 
     def make_test_categories(self):
@@ -124,7 +103,7 @@ class SortableTestCase(TestCase):
         return category1, category2, category3
 
     def get_sorting_url(self, model):
-        return '/admin/app/project/sort/do-sorting/{0}/'.format(
+        return '/admin/samples/project/sort/do-sorting/{0}/'.format(
             model.model_type_id())
 
     def get_category_indexes(self, *categories):
@@ -135,7 +114,7 @@ class SortableTestCase(TestCase):
             password=self.user_raw_password)
         self.assertTrue(logged_in, 'User is not logged in')
 
-        response = self.client.get('/admin/app/category/sort/')
+        response = self.client.get('/admin/samples/category/sort/')
         self.assertEqual(response.status_code, httplib.OK,
             'Admin sort request failed.')
 
@@ -185,8 +164,7 @@ class SortableTestCase(TestCase):
         # make a normal POST
         response = self.client.post(self.get_sorting_url(Category),
             data=self.get_category_indexes(category1, category2, category3))
-        content = json.loads(response.content.decode(encoding='UTF-8'),
-            'latin-1')
+        content = json.loads(response.content.decode(encoding='UTF-8'))
         self.assertFalse(content.get('objects_sorted'),
             'Objects should not have been sorted. An ajax post is required.')
 
@@ -202,8 +180,7 @@ class SortableTestCase(TestCase):
         response = self.client.post(self.get_sorting_url(Category),
             data=self.get_category_indexes(category3, category2, category1),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        content = json.loads(response.content.decode(encoding='UTF-8'),
-            'latin-1')
+        content = json.loads(response.content.decode(encoding='UTF-8'))
         self.assertTrue(content.get('objects_sorted'),
             'Objects should have been sorted.')
 
@@ -256,8 +233,8 @@ class SortableTestCase(TestCase):
 
         self.client.login(username=self.user.username,
             password=self.user_raw_password)
-        response = self.client.get('/admin/app/project/sort/')
-        self.assertEquals(response.status_code, httplib.OK,
+        response = self.client.get('/admin/samples/project/sort/')
+        self.assertEqual(response.status_code, httplib.OK,
             'Unable to reach sort view.')
 
     def test_adminsortable_change_list_view_permission_denied(self):
@@ -266,9 +243,9 @@ class SortableTestCase(TestCase):
 
         self.client.login(username=self.staff.username,
                           password=self.staff_raw_password)
-        response = self.client.get('/admin/app/project/sort/')
-        self.assertEquals(response.status_code, httplib.FORBIDDEN,
-                          'Sort view must be forbidden.')
+        response = self.client.get('/admin/samples/project/sort/')
+        self.assertEqual(response.status_code, httplib.FORBIDDEN,
+                         'Sort view must be forbidden.')
 
     def test_adminsortable_inline_changelist_success(self):
         self.client.login(username=self.user.username,
@@ -291,8 +268,7 @@ class SortableTestCase(TestCase):
             response.status_code,
             httplib.OK,
             'Note inline must be sortable in ProjectAdmin')
-        content = json.loads(response.content.decode(encoding='UTF-8'),
-                             'latin-1')
+        content = json.loads(response.content.decode(encoding='UTF-8'))
         self.assertTrue(content.get('objects_sorted'),
                         'Objects should have been sorted.')
 
@@ -317,8 +293,5 @@ class SortableTestCase(TestCase):
         self.assertEqual(notes, expected_notes)
 
     def test_save_non_auto_field_model(self):
-        if VERSION > (1, 8):
-            model = TestNonAutoFieldModel()
-            model.save()
-        else:
-            pass
+        model = TestNonAutoFieldModel()
+        model.save()

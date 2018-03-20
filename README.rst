@@ -1,9 +1,7 @@
 Django Admin Sortable
 =====================
 
-|Build Status|
-
-Current version: 2.0.21
+|PyPI version| |Python versions| |Build Status|
 
 This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
@@ -26,9 +24,9 @@ Sorting inlines:
 Supported Django Versions
 -------------------------
 
-For Django 1.5.x to 1.9.x, use version 2.0.18.
+For Django 1.5.x to 1.7.x, use version 2.0.18.
 
-For Django 1.10.x, use 2.0.19 or higher.
+For Django 1.8.x or higher, use the latest version.
 
 Other notes of interest regarding versions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,7 +36,7 @@ Django 1.4.x
 
 django-admin-sortable 1.6.6 introduced a backward-incompatible change
 for the ``sorting_filters`` attribute. Please convert your attributes to
-the new tuple-based format if you haven't already.
+the new tuple-based format if you haven’t already.
 
 django-admin-sortable 1.7.1 and higher are compatible with Python 3.
 
@@ -47,7 +45,7 @@ Installation
 
 1. ``$ pip install django-admin-sortable``
 
---or--
+–or–
 
 Download django-admin-sortable from
 `source <https://github.com/iambrandontaylor/django-admin-sortable/archive/master.zip>`__
@@ -64,8 +62,13 @@ Configuration
 -------------
 
 1. Add ``adminsortable`` to your ``INSTALLED_APPS``.
-2. Ensure ``django.core.context_processors.static`` is in your
-   ``TEMPLATE_CONTEXT_PROCESSORS``.
+2. Ensure ``django.template.context_processors.static`` is in your
+   ``TEMPLATES["OPTIONS"]["context_processors"]``.
+
+   -  (In older versions of Django, ensure
+      ``django.core.context_processors.static`` is in
+      ``TEMPLATE_CONTEXT_PROCESSORS`` instead.)
+
 3. Ensure that ``CSRF_COOKIE_HTTPONLY`` has not been set to ``True``, as
    django-admin-sortable is currently incompatible with that setting.
 
@@ -81,11 +84,11 @@ to the location you serve static files from.
 Testing
 ~~~~~~~
 
-Have a look at the included sample\_project to see working examples. The
+Have a look at the included sample_project to see working examples. The
 login credentials for admin are: admin/admin
 
 When a model is sortable, a tool-area link will be added that says
-"Change Order". Click this link, and you will be taken to the custom
+“Change Order”. Click this link, and you will be taken to the custom
 view where you can drag-and-drop the records into order.
 
 Inlines may be drag-and-dropped into any order directly from the change
@@ -97,11 +100,11 @@ Usage
 Models
 ~~~~~~
 
-To add "sortability" to a model, you need to inherit ``SortableMixin``
+To add “sortability” to a model, you need to inherit ``SortableMixin``
 and at minimum, define:
 
 -  The field which should be used for ``Meta.ordering``, which must
-   resolve to one of the integer fields defined in Django's ORM:
+   resolve to one of the integer fields defined in Django’s ORM:
 -  ``PositiveIntegerField``
 -  ``IntegerField``
 -  ``PositiveSmallIntegerField``
@@ -110,6 +113,9 @@ and at minimum, define:
 
 -  ``Meta.ordering`` **must only contain one value**, otherwise, your
    objects will not be sorted correctly.
+-  **IMPORTANT**: You must name the field you use for ordering something
+   other than “order_field” as this name is reserved by the
+   ``SortableMixin`` class.
 -  It is recommended that you set ``editable=False`` and
    ``db_index=True`` on the field defined in ``Meta.ordering`` for a
    seamless Django admin experience and faster lookups on the objects.
@@ -137,14 +143,14 @@ Sample Model:
         def __unicode__(self):
             return self.title
 
-Support for models that don't use an ``AutoField`` for their primary key
+Support for models that don’t use an ``AutoField`` for their primary key
 are also supported in version 2.0.20 or higher.
 
 Common Use Case
 ^^^^^^^^^^^^^^^
 
 A common use case is to have child objects that are sortable relative to
-a parent. If your parent object is also sortable, here's how you would
+a parent. If your parent object is also sortable, here’s how you would
 set up your models and admin options:
 
 .. code:: python
@@ -235,7 +241,7 @@ will be grouped by the non-sortable foreign key when sorting.
 Backwards Compatibility
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-If you previously used Django Admin Sortable, **DON'T PANIC** -
+If you previously used Django Admin Sortable, **DON’T PANIC** -
 everything will still work exactly as before ***without any changes to
 your code***. Going forward, it is recommended that you use the new
 ``SortableMixin`` on your models, as pre-2.0 compatibility might not be
@@ -246,17 +252,17 @@ hard-coded ``order`` field, and meta inheritance requirements:
 
 .. code:: python
 
-        # legacy model definition
+    # legacy model definition
 
-        from adminsortable.models import Sortable
+    from adminsortable.models import Sortable
 
-        class Project(Sortable):
-            class Meta(Sortable.Meta):
-                pass
-            title = models.CharField(max_length=50)
+    class Project(Sortable):
+        class Meta(Sortable.Meta):
+            pass
+        title = models.CharField(max_length=50)
 
-            def __unicode__(self):
-                return self.title
+        def __unicode__(self):
+            return self.title
 
 Model Instance Methods
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -283,7 +289,7 @@ following data:
     |                | Child Model 4 |
     |                | Child Model 5 |
 
-"Child Model 2" ``get_next()`` would return ``None`` "Child Model 3"
+“Child Model 2” ``get_next()`` would return ``None`` “Child Model 3”
 ``get_previous`` would return ``None``
 
 If you wish to override this behavior, pass in:
@@ -293,7 +299,7 @@ If you wish to override this behavior, pass in:
 
         your_instance.get_next(filter_on_sortable_fk=False)
 
-You may also pass in additional ORM "extra\_filters" as a dictionary,
+You may also pass in additional ORM “extra_filters” as a dictionary,
 should you need to:
 
 .. code:: python
@@ -306,13 +312,13 @@ Adding Sorting to an existing model
 Django 1.5.x to 1.6.x
 ^^^^^^^^^^^^^^^^^^^^^
 
-If you're adding Sorting to an existing model, it is recommended that
+If you’re adding Sorting to an existing model, it is recommended that
 you use `django-south <http://south.areacode.com/>`__ to create a schema
-migration to add the "order" field to your model. You will also need to
+migration to add the “order” field to your model. You will also need to
 create a data migration in order to add the appropriate values for the
-"order" column.
+“order” column.
 
-Example assuming a model named "Category":
+Example assuming a model named “Category”:
 
 .. code:: python
 
@@ -328,7 +334,7 @@ more information on South Data Migrations.
 Django 1.7.x or higher
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Since schema migrations are built into Django 1.7, you don't have to use
+Since schema migrations are built into Django 1.7, you don’t have to use
 south, but the process of adding and running migrations is nearly
 identical. Take a look at the
 `Migrations <https://docs.djangoproject.com/en/1.7/topics/migrations/>`__
@@ -399,8 +405,8 @@ Overriding ``queryset()``
 django-admin-sortable supports custom queryset overrides on admin models
 and inline models in Django admin!
 
-If you're providing an override of a SortableAdmin or Sortable inline
-model, you don't need to do anything extra. django-admin-sortable will
+If you’re providing an override of a SortableAdmin or Sortable inline
+model, you don’t need to do anything extra. django-admin-sortable will
 automatically honor your queryset.
 
 Have a look at the WidgetAdmin class in the sample project for an
@@ -435,7 +441,7 @@ properly determine the sortability of your model. Example:
             return qs
 
 If you override the queryset of an inline, the number of objects present
-may change, and adminsortable won't be able to automatically determine
+may change, and adminsortable won’t be able to automatically determine
 if the inline model is sortable from here, which is why we have to set
 the ``is_sortable`` property of the model in this method.
 
@@ -447,28 +453,28 @@ a ``sorting_filters`` tuple. This works exactly the same as
 ``.filter()`` on a QuerySet, and is applied *after* ``get_queryset()``
 on the admin class, allowing you to override the queryset as you would
 normally in admin but apply additional filters for sorting. The text
-"Change Order of" will appear before each filter in the Change List
+“Change Order of” will appear before each filter in the Change List
 template, and the filter groups are displayed from left to right in the
-order listed. If no ``sorting_filters`` are specified, the text "Change
-Order" will be displayed for the link.
+order listed. If no ``sorting_filters`` are specified, the text “Change
+Order” will be displayed for the link.
 
 Self-Referential SortableForeignKey
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can specify a self-referential SortableForeignKey field, however the
 admin interface will currently show a model that is a grandchild at the
-same level as a child. I'm working to resolve this issue.
+same level as a child. I’m working to resolve this issue.
 
 Important!
 ''''''''''
 
 django-admin-sortable 1.6.6 introduced a backwards-incompatible change
 for ``sorting_filters``. Previously this attribute was defined as a
-dictionary, so you'll need to change your values over to the new
+dictionary, so you’ll need to change your values over to the new
 tuple-based format.
 
-An example of sorting subsets would be a "Board of Directors". In this
-use case, you have a list of "People" objects. Some of these people are
+An example of sorting subsets would be a “Board of Directors”. In this
+use case, you have a list of “People” objects. Some of these people are
 on the Board of Directors and some not, and you need to sort them
 independently.
 
@@ -493,9 +499,9 @@ independently.
 Extending custom templates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-By default, adminsortable's change form and change list views inherit
-from Django admin's standard templates. Sometimes you need to have a
-custom change form or change list, but also need adminsortable's CSS and
+By default, adminsortable’s change form and change list views inherit
+from Django admin’s standard templates. Sometimes you need to have a
+custom change form or change list, but also need adminsortable’s CSS and
 JavaScript for inline models that are sortable for example.
 
 SortableAdmin has two attributes you can override for this use case:
@@ -509,27 +515,27 @@ These attributes have default values of:
 
 .. code:: python
 
-        change_form_template_extends = 'admin/change_form.html'
-        change_list_template_extends = 'admin/change_list.html'
+    change_form_template_extends = 'admin/change_form.html'
+    change_list_template_extends = 'admin/change_list.html'
 
-If you need to extend the inline change form templates, you'll need to
-select the right one, depending on your version of Django. For Django
-1.5.x or below, you'll need to extend one of the following:
+If you need to extend the inline change form templates, you’ll need to
+select the right one, depending on your version of Django. For 1.10.x or
+below, you’ll need to extend one of the following:
 
 ::
 
-    templates/adminsortable/edit_inline/stacked-1.5.x.html
-    templates/adminsortable/edit_inline/tabular-inline-1.5.x.html
+    templates/adminsortable/edit_inline/stacked-1.10.x.html
+    templates/adminsortable/edit_inline/tabular-inline-1.10.x.html
 
-For Django 1.6.x, extend:
+otherwise, extend:
 
 ::
 
     templates/adminsortable/edit_inline/stacked.html
     templates/adminsortable/edit_inline/tabular.html
 
-A Special Note About Stacked Inlines...
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A Special Note About Stacked Inlines…
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The height of a stacked inline model can dynamically increase, which can
 make them difficult to sort. If you anticipate the height of a stacked
@@ -539,7 +545,7 @@ SortableTabularInline instead.
 Django-CMS integration
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Django-CMS plugins use their own change form, and thus won't
+Django-CMS plugins use their own change form, and thus won’t
 automatically include the necessary JavaScript for django-admin-sortable
 to work. Fortunately, this is easy to resolve, as the ``CMSPlugin``
 class allows a change form template to be specified:
@@ -569,16 +575,17 @@ class allows a change form template to be specified:
 The contents of ``sortable-stacked-inline-change-form.html`` at a
 minimum need to extend the extrahead block with:
 
-.. code:: html
+.. code:: html+django
 
     {% extends "admin/cms/page/plugin_change_form.html" %}
     {% load static from staticfiles %}
 
     {% block extrahead %}
         {{ block.super }}
-        <script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
-        <script type="text/javascript" src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
+        <script src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
+        <script src="{% static 'adminsortable/js/jquery.ui.touch-punch.min.js' %}"></script>
+        <script src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
+        <script src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
 
         <link rel="stylesheet" type="text/css" href="{% static 'adminsortable/css/admin.sortable.inline.css' %}" />
     {% endblock extrahead %}
@@ -587,21 +594,54 @@ Sorting within Django-CMS is really only feasible for inline models of a
 plugin as Django-CMS already includes sorting for plugin instances. For
 tabular inlines, just substitute:
 
-.. code:: html
+.. code:: html+django
 
-        <script src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
+    <script src="{% static 'adminsortable/js/admin.sortable.stacked.inlines.js' %}"></script>
 
 with:
 
-.. code:: html
+.. code:: html+django
 
-        <script src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
+    <script src="{% static 'adminsortable/js/admin.sortable.tabular.inlines.js' %}"></script>
+
+Notes
+~~~~~
+
+From ``django-cms 3.x`` the path of change_form.html has changed.
+Replace the follwing line:
+
+.. code:: html+django
+
+    {% extends "admin/cms/page/plugin_change_form.html" %}
+
+with
+
+.. code:: html+django
+
+    {% extends "admin/cms/page/plugin/change_form.html" %}
+
+From ``django-admin-sortable 2.0.13`` the ``jquery.django-csrf.js`` was
+removed and you have to include the snippet-template. Change the
+following line:
+
+.. code:: html+django
+
+    <script type="text/javascript" src="{% static 'adminsortable/js/jquery.django-csrf.js' %}"></script>
+
+to
+
+.. code:: html+django
+
+    {% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name='csrftoken' %}
+
+Please note, if you change the ``CSRF_COOKIE_NAME`` you have to adjust
+``csrf_cookie_name='YOUR_CSRF_COOKIE_NAME'``
 
 Rationale
 ~~~~~~~~~
 
 Other projects have added drag-and-drop ordering to the ChangeList view,
-however this introduces a couple of problems...
+however this introduces a couple of problems…
 
 -  The ChangeList view supports pagination, which makes drag-and-drop
    ordering across pages impossible.
@@ -617,13 +657,11 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What's new in 2.0.21?
-~~~~~~~~~~~~~~~~~~~~~
+What’s new in 2.1.4?
+~~~~~~~~~~~~~~~~~~~~
 
--  Fixed a regression introduced by `Pull Request
-   143 <https://github.com/iambrandontaylor/django-admin-sortable/pull/143>`__
-   which caused models sortable by a foriegn key to not persist the sort
-   order correctly.
+-  Improved performance on large data sets. Credit to
+   `mrmachine <https://github.com/mrmachine>`__.
 
 Future
 ~~~~~~
@@ -637,5 +675,9 @@ License
 
 django-admin-sortable is released under the Apache Public License v2.
 
-.. |Build Status| image:: https://travis-ci.org/iambrandontaylor/django-admin-sortable.svg?branch=master
-   :target: https://travis-ci.org/iambrandontaylor/django-admin-sortable
+.. |PyPI version| image:: https://img.shields.io/pypi/v/django-admin-sortable.svg
+   :target: https://pypi.python.org/pypi/django-admin-sortable
+.. |Python versions| image:: https://img.shields.io/pypi/pyversions/django-admin-sortable.svg
+   :target: https://pypi.python.org/pypi/django-admin-sortable
+.. |Build Status| image:: https://travis-ci.org/alsoicode/django-admin-sortable.svg?branch=master
+   :target: https://travis-ci.org/alsoicode/django-admin-sortable

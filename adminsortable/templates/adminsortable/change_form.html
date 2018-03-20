@@ -8,6 +8,7 @@
 
     {% if has_sortable_tabular_inlines or has_sortable_stacked_inlines %}
         <script type="text/javascript" src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
+        <script src="{% static 'adminsortable/js/jquery.ui.touch-punch.min.js' %}"></script>
         {% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name=csrf_cookie_name %}
     {% endif %}
 
