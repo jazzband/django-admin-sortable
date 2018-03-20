@@ -4,7 +4,6 @@ except ImportError:
     import http.client as httplib  # Python 3
 
 import json
-import uuid
 
 import django
 
@@ -15,27 +14,7 @@ from django.test.client import Client
 
 from adminsortable.models import SortableMixin
 from adminsortable.utils import get_is_sortable
-from .models import Category, Person, Project
-
-
-class TestSortableModel(SortableMixin):
-    title = models.CharField(max_length=100)
-
-    order = models.PositiveIntegerField(default=0, editable=False)
-
-    class Meta:
-        ordering = ['order']
-
-    def __unicode__(self):
-        return self.title
-
-
-class TestNonAutoFieldModel(SortableMixin):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    order = models.PositiveIntegerField(editable=False, db_index=True)
-
-    class Meta:
-        ordering = ['order']
+from .models import Category, Person, Project, TestNonAutoFieldModel
 
 
 class SortableTestCase(TestCase):

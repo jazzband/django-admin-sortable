@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -249,3 +251,12 @@ class BackwardCompatibleWidget(Sortable, SimpleModel):
 
     def __str__(self):
         return self.title
+
+
+@python_2_unicode_compatible
+class TestNonAutoFieldModel(SortableMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.PositiveIntegerField(editable=False, db_index=True)
+
+    class Meta:
+        ordering = ['order']
