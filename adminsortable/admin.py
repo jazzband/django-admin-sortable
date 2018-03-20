@@ -109,7 +109,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         """
         # get sort group index from querystring if present
         sort_filter_index = request.GET.get('sort_filter')
-        
+
         filters = {}
         if sort_filter_index:
             try:
@@ -118,7 +118,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 pass
 
         # Apply any sort filters to create a subset of sortable objects
-    return self.get_queryset(request).filter(**filters)
+        return self.get_queryset(request).filter(**filters)
 
     def sort_view(self, request):
         """
