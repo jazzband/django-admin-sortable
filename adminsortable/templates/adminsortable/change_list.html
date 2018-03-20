@@ -75,20 +75,20 @@
 {% block content %}
 	<div id="content-main">
 		{% block object-tools %}
-	        <ul class="object-tools">
-	            <li>
-                    <a href="{% url opts|admin_urlname:'changelist' %}">
-                    {% blocktrans with opts.verbose_name_plural|capfirst as model %}Return to {{ model }}{% endblocktrans %}
-                    </a>
-                </li>
-	        </ul>
-	    {% endblock %}
+      <ul class="object-tools">
+        <li>
+          <a href="{% url opts|admin_urlname:'changelist' %}">
+          {% blocktrans with opts.verbose_name_plural|capfirst as model %}Return to {{ model }}{% endblocktrans %}
+          </a>
+        </li>
+      </ul>
+    {% endblock %}
 		{% if objects %}
 		<div id="sortable">
 			{% if group_expression %}
-                 {% include "adminsortable/shared/nested_objects.html" %}
+        {% include "adminsortable/shared/nested_objects.html" %}
 			{% else %}
-			     {% include "adminsortable/shared/objects.html" %}
+        {% include "adminsortable/shared/objects.html" %}
 			{% endif %}
       {% csrf_token %}
 		</div>
