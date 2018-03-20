@@ -1,7 +1,5 @@
-{% load adminsortable_tags %}
-
 {% if objects %}
 	<ul class="sortable single">
-		{% render_list_items objects %}
+		{% include "adminsortable/shared/list_items.html" with list_objects=objects %}
 	</ul>
 {% endif %}
