@@ -413,12 +413,12 @@ change_form_template_extends = 'admin/change_form.html'
 change_list_template_extends = 'admin/change_list.html'
 ```
 
-If you need to extend the inline change form templates, you'll need to select the right one, depending on your version of Django. For Django 1.5.x or below, you'll need to extend one of the following:
+If you need to extend the inline change form templates, you'll need to select the right one, depending on your version of Django. For 1.10.x or below, you'll need to extend one of the following:
 
-    templates/adminsortable/edit_inline/stacked-1.5.x.html
-    templates/adminsortable/edit_inline/tabular-inline-1.5.x.html
+    templates/adminsortable/edit_inline/stacked-1.10.x.html
+    templates/adminsortable/edit_inline/tabular-inline-1.10.x.html
 
-For Django 1.6.x, extend:
+otherwise, extend:
 
     templates/adminsortable/edit_inline/stacked.html
     templates/adminsortable/edit_inline/tabular.html
