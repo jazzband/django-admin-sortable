@@ -1,0 +1,50 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: adminsortable\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-22 18:35+0100\n"
+"PO-Revision-Date: 2018-03-22 18:35+0100\n"
+"Last-Translator: Luka Matijevic <lumatijev@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hr\n"
+
+#: templates/adminsortable/change_list.html:15
+#, python-format
+msgid "Drag and drop %(model)s to change display order"
+msgstr "Povuci i ispusti %(model)s kako bi promijenio redoslijed prikaza"
+
+#: templates/adminsortable/change_list.html:25
+#, python-format
+msgid "Reorder"
+msgstr "Promijeni redoslijed"
+
+#: templates/adminsortable/change_list.html:32
+#, python-format
+msgid "Drag and drop %(sort_type)s %(model)s to change their order."
+msgstr "Povuci i ispusti %(sort_type)s %(model)s kako bi promijenio njihov redoslijed."
+
+#: templates/adminsortable/change_list.html:34
+#, python-format
+msgid "Drag and drop %(model)s to change their order."
+msgstr "Povuci i ispusti %(model)s kako bi promijenio njihov redoslijed."
+
+#: templates/adminsortable/change_list.html:39
+#, python-format
+msgid ""
+"You may also drag and drop %(sortable_by_class_display_name)s to change "
+"their order."
+msgstr ""
+"Možeš povući i ispustiti %(sortable_by_class_display_name)s kako bi promijenio "
+"njihov redoslijed."
+
+#: templates/adminsortable/change_list.html:50
+#, python-format
+msgid "Return to %(model)s"
+msgstr "Povratak na %(model)s"
+
+#: templates/adminsortable/change_list_with_sort_link.html:6
+msgid "Change Order"
+msgstr "Promjena redoslijeda"
