@@ -35,12 +35,12 @@
     $(document).ready(function($) {
         var url = window.location.href;
         var urlParts = url.split('?');
-        var cnangeListUrl = $('a#return-to-changelist').attr('href')
+        var changeListUrl = $('a#return-to-changelist').attr('href');
 
         if (urlParts.length === 2) {
             $('a#return-to-changelist').attr(
                 'href',
-                cnangeListUrl + '?' + urlParts[1].replace('filter_expression=', '')
+                changeListUrl + '?' + urlParts[1].replace('filter_expression=', '')
             );
         }
     });
