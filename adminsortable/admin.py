@@ -109,13 +109,20 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         """
         # get sort group index from querystring if present
         sort_filter_index = request.GET.get('sort_filter')
+        filter_expression = request.GET.get('filter_expression')
 
         filters = {}
+
         if sort_filter_index:
             try:
                 filters = self.model.sorting_filters[int(sort_filter_index)][1]
             except (IndexError, ValueError):
                 pass
+
+        if filter_expression:
+            filters.update(
+                dict([filter_expression.split('=')])
+            )
 
         # Apply any sort filters to create a subset of sortable objects
         return self.get_queryset(request).filter(**filters)

@@ -29,6 +29,23 @@
 <script src="{% static 'adminsortable/js/jquery.ui.touch-punch.min.js' %}"></script>
 {% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name=csrf_cookie_name %}
 <script src="{% static 'adminsortable/js/admin.sortable.js' %}"></script>
+
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function($) {
+        var url = window.location.href;
+        var urlParts = url.split('?');
+        var changeListUrl = $('a#return-to-changelist').attr('href');
+
+        if (urlParts.length === 2) {
+            $('a#return-to-changelist').attr(
+                'href',
+                changeListUrl + '?' + urlParts[1].replace('filter_expression=', '')
+            );
+        }
+    });
+})(django.jQuery);
+</script>
 {% endblock %}
 
 {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-list{% endblock %}
@@ -77,7 +94,7 @@
 		{% block object-tools %}
       <ul class="object-tools">
         <li>
-          <a href="{% url opts|admin_urlname:'changelist' %}">
+          <a id="return-to-changelist" href="{% url opts|admin_urlname:'changelist' %}">
           {% blocktrans with opts.verbose_name_plural|capfirst as model %}Return to {{ model }}{% endblocktrans %}
           </a>
         </li>
