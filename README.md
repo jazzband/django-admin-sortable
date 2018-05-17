@@ -531,8 +531,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1.4?
-- Improved performance on large data sets. Credit to [mrmachine](https://github.com/mrmachine).
+### What's new in 2.1.5?
+- Support for Django Admin filters. Credit to [timur-orudzhov](https://github.com/timur-orudzhov).
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
