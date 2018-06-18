@@ -100,7 +100,6 @@ class MySortableClass(SortableMixin):
         ordering = ['the_order']
 
 
-
     # define the field the model should be ordered by
     the_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
@@ -429,6 +428,71 @@ which can make them difficult to sort. If you anticipate the height of a
 stacked inline is going to be very tall, I would suggest using
 SortableTabularInline instead.
 
+#### Custom JS callbacks after sorting is complete
+If you need to define a custom event or other callback to be executed after sorting is completed, you'll need to:
+
+1. Create a custom template for to add your JavaScript
+2. Populate the `after_sorting_js_callback_name` on your model admin
+
+An example of this can be found in the "samples" application in the source. Here's a model admin for a model called "Project":
+
+```python
+class ProjectAdmin(SortableAdmin):
+    inlines = [
+        CreditInline, NoteInline, GenericNoteInline,
+        NonSortableCreditInline, NonSortableNoteInline
+    ]
+    list_display = ['__str__', 'category']
+
+    after_sorting_js_callback_name = 'afterSortCallback'  # do not include () - just function name
+    sortable_change_list_template = 'adminsortable/custom_change_list.html'
+    sortable_change_form_template = "adminsortable/custom_change_form.html"
+```
+
+This example is going to add a custom callback on the parent model, and it's inlines. Here is the JavaScript added to the custom change list:
+
+```html+django
+{% extends 'adminsortable/change_list.html' %}
+
+{% block extrahead %}
+  {{ block.super }}
+
+  <script>
+    django.jQuery(document).on('order:changed', function(event) {
+      console.log(event.message);
+      // your code here
+    });
+
+    window['{{ after_sorting_js_callback_name }}'] = function() {
+      django.jQuery(document).trigger({ type: 'order:changed', message: 'Order changed', time: new Date() });
+    };
+  </script>
+{% endblock %}
+```
+
+and the custom change form, for the inline models:
+
+```html+django
+{% extends "adminsortable/change_form.html" %}
+
+{% block extrahead %}
+  {{ block.super }}
+
+  <script>
+    django.jQuery(document).on('order:changed', function(event) {
+      console.log(event.message);
+      // your code here
+    });
+
+    window['{{ after_sorting_js_callback_name }}'] = function() {
+      django.jQuery(document).trigger({ type: 'order:changed', message: 'Order changed', time: new Date() });
+    };
+  </script>
+{% endblock %}
+```
+
+Ideally, you'd pull in a shared piece of code for your callback to keep your code DRY.
+
 ### Django-CMS integration
 Django-CMS plugins use their own change form, and thus won't automatically
 include the necessary JavaScript for django-admin-sortable to work. Fortunately,
@@ -531,8 +595,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1.5?
-- Support for Django Admin filters. Credit to [timur-orudzhov](https://github.com/timur-orudzhov).
+### What's new in 2.1.6?
+- Added inclusion of custom JavaScript callbacks after sorting is performed, if desired.
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
