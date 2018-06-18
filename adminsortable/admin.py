@@ -32,6 +32,8 @@ class SortableAdminBase(object):
     change_form_template_extends = 'admin/change_form.html'
     change_list_template_extends = 'admin/change_list.html'
 
+    after_sorting_js_callback_name = None
+
     def changelist_view(self, request, extra_context=None):
         """
         If the model that inherits Sortable has more than one object,
@@ -215,7 +217,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'sortable_by_class_is_sortable': sortable_by_class_is_sortable,
             'sortable_by_class_display_name': sortable_by_class_display_name,
             'jquery_lib_path': jquery_lib_path,
-            'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken')
+            'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken'),
+            'after_sorting_js_callback_name': self.after_sorting_js_callback_name
         })
         return render(request, self.sortable_change_list_template, context)
 
@@ -238,7 +241,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'change_form_template_extends': self.change_form_template_extends,
             'has_sortable_tabular_inlines': self.has_sortable_tabular_inlines,
             'has_sortable_stacked_inlines': self.has_sortable_stacked_inlines,
-            'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken')
+            'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken'),
+            'after_sorting_js_callback_name': self.after_sorting_js_callback_name
         })
 
         return super(SortableAdmin, self).change_view(request, object_id,
