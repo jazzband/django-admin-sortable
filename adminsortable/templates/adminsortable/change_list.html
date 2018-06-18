@@ -21,14 +21,14 @@
 {% endblock %}
 
 {% block extrahead %}
-{{ block.super }}
-{{ media.js }}
 <script src="{% static jquery_lib_path %}"></script>
 <script src="{% static 'admin/js/jquery.init.js' %}"></script>
+{{ block.super }}
+{{ media.js }}
 <script src="{% static 'adminsortable/js/jquery-ui-django-admin.min.js' %}"></script>
 <script src="{% static 'adminsortable/js/jquery.ui.touch-punch.min.js' %}"></script>
 {% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name=csrf_cookie_name %}
-<script src="{% static 'adminsortable/js/admin.sortable.js' %}"></script>
+{% include 'adminsortable/admin.sortable.html' with after_sorting_js_callback_name=after_sorting_js_callback_name %}
 
 <script type="text/javascript">
 (function($) {

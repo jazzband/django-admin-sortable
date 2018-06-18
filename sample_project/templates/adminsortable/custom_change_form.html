@@ -1,0 +1,15 @@
+{% extends "adminsortable/change_form.html" %}
+
+{% block extrahead %}
+  {{ block.super }}
+
+  <script>
+    django.jQuery(document).on('order:changed', function(event) {
+      console.log(event.message);
+    });
+
+    window['{{ after_sorting_js_callback_name }}'] = function() {
+      django.jQuery(document).trigger({ type: 'order:changed', message: 'Order changed', time: new Date() });
+    };
+  </script>
+{% endblock %}

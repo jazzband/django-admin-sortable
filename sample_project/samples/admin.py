@@ -83,6 +83,9 @@ class ProjectAdmin(SortableAdmin):
         NonSortableCreditInline, NonSortableNoteInline
     ]
     list_display = ['__str__', 'category']
+    after_sorting_js_callback_name = 'afterSortCallback'
+    sortable_change_list_template = 'adminsortable/custom_change_list.html'
+    sortable_change_form_template = "adminsortable/custom_change_form.html"
 
 admin.site.register(Project, ProjectAdmin)
 
