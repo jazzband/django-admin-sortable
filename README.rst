@@ -42,6 +42,8 @@ the new tuple-based format if you haven’t already.
 
 django-admin-sortable 1.7.1 and higher are compatible with Python 3.
 
+django-admin-sortable 2.1.6 ihas a bug. Please don’t use it :)
+
 Installation
 ------------
 
@@ -729,11 +731,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.1.5?
+What’s new in 2.1.7?
 ~~~~~~~~~~~~~~~~~~~~
 
--  Support for Django Admin filters. Credit to
-   `timur-orudzhov <https://github.com/timur-orudzhov>`__.
+-  Bug fix for inlines that caused sorting to stop working.
 
 Future
 ~~~~~~

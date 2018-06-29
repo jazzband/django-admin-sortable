@@ -28,6 +28,8 @@ django-admin-sortable 1.6.6 introduced a backward-incompatible change for the `s
 
 django-admin-sortable 1.7.1 and higher are compatible with Python 3.
 
+django-admin-sortable 2.1.6 ihas a bug. Please don't use it :)
+
 
 ## Installation
 1. `$ pip install django-admin-sortable`
@@ -595,8 +597,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1.6?
-- Added inclusion of custom JavaScript callbacks after sorting is performed, if desired.
+### What's new in 2.1.7?
+- Bug fix for inlines that caused sorting to stop working.
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
