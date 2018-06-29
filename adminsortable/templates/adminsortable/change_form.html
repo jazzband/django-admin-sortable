@@ -13,11 +13,11 @@
     {% endif %}
 
     {% if has_sortable_tabular_inlines %}
-        {% include 'adminsortable/edit_inline/admin.sortable.stacked.inlines.html' with after_sorting_js_callback_name=after_sorting_js_callback_name %}
+        {% include 'adminsortable/edit_inline/admin.sortable.tabular.inlines.html' with after_sorting_js_callback_name=after_sorting_js_callback_name %}
     {% endif %}
 
     {% if has_sortable_stacked_inlines %}
-        {% include 'adminsortable/edit_inline/admin.sortable.tabular.inlines.html' with after_sorting_js_callback_name=after_sorting_js_callback_name %}
+        {% include 'adminsortable/edit_inline/admin.sortable.stacked.inlines.html' with after_sorting_js_callback_name=after_sorting_js_callback_name %}
     {% endif %}
 {% endblock %}
 
