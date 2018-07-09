@@ -56,6 +56,11 @@ class SortableAdminBase(object):
         return super(SortableAdminBase, self).changelist_view(request,
             extra_context=extra_context)
 
+    # override this function in your SortableAdmin if you need to do something
+    # after sorting has occurred
+    def after_sorting(self):
+        pass
+
 
 class SortableAdmin(SortableAdminBase, ModelAdmin):
     """
@@ -302,6 +307,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             except (KeyError, IndexError, klass.DoesNotExist,
                     AttributeError, ValueError):
                 pass
+
+        self.after_sorting()
 
         return HttpResponse(json.dumps(response, ensure_ascii=False),
             content_type='application/json')

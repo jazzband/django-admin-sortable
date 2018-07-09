@@ -61,6 +61,9 @@ class NoteInline(SortableStackedInline):
     model = Note
     extra = 2
 
+    def after_sorting(self):
+        print('I happened after sorting')
+
 
 class GenericNoteInline(SortableGenericStackedInline):
     model = GenericNote
@@ -83,9 +86,13 @@ class ProjectAdmin(SortableAdmin):
         NonSortableCreditInline, NonSortableNoteInline
     ]
     list_display = ['__str__', 'category']
+    list_filter = ('category__title',)
     after_sorting_js_callback_name = 'afterSortCallback'
     sortable_change_list_template = 'adminsortable/custom_change_list.html'
-    sortable_change_form_template = "adminsortable/custom_change_form.html"
+    sortable_change_form_template = 'adminsortable/custom_change_form.html'
+
+    def after_sorting(self):
+        print('I happened after sorting')
 
 admin.site.register(Project, ProjectAdmin)
 
