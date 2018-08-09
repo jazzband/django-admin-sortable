@@ -3,18 +3,6 @@
 
 {% block extrahead %}
     {{ block.super }}
-    <script type="text/javascript">
-    (function($) {
-        $(document).ready(function($) {
-            var url = window.location.href;
-            var urlParts = url.split('?');
-
-            if (urlParts.length === 2) {
-                $('a#change-order').attr('href', './sort/?filter_expression=' + urlParts[1]);
-            }
-        });
-    })(django.jQuery);
-    </script>
 {% endblock %}
 
 
