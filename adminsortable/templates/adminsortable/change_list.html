@@ -29,23 +29,6 @@
 <script src="{% static 'adminsortable/js/jquery.ui.touch-punch.min.js' %}"></script>
 {% include 'adminsortable/csrf/jquery.django-csrf.html' with csrf_cookie_name=csrf_cookie_name %}
 {% include 'adminsortable/admin.sortable.html' with after_sorting_js_callback_name=after_sorting_js_callback_name %}
-
-<script type="text/javascript">
-(function($) {
-    $(document).ready(function($) {
-        var url = window.location.href;
-        var urlParts = url.split('?');
-        var changeListUrl = $('a#return-to-changelist').attr('href');
-
-        if (urlParts.length === 2) {
-            $('a#return-to-changelist').attr(
-                'href',
-                changeListUrl + '?' + urlParts[1].replace('filter_expression=', '')
-            );
-        }
-    });
-})(django.jQuery);
-</script>
 {% endblock %}
 
 {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-list{% endblock %}
