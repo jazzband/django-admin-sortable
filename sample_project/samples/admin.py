@@ -88,6 +88,7 @@ class ProjectAdmin(SortableAdmin):
     list_display = ['__str__', 'category']
     list_filter = ('category__title',)
     after_sorting_js_callback_name = 'afterSortCallback'
+    search_fields = ['title']
     sortable_change_list_template = 'adminsortable/custom_change_list.html'
     sortable_change_form_template = 'adminsortable/custom_change_form.html'
 

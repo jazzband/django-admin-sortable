@@ -9,7 +9,7 @@
             var url = window.location.href;
             var urlParts = url.split('?');
 
-            if (urlParts.length === 2) {
+            if (urlParts.length === 2 && urlParts[1].substr(0, 2) !== 'q=') {
                 $('a#change-order').attr('href', './sort/?filter_expression=' + urlParts[1]);
             }
         });
