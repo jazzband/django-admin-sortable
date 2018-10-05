@@ -599,8 +599,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1.7?
-- Bug fix for inlines that caused sorting to stop working.
+### What's new in 2.1.8?
+- Bug fix for sorting a queryset where a search may have been performed.
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.

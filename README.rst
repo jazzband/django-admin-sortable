@@ -55,7 +55,7 @@ Download django-admin-sortable from
 `source <https://github.com/iambrandontaylor/django-admin-sortable/archive/master.zip>`__
 
 1. Unzip the directory and cd into the uncompressed project directory
-2. 
+2.
 
    -  Optional: Enable your virtualenv
 
@@ -731,10 +731,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.1.7?
+What’s new in 2.1.8?
 ~~~~~~~~~~~~~~~~~~~~
 
--  Bug fix for inlines that caused sorting to stop working.
+-  Bug fix for sorting a queryset where a search may have been performed.
 
 Future
 ~~~~~~
