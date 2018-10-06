@@ -100,35 +100,35 @@ class SortableMixin(models.Model):
 
         super(SortableMixin, self).save(*args, **kwargs)
 
-    def _filter_objects(self, filters, extra_filters, filter_on_sortable_fk):
+    def _filter_objects(self, filters, filter_args, extra_filters, filter_on_sortable_fk):
         if extra_filters:
             filters.update(extra_filters)
 
         if self.sortable_foreign_key and filter_on_sortable_fk:
             # sfk_obj == sortable foreign key instance
             sfk_obj = getattr(self, self.sortable_foreign_key.name)
-            filters.update(
-                {self.sortable_foreign_key.name: sfk_obj.id})
+            filters.update({ self.sortable_foreign_key.name: sfk_obj.id })
 
         try:
             order_by = '-{0}'.format(self.order_field_name) \
                 if '{0}__lt'.format(self.order_field_name) in filters.keys() \
                 else self.order_field_name
-            obj = self.__class__.objects.filter(
-                **filters).order_by(order_by)[:1][0]
+            obj = self.__class__.objects.filter(*filter_args, **filters).order_by(order_by)[:1][0]
         except IndexError:
             obj = None
 
         return obj
 
-    def get_next(self, extra_filters={}, filter_on_sortable_fk=True):
+    def get_next(self, filter_args=[], extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects(
             {'{0}__gt'.format(self.order_field_name): self._get_order_field_value()},
+            filter_args,
             extra_filters, filter_on_sortable_fk)
 
-    def get_previous(self, extra_filters={}, filter_on_sortable_fk=True):
+    def get_previous(self, filter_args=[], extra_filters={}, filter_on_sortable_fk=True):
         return self._filter_objects(
             {'{0}__lt'.format(self.order_field_name): self._get_order_field_value()},
+            filter_args,
             extra_filters, filter_on_sortable_fk)
 
 

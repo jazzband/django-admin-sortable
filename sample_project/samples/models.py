@@ -49,8 +49,14 @@ class Project(SimpleModel, SortableMixin):
 
     category = SortableForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField()
+    isApproved = models.BooleanField(default=False)
+    isFunded = models.BooleanField(default=False)
 
     order = models.PositiveIntegerField(default=0, editable=False)
+
+    def get_next(self):
+        return super(Project, self).get_next(
+            filter_args=[models.Q(isApproved=True) | models.Q(isFunded=True)])
 
 
 # Registered as a tabular inline on `Project`
