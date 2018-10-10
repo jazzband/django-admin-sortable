@@ -42,7 +42,7 @@ the new tuple-based format if you haven’t already.
 
 django-admin-sortable 1.7.1 and higher are compatible with Python 3.
 
-django-admin-sortable 2.1.6 ihas a bug. Please don’t use it :)
+django-admin-sortable 2.1.6 has a bug. Please don’t use it :)
 
 Installation
 ------------
@@ -302,12 +302,19 @@ If you wish to override this behavior, pass in:
 
        your_instance.get_next(filter_on_sortable_fk=False)
 
-You may also pass in additional ORM “extra_filters” as a dictionary,
-should you need to:
+You may also pass in additional ORM "filer_args" as a list, or "filter_kwargs" as a dictionary, should you need to:
 
 .. code:: python
 
-       your_instance.get_next(extra_filters={'title__icontains': 'blue'})
+    your_instance.get_next(
+        filter_args=[Q(field1=True) | Q(field2=True)],
+        filter_kwargs={'title__icontains': 'blue'}
+    )
+
+Deprecation Warning
+^^^^^^^^^^^^^^^^^^^^^
+
+Previously "filter_kwargs" was named "extra_filters". With the addition of "filter_args", "extra_filters" was renamed for consistency. "extra_filters" will be removed in the next version of django-admin-sortable.
 
 Adding Sorting to an existing model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -731,10 +738,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.1.8?
+What’s new in 2.1.9?
 ~~~~~~~~~~~~~~~~~~~~
 
--  Bug fix for sorting a queryset where a search may have been performed.
+-  get_next() and get_previous() methods now accept filter arguments as a list to support Q objects.
 
 Future
 ~~~~~~

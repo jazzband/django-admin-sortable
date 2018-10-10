@@ -100,9 +100,14 @@ class SortableMixin(models.Model):
 
         super(SortableMixin, self).save(*args, **kwargs)
 
-    def _filter_objects(self, filters, filter_args, extra_filters, filter_on_sortable_fk):
+    def _filter_objects(self, filters, filter_args, extra_filters, filter_kwargs, filter_on_sortable_fk):
+        # DEPRECATION WARNING: `extra_filters` will be replaced by `filter_kwargs` in the next release
+
         if extra_filters:
             filters.update(extra_filters)
+
+        if filter_kwargs:
+            filters.update(filter_kwargs)
 
         if self.sortable_foreign_key and filter_on_sortable_fk:
             # sfk_obj == sortable foreign key instance
@@ -119,17 +124,23 @@ class SortableMixin(models.Model):
 
         return obj
 
-    def get_next(self, filter_args=[], extra_filters={}, filter_on_sortable_fk=True):
+    def get_next(self, filter_args=[], extra_filters={}, filter_kwargs={}, filter_on_sortable_fk=True):
         return self._filter_objects(
             {'{0}__gt'.format(self.order_field_name): self._get_order_field_value()},
             filter_args,
-            extra_filters, filter_on_sortable_fk)
+            extra_filters,
+            filter_kwargs,
+            filter_on_sortable_fk
+        )
 
-    def get_previous(self, filter_args=[], extra_filters={}, filter_on_sortable_fk=True):
+    def get_previous(self, filter_args=[], extra_filters={}, filter_kwargs={}, filter_on_sortable_fk=True):
         return self._filter_objects(
             {'{0}__lt'.format(self.order_field_name): self._get_order_field_value()},
             filter_args,
-            extra_filters, filter_on_sortable_fk)
+            extra_filters,
+            filter_kwargs,
+            filter_on_sortable_fk
+        )
 
 
 # for legacy support of existing implementations
