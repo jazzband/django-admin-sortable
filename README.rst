@@ -9,6 +9,9 @@ This project makes it easy to add drag-and-drop ordering to any model in
 Django admin. Inlines for a sortable model may also be made sortable,
 enabling individual items or groups of items to be sortable.
 
+If you find Django Admin Sortable to be helpful, consider `buying me a
+coffee <https://www.buymeacoffee.com/NY9TUAEwF>`__!
+
 Sorting model instances with a sortable parent:
 
 .. figure:: http://res.cloudinary.com/alsoicode/image/upload/v1451237555/django-admin-sortable/sortable-models.jpg
@@ -55,7 +58,7 @@ Download django-admin-sortable from
 `source <https://github.com/iambrandontaylor/django-admin-sortable/archive/master.zip>`__
 
 1. Unzip the directory and cd into the uncompressed project directory
-2.
+2. 
 
    -  Optional: Enable your virtualenv
 
@@ -302,19 +305,23 @@ If you wish to override this behavior, pass in:
 
        your_instance.get_next(filter_on_sortable_fk=False)
 
-You may also pass in additional ORM "filer_args" as a list, or "filter_kwargs" as a dictionary, should you need to:
+You may also pass in additional ORM “filer_args” as a list, or
+“filter_kwargs” as a dictionary, should you need to:
 
 .. code:: python
 
-    your_instance.get_next(
-        filter_args=[Q(field1=True) | Q(field2=True)],
-        filter_kwargs={'title__icontains': 'blue'}
-    )
+       your_instance.get_next(
+           filter_args=[Q(field1=True) | Q(field2=True)],
+           filter_kwargs={'title__icontains': 'blue'}
+       )
 
 Deprecation Warning
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 
-Previously "filter_kwargs" was named "extra_filters". With the addition of "filter_args", "extra_filters" was renamed for consistency. "extra_filters" will be removed in the next version of django-admin-sortable.
+Previously “filter_kwargs” was named “extra_filters”. With the addition
+of “filter_args”, “extra_filters” was renamed for consistency.
+“extra_filters” will be removed in the next version of
+django-admin-sortable.
 
 Adding Sorting to an existing model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -738,10 +745,12 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.1.9?
-~~~~~~~~~~~~~~~~~~~~
+What’s new in 2.1.10?
+~~~~~~~~~~~~~~~~~~~~~
 
--  get_next() and get_previous() methods now accept filter arguments as a list to support Q objects.
+-  Updated admin templates to use the ``CSRF_HEADER_NAME`` from
+   `settings <https://docs.djangoproject.com/en/2.1/ref/settings/#csrf-header-name>`__
+   instead of using a hard-coded value.
 
 Future
 ~~~~~~
