@@ -606,8 +606,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1.10?
-- Updated admin templates to use the `CSRF_HEADER_NAME` from [settings](https://docs.djangoproject.com/en/2.1/ref/settings/#csrf-header-name) instead of using a hard-coded value.
+### What's new in 2.1.11?
+- Fixed missing `csrfmiddlewaretoken` in Ajax POST data. This affects Django 2.1.4 and higher.
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.

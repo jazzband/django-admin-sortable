@@ -58,7 +58,7 @@ Download django-admin-sortable from
 `source <https://github.com/iambrandontaylor/django-admin-sortable/archive/master.zip>`__
 
 1. Unzip the directory and cd into the uncompressed project directory
-2. 
+2.
 
    -  Optional: Enable your virtualenv
 
@@ -745,12 +745,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.1.10?
+What’s new in 2.1.11?
 ~~~~~~~~~~~~~~~~~~~~~
 
--  Updated admin templates to use the ``CSRF_HEADER_NAME`` from
-   `settings <https://docs.djangoproject.com/en/2.1/ref/settings/#csrf-header-name>`__
-   instead of using a hard-coded value.
+-  Fixed missing `csrfmiddlewaretoken` in Ajax POST data. This affects Django 2.1.4 and higher.
 
 Future
 ~~~~~~
