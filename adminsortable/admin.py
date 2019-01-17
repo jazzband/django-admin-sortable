@@ -230,7 +230,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'sortable_by_class_display_name': sortable_by_class_display_name,
             'jquery_lib_path': jquery_lib_path,
             'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken'),
-            'csrf_header_name': getattr(settings, 'CSRF_HEADER_NAME', 'HTTP_X_CSRFTOKEN'),
+            'csrf_header_name': getattr(settings, 'CSRF_HEADER_NAME', 'X-CSRFToken'),
             'after_sorting_js_callback_name': self.after_sorting_js_callback_name
         })
         return render(request, self.sortable_change_list_template, context)
@@ -255,7 +255,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'has_sortable_tabular_inlines': self.has_sortable_tabular_inlines,
             'has_sortable_stacked_inlines': self.has_sortable_stacked_inlines,
             'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken'),
-            'csrf_header_name': getattr(settings, 'CSRF_HEADER_NAME', 'HTTP_X_CSRFTOKEN'),
+            'csrf_header_name': getattr(settings, 'CSRF_HEADER_NAME', 'X-CSRFToken'),
             'after_sorting_js_callback_name': self.after_sorting_js_callback_name
         })
 

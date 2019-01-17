@@ -18,7 +18,7 @@
                 $.ajax({
                     url: ui.item.find('a.admin_sorting_url').attr('href'),
                     type: 'POST',
-                    data: { indexes: indexes.join(',') },
+                    data: { indexes: indexes.join(','), csrfmiddlewaretoken: window.csrftoken },
                     success: function() {
                         // set icons based on position
                         lineItems.each(function(index, element) {

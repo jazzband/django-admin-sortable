@@ -3,4 +3,5 @@
 <form>
     <input name="pk" type="hidden" value="{{ object.pk|unlocalize }}" />
     <a href="{% url opts|admin_urlname:'do_sorting' object.model_type_id|unlocalize %}" class="admin_sorting_url"><i class="fa fa-{% if forloop.first %}sort-desc{% elif forloop.last %}sort-asc{% else %}sort{% endif %}"></i> {{ object }}</a>
+    {% csrf_token %}
 </form>
