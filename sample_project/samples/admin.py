@@ -85,8 +85,8 @@ class ProjectAdmin(SortableAdmin):
         CreditInline, NoteInline, GenericNoteInline,
         NonSortableCreditInline, NonSortableNoteInline
     ]
-    list_display = ['__str__', 'category']
-    list_filter = ('category__title',)
+    list_display = ['__str__', 'category', 'isApproved',]
+    list_filter = ('category__title', 'isApproved',)
     after_sorting_js_callback_name = 'afterSortCallback'
     search_fields = ['title']
     sortable_change_list_template = 'adminsortable/custom_change_list.html'
