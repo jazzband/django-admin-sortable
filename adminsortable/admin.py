@@ -40,7 +40,19 @@ class SortableAdminBase(object):
         its sort order can be changed. This view adds a link to the
         object_tools block to take people to the view to change the sorting.
         """
-        if get_is_sortable(self.get_queryset(request)):
+
+        # apply any filters via the querystring
+        filters = {}
+
+        for k, v in request.GET.items():
+            filters.update({ k: v })
+
+        # Check if the filtered queryset contains more than 1 item
+        # to enable sort link
+        queryset = self.get_queryset(request).filter(**filters)
+        self.is_sortable = False
+
+        if get_is_sortable(queryset):
             self.change_list_template = \
                 self.sortable_change_list_with_sort_link_template
             self.is_sortable = True
@@ -51,8 +63,10 @@ class SortableAdminBase(object):
         extra_context.update({
             'change_list_template_extends': self.change_list_template_extends,
             'sorting_filters': [sort_filter[0] for sort_filter
-                in getattr(self.model, 'sorting_filters', [])]
+                in getattr(self.model, 'sorting_filters', [])],
+            'is_sortable': self.is_sortable
         })
+
         return super(SortableAdminBase, self).changelist_view(request,
             extra_context=extra_context)
 

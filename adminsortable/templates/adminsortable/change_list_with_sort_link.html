@@ -24,9 +24,11 @@
         <a href="./sort/?sort_filter={{ forloop.counter0 }}">{% trans 'Change Order of' %} {{ sorting_filter }}</a>
     </li>
     {% empty %}
+    {% if is_sortable %}
     <li>
         <a id="change-order" href="./sort/">{% trans 'Change Order' %}</a>
     </li>
+    {% endif %}
     {% endfor %}
     {{ block.super }}
 {% endblock %}
