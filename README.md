@@ -606,8 +606,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1.11?
-- Fixed missing `csrfmiddlewaretoken` in Ajax POST data. This affects Django 2.1.4 and higher.
+### What's new in 2.1.12?
+- Fixed multiple list filter issue that was causing incorrect sortable objects to be displayed
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.

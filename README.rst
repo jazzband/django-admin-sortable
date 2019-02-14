@@ -745,10 +745,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.1.11?
+What’s new in 2.1.12?
 ~~~~~~~~~~~~~~~~~~~~~
 
--  Fixed missing `csrfmiddlewaretoken` in Ajax POST data. This affects Django 2.1.4 and higher.
+-  Fixed multiple list filter issue that was causing incorrect sortable objects to be displayed
 
 Future
 ~~~~~~
