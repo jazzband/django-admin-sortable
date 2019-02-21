@@ -34,6 +34,15 @@ class SortableAdminBase(object):
 
     after_sorting_js_callback_name = None
 
+    def get_querystring_filters(self, request):
+        filters = {}
+
+        for k, v in request.GET.items():
+            if k not in ['_to_field', '_popup',]:
+                filters.update({ k: v })
+
+        return filters
+
     def changelist_view(self, request, extra_context=None):
         """
         If the model that inherits Sortable has more than one object,
@@ -42,10 +51,7 @@ class SortableAdminBase(object):
         """
 
         # apply any filters via the querystring
-        filters = {}
-
-        for k, v in request.GET.items():
-            filters.update({ k: v })
+        filters = self.get_querystring_filters(request)
 
         # Check if the filtered queryset contains more than 1 item
         # to enable sort link
@@ -131,17 +137,14 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         # get sort group index from querystring if present
         sort_filter_index = request.GET.get('sort_filter')
 
-        filters = {}
+        # apply any filters via the querystring
+        filters = self.get_querystring_filters(request)
 
         if sort_filter_index:
             try:
                 filters = self.model.sorting_filters[int(sort_filter_index)][1]
             except (IndexError, ValueError):
                 pass
-
-        # apply any filters via the querystring
-        for k, v in request.GET.items():
-            filters.update({ k: v })
 
         # Apply any sort filters to create a subset of sortable objects
         return self.get_queryset(request).filter(**filters)

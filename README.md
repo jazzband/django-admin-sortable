@@ -606,8 +606,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1.12?
-- Fixed multiple list filter issue that was causing incorrect sortable objects to be displayed
+### What's new in 2.1.13?
+- Fixed an issue when sorting was performed on an object referenced by a raw_id field
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.

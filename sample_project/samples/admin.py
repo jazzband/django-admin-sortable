@@ -52,6 +52,12 @@ class WidgetAdmin(SortableAdmin):
 admin.site.register(Widget, WidgetAdmin)
 
 
+class CreditAdmin(SortableAdmin):
+    raw_id_fields = ('project',)
+
+admin.site.register(Credit, CreditAdmin)
+
+
 class CreditInline(SortableTabularInline):
     model = Credit
     extra = 1

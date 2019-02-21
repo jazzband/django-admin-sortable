@@ -745,10 +745,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.1.12?
+What’s new in 2.1.13?
 ~~~~~~~~~~~~~~~~~~~~~
 
--  Fixed multiple list filter issue that was causing incorrect sortable objects to be displayed
+-  Fixed an issue when sorting was performed on an object referenced by a raw_id field
 
 Future
 ~~~~~~
