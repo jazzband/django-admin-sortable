@@ -745,10 +745,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.1.13?
+What’s new in 2.1.14?
 ~~~~~~~~~~~~~~~~~~~~~
 
--  Fixed an issue when sorting was performed on an object referenced by a raw_id field
+-  Improved filtering of querystring values. Thanks to `@stephrdev <https://github.com/stephrdev>`
 
 Future
 ~~~~~~
