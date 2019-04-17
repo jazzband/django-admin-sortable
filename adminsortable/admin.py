@@ -6,7 +6,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
-from django.contrib.admin.views.main import IGNORED_PARAMS
+from django.contrib.admin.views.main import IGNORED_PARAMS, PAGE_VAR
 from django.contrib.contenttypes.admin import (GenericStackedInline,
                                                GenericTabularInline)
 from django.contrib.contenttypes.models import ContentType
@@ -39,7 +39,7 @@ class SortableAdminBase(object):
         filters = {}
 
         for k, v in request.GET.items():
-            if k not in IGNORED_PARAMS:
+            if k not in IGNORED_PARAMS and k != PAGE_VAR:
                 filters[k] = v
 
         return filters
