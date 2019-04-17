@@ -6,6 +6,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
+from django.contrib.admin.views.main import IGNORED_PARAMS, PAGE_VAR
 from django.contrib.contenttypes.admin import (GenericStackedInline,
                                                GenericTabularInline)
 from django.contrib.contenttypes.models import ContentType
@@ -33,6 +34,15 @@ class SortableAdminBase(object):
     change_list_template_extends = 'admin/change_list.html'
 
     after_sorting_js_callback_name = None
+
+    def get_querystring_filters(self, request):
+        filters = {}
+
+        for k, v in request.GET.items():
+            if k not in IGNORED_PARAMS and k != PAGE_VAR:
+                filters[k] = v
+
+        return filters
 
     def changelist_view(self, request, extra_context=None):
         """
