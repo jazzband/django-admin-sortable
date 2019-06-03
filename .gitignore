@@ -12,4 +12,4 @@ atlassian-*
 __pycache__
 .venv/
 build
-.vscode
+.vscode/*
