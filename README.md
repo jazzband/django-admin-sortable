@@ -252,7 +252,7 @@ You may also pass in additional ORM "filer_args" as a list, or "filter_kwargs" a
 ```
 
 #### Deprecation Warning
-Previously "filter_kwargs" was named "extra_filters". With the addition of "filter_args", "extra_filters" was renamed for consistency. "extra_filters" will be removed in the next version of django-admin-sortable.
+Previously "filter_kwargs" was named "extra_filters". With the addition of "filter_args", "extra_filters" was renamed for consistency.
 
 
 ### Adding Sorting to an existing model
@@ -606,8 +606,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1.10?
-- Updated admin templates to use the `CSRF_HEADER_NAME` from [settings](https://docs.djangoproject.com/en/2.1/ref/settings/#csrf-header-name) instead of using a hard-coded value.
+### What's new in 2.1.11?
+- Updated SortableAdminBase to prevent querystring filtering from breaking in certain conditions.
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.

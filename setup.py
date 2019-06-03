@@ -22,6 +22,7 @@ setup(
     install_requires=['django'],
     license='APL',
     long_description=README,
+    long_description_content_type='text/markdown',
     name='django-admin-sortable',
     packages=find_packages(exclude=['sample_project']),
     url='https://github.com/iambrandontaylor/django-admin-sortable',
