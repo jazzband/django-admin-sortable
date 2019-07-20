@@ -1,4 +1,4 @@
-VERSION = (2, 1, 16)
+VERSION = (2, 1, 17)
 DEV_N = None
 
 

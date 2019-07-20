@@ -606,8 +606,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.1.16?
-- Added Ukrainian translations courtesy of [@Serhiy](https://github.com/SerhiyRomanov)
+### What's new in 2.1.17?
+- Fixed Ukrainian translations courtesy of [@Serhiy](https://github.com/SerhiyRomanov)
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
