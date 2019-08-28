@@ -40,7 +40,7 @@
                         data: { indexes : indexes.join(','), csrfmiddlewaretoken: window.csrftoken },
                         success: function() {
                             // set icons based on position
-                            var icons = ui.item.parent().find('.fa');
+                            var icons = ui.item.parent().find('a > .fa');
                             icons.removeClass('fa-sort-desc fa-sort-asc fa-sort');
                             icons.each(function(index, element) {
                                 var icon = $(element);
