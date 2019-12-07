@@ -1,4 +1,4 @@
-{% load i18n admin_urls admin_static django_template_additions %}
+{% load i18n admin_urls static django_template_additions %}
 {% get_django_version as django_version %}
 <div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
   <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }} {% if inline_admin_formset.formset.initial_form_count > 1 %} - {% trans "drag and drop to change order" %}{% endif %}</h2>
