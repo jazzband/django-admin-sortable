@@ -751,10 +751,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.2.1?
+What’s new in 2.2.2?
 ~~~~~~~~~~~~~~~~~~~~
 
--  Fixed overzealous selector in sortable inline tabular JavaScript code that was allowing the header row to be draggable.
+-  Fixed FontAwesome icons not showing up in inline sortable templates.
 
 Future
 ~~~~~~
