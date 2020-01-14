@@ -59,7 +59,7 @@ Download django-admin-sortable from
 
 1. Unzip the directory and cd into the uncompressed project directory
 
-2. 
+2.
 
    -  Optional: Enable your virtualenv
 
@@ -751,10 +751,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.2.0?
+What’s new in 2.2.1?
 ~~~~~~~~~~~~~~~~~~~~
 
--  Django 3 compatibility
+-  Fixed overzealous selector in sortable inline tabular JavaScript code that was allowing the header row to be draggable.
 
 Future
 ~~~~~~

@@ -609,8 +609,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.2.0?
-- Django 3 compatibility
+### What's new in 2.2.1?
+- Fixed overzealous selector in sortable inline tabular JavaScript code that was allowing the header row to be draggable.
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.
