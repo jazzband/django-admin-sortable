@@ -29,6 +29,9 @@
              id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
         <td class="original">
           {% if inline_admin_form.original or inline_admin_form.show_url %}<p>
+            {% with initial_forms_count=inline_admin_form.formset.management_form.INITIAL_FORMS.value %}
+            <i class="fa fa-{% if forloop.first %}sort-desc{% elif forloop.counter == initial_forms_count %}sort-asc{% else %}sort{% endif %}"></i>
+            {% endwith %}
           {% if inline_admin_form.original %}
           {{ inline_admin_form.original }}
           {% if inline_admin_form.model_admin.show_change_link and inline_admin_form.model_admin.has_registered_model %}<a href="{% url inline_admin_form.model_admin.opts|admin_urlname:'change' inline_admin_form.original.pk|admin_urlquote %}" class="inlinechangelink">{% trans "Change" %}</a>{% endif %}

@@ -751,10 +751,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.2.2?
+What’s new in 2.2.3?
 ~~~~~~~~~~~~~~~~~~~~
 
--  Fixed FontAwesome icons not showing up in inline sortable templates.
+-  Updated inline sortable templates to fix FontAwesome icon visibility and be compatible with Django 2 & 3.
 
 Future
 ~~~~~~
