@@ -58,7 +58,7 @@ django-admin-sortable is currently incompatible with that setting.
 
 ### Static Media
 Preferred:
-Use the [staticfiles app](https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/)
+Use the [staticfiles app](https://docs.djangoproject.com/en/3.0/howto/static-files/)
 
 Alternate:
 Copy the `adminsortable` folder from the `static` folder to the

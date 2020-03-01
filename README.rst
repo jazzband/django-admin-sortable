@@ -84,7 +84,7 @@ Static Media
 ~~~~~~~~~~~~
 
 Preferred: Use the `staticfiles
-app <https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/>`__
+app <https://docs.djangoproject.com/en/3.0/howto/static-files/>`__
 
 Alternate: Copy the ``adminsortable`` folder from the ``static`` folder
 to the location you serve static files from.
