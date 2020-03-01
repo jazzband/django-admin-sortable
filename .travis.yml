@@ -7,7 +7,7 @@ python:
     - "3.6"
 
 env:
-    - DJANGO_VERSION=2.2.10 SAMPLE_PROJECT=sample_project
+    - DJANGO_VERSION=2.0.13 SAMPLE_PROJECT=sample_project
     - DJANGO_VERSION=3.0.0 SAMPLE_PROJECT=sample_project
 
 branches:
@@ -22,15 +22,15 @@ matrix:
 
         -
             python: "3.4"
-            env: DJANGO_VERSION=2.2.10 SAMPLE_PROJECT=sample_project
+            env: DJANGO_VERSION=2.0.13 SAMPLE_PROJECT=sample_project
 
         -
             python: "3.5"
-            env: DJANGO_VERSION=2.2.10 SAMPLE_PROJECT=sample_project
+            env: DJANGO_VERSION=2.0.13 SAMPLE_PROJECT=sample_project
 
         -
             python: "3.6"
-            env: DJANGO_VERSION=2.2.10 SAMPLE_PROJECT=sample_project
+            env: DJANGO_VERSION=2.0.13 SAMPLE_PROJECT=sample_project
 
 install:
     - pip install django==$DJANGO_VERSION
