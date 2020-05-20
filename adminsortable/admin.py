@@ -182,7 +182,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                     # Django < 1.9
                     sortable_by_fk = field.rel.to
                 sortable_by_field_name = field.name.lower()
-                sortable_by_class_is_sortable = sortable_by_fk.objects.count() >= 2
+                sortable_by_class_is_sortable = \
+                    isinstance(sortable_by_fk, SortableMixin) and \
+                    sortable_by_fk.objects.count() >= 2
 
         if sortable_by_property:
             # backwards compatibility for < 1.1.1, where sortable_by was a
