@@ -314,6 +314,15 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
                 objects_dict = {str(obj.pk): obj for obj in qs}
                 objects_list = list(objects_dict.keys())
+                if len(indexes) != len(objects_dict):
+                    return HttpResponseBadRequest(
+                        json.dumps({
+                            'objects_sorted': False,
+                            'reason': _("An object has been added or removed "
+                                        "since the last load. Please refresh "
+                                        "the page and try reordering again."),
+                        }, ensure_ascii=False),
+                        content_type='application/json')
                 order_field_name = klass._meta.ordering[0]
 
                 if order_field_name.startswith('-'):
