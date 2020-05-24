@@ -15,6 +15,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 from django.utils.decorators import method_decorator
+from django.utils.six.moves.urllib.parse import urlencode
 from django.views.decorators.http import require_POST
 
 from adminsortable.fields import SortableForeignKey
@@ -236,6 +237,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         else:
             context = self.admin_site.each_context(request)
 
+        filters = urlencode(self.get_querystring_filters(request))
+
         context.update({
             'title': u'Drag and drop {0} to change display order'.format(
                 capfirst(verbose_name_plural)),
@@ -246,6 +249,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'sortable_by_class': sortable_by_class,
             'sortable_by_class_is_sortable': sortable_by_class_is_sortable,
             'sortable_by_class_display_name': sortable_by_class_display_name,
+            'filters': filters,
             'jquery_lib_path': jquery_lib_path,
             'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken'),
             'csrf_header_name': getattr(settings, 'CSRF_HEADER_NAME', 'X-CSRFToken'),
