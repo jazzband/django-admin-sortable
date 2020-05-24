@@ -10,8 +10,8 @@
 	margin-left: 1em;
 }
 
-#sortable ul li,
-#sortable ul li a
+#sortable ul.sortable li,
+#sortable ul.sortable li a
 {
     cursor: move;
 }
