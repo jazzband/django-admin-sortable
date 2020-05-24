@@ -11,11 +11,13 @@ from django.contrib.contenttypes.admin import (GenericStackedInline,
                                                GenericTabularInline)
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
+from django.db import transaction
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 from django.utils.decorators import method_decorator
 from django.utils.six.moves.urllib.parse import urlencode
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from adminsortable.fields import SortableForeignKey
@@ -296,14 +298,21 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         response = {'objects_sorted': False}
 
         if request.is_ajax():
-            try:
-                klass = ContentType.objects.get(id=model_type_id).model_class()
+            klass = ContentType.objects.get(id=model_type_id).model_class()
 
-                indexes = list(map(str,
-                    request.POST.get('indexes', []).split(',')))
-                objects_dict = dict([(str(obj.pk), obj) for obj in
-                    klass.objects.filter(pk__in=indexes)])
+            indexes = [str(idx) for idx in request.POST.get('indexes', []).split(',')]
 
+            # apply any filters via the querystring
+            filters = self.get_querystring_filters(request)
+
+            filters['pk__in'] = indexes
+
+            # Lock rows that we might update
+            qs = klass.objects.select_for_update().filter(**filters)
+
+            with transaction.atomic():
+
+                objects_dict = {str(obj.pk): obj for obj in qs}
                 order_field_name = klass._meta.ordering[0]
 
                 if order_field_name.startswith('-'):
@@ -318,19 +327,17 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
                 start_index = getattr(start_object, order_field_name,
                     len(indexes))
-
+                objects_to_update = []
                 for index in indexes:
                     obj = objects_dict.get(index)
                     # perform the update only if the order field has changed
                     if getattr(obj, order_field_name) != start_index:
                         setattr(obj, order_field_name, start_index)
-                        # only update the object's order field
-                        obj.save(update_fields=(order_field_name,))
+                        objects_to_update.append(obj)
                     start_index += step
+
+                qs.bulk_update(objects_to_update, [order_field_name])
                 response = {'objects_sorted': True}
-            except (KeyError, IndexError, klass.DoesNotExist,
-                    AttributeError, ValueError):
-                pass
 
         self.after_sorting()
 
