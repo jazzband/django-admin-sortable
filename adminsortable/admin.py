@@ -313,17 +313,17 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             with transaction.atomic():
 
                 objects_dict = {str(obj.pk): obj for obj in qs}
+                objects_list = list(objects_dict.keys())
                 order_field_name = klass._meta.ordering[0]
 
                 if order_field_name.startswith('-'):
                     order_field_name = order_field_name[1:]
                     step = -1
-                    start_object = max(objects_dict.values(),
-                        key=lambda x: getattr(x, order_field_name))
+                    start_object = objects_dict[objects_list[-1]]
+
                 else:
                     step = 1
-                    start_object = min(objects_dict.values(),
-                        key=lambda x: getattr(x, order_field_name))
+                    start_object = objects_dict[objects_list[0]]
 
                 start_index = getattr(start_object, order_field_name,
                     len(indexes))
