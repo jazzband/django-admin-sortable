@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlencode
 
 from django import VERSION
 
@@ -11,10 +12,12 @@ from django.contrib.contenttypes.admin import (GenericStackedInline,
                                                GenericTabularInline)
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
+from django.db import transaction
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from adminsortable.fields import SortableForeignKey
@@ -182,7 +185,9 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                     # Django < 1.9
                     sortable_by_fk = field.rel.to
                 sortable_by_field_name = field.name.lower()
-                sortable_by_class_is_sortable = sortable_by_fk.objects.count() >= 2
+                sortable_by_class_is_sortable = \
+                    isinstance(sortable_by_fk, SortableMixin) and \
+                    sortable_by_fk.objects.count() >= 2
 
         if sortable_by_property:
             # backwards compatibility for < 1.1.1, where sortable_by was a
@@ -234,6 +239,8 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         else:
             context = self.admin_site.each_context(request)
 
+        filters = urlencode(self.get_querystring_filters(request))
+
         context.update({
             'title': u'Drag and drop {0} to change display order'.format(
                 capfirst(verbose_name_plural)),
@@ -244,6 +251,7 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             'sortable_by_class': sortable_by_class,
             'sortable_by_class_is_sortable': sortable_by_class_is_sortable,
             'sortable_by_class_display_name': sortable_by_class_display_name,
+            'filters': filters,
             'jquery_lib_path': jquery_lib_path,
             'csrf_cookie_name': getattr(settings, 'CSRF_COOKIE_NAME', 'csrftoken'),
             'csrf_header_name': getattr(settings, 'CSRF_HEADER_NAME', 'X-CSRFToken'),
@@ -290,41 +298,62 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
         response = {'objects_sorted': False}
 
         if request.is_ajax():
-            try:
-                klass = ContentType.objects.get(id=model_type_id).model_class()
+            klass = ContentType.objects.get(id=model_type_id).model_class()
 
-                indexes = list(map(str,
-                    request.POST.get('indexes', []).split(',')))
-                objects_dict = dict([(str(obj.pk), obj) for obj in
-                    klass.objects.filter(pk__in=indexes)])
+            indexes = [str(idx) for idx in request.POST.get('indexes', []).split(',')]
 
+            # apply any filters via the querystring
+            filters = self.get_querystring_filters(request)
+
+            filters['pk__in'] = indexes
+
+            # Lock rows that we might update
+            qs = klass.objects.select_for_update().filter(**filters)
+
+            with transaction.atomic():
+
+                # Python 3.6+ only
+                # objects_dict = {str(obj.pk): obj for obj in qs}
+                # objects_list = list(objects_dict.keys())
+                objects_dict = {}
+                objects_list = []
+                for obj in qs:
+                    key = str(obj.pk)
+                    objects_dict[key] = obj
+                    objects_list.append(key)
+                if len(indexes) != len(objects_dict):
+                    return HttpResponseBadRequest(
+                        json.dumps({
+                            'objects_sorted': False,
+                            'reason': _("An object has been added or removed "
+                                        "since the last load. Please refresh "
+                                        "the page and try reordering again."),
+                        }, ensure_ascii=False),
+                        content_type='application/json')
                 order_field_name = klass._meta.ordering[0]
 
                 if order_field_name.startswith('-'):
                     order_field_name = order_field_name[1:]
                     step = -1
-                    start_object = max(objects_dict.values(),
-                        key=lambda x: getattr(x, order_field_name))
+                    start_object = objects_dict[objects_list[-1]]
+
                 else:
                     step = 1
-                    start_object = min(objects_dict.values(),
-                        key=lambda x: getattr(x, order_field_name))
+                    start_object = objects_dict[objects_list[0]]
 
                 start_index = getattr(start_object, order_field_name,
                     len(indexes))
-
+                objects_to_update = []
                 for index in indexes:
                     obj = objects_dict.get(index)
                     # perform the update only if the order field has changed
                     if getattr(obj, order_field_name) != start_index:
                         setattr(obj, order_field_name, start_index)
-                        # only update the object's order field
-                        obj.save(update_fields=(order_field_name,))
+                        objects_to_update.append(obj)
                     start_index += step
+
+                qs.bulk_update(objects_to_update, [order_field_name])
                 response = {'objects_sorted': True}
-            except (KeyError, IndexError, klass.DoesNotExist,
-                    AttributeError, ValueError):
-                pass
 
         self.after_sorting()
 
