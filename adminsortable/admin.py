@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlencode
 
 from django import VERSION
 
@@ -16,7 +17,6 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.template.defaultfilters import capfirst
 from django.utils.decorators import method_decorator
-from django.utils.six.moves.urllib.parse import urlencode
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
