@@ -312,8 +312,15 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
 
             with transaction.atomic():
 
-                objects_dict = {str(obj.pk): obj for obj in qs}
-                objects_list = list(objects_dict.keys())
+                # Python 3.6+ only
+                # objects_dict = {str(obj.pk): obj for obj in qs}
+                # objects_list = list(objects_dict.keys())
+                objects_dict = {}
+                objects_list = []
+                for obj in qs:
+                    key = str(obj.pk)
+                    objects_dict[key] = obj
+                    objects_list.append(key)
                 if len(indexes) != len(objects_dict):
                     return HttpResponseBadRequest(
                         json.dumps({
