@@ -82,6 +82,11 @@ class SortableTestCase(TestCase):
         self.assertTrue(get_is_sortable(Category.objects.all()),
             'Category has more than one record. It should be sortable.')
 
+    def test_doesnt_overwrite_preexisting_order_field_value(self):
+        self.create_category()
+        category = Category.objects.create(title='Category 2', order=5)
+        self.assertEqual(category.order, 5)
+
     def test_save_order_incremented(self):
         category1 = self.create_category()
         self.assertEqual(category1.order, 1, 'Category 1 order should be 1.')
