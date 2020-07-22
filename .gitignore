@@ -11,5 +11,8 @@ atlassian-*
 .codeintel
 __pycache__
 .venv/
+.coverage
+.tox/
+htmlcov/
 build
 .vscode/*
