@@ -9,4 +9,6 @@ Inlines may be drag-and-dropped into any order directly from the change form.
 
 Unit and functional tests may be found in the ``app/tests.py`` file and run via:
 
+    .. code-block:: bash
+
     $ python manage.py test app
