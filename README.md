@@ -155,6 +155,8 @@ admin.site.register(Category, SortableAdmin)
 admin.site.register(Project, SortableAdmin)
 ```
 
+#### Sortable Model With Non-Sortable Parent
+
 Sometimes you might have a parent model that is not sortable, but has child models that are. In that case define your models and admin options as such:
 
 ```python
