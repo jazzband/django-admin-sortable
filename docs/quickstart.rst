@@ -3,6 +3,8 @@ Quickstart
 
 To get started using ``django-admin-sortable`` simply install it using ``pip``::
 
+    .. code-block:: bash
+
     $ pip install django-admin-sortable
 
 Add ``adminsortable`` to your project's ``INSTALLED_APPS`` setting.
@@ -10,6 +12,8 @@ Add ``adminsortable`` to your project's ``INSTALLED_APPS`` setting.
 Ensure ``django.core.context_processors.static`` is in your ``TEMPLATE_CONTEXT_PROCESSORS`` setting.
 
 Define your model, inheriting from ``adminsortable.Sortable``::
+
+    .. code-block:: python
 
     # models.py
     from adminsortable.models import Sortable
@@ -24,6 +28,8 @@ Define your model, inheriting from ``adminsortable.Sortable``::
             return self.title
 
 Wire up your sortable model to Django admin::
+
+    .. code-block:: python
 
     # admin.py
     from adminsortable.admin import SortableAdmin

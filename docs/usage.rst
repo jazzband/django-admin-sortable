@@ -4,7 +4,9 @@ Using Django Admin Sortable
 Models
 ------
 
-To add sorting to a model, your model needs to inherit from ``Sortable`` and have an inner ``Meta`` class that inherits from ``Sortable.Meta``::
+To add sorting to a model, your model needs to inherit from ``SortableMixin`` and at minimum, define an inner ``Meta.ordering`` value
+
+    .. code-block:: python
 
     # models.py
     from adminsortable.models import Sortable
@@ -22,7 +24,7 @@ It is also possible to order objects relative to another object that is a Foreig
 
 .. note:: A small caveat here is that ``Category`` must also either inherit from ``Sortable`` or include an ``order`` property which is a ``PositiveSmallInteger`` field. This is due to the way Django admin instantiates classes.
 
-::
+    .. code-block:: python
 
     # models.py
     from adminsortable.fields import SortableForeignKey
@@ -53,6 +55,8 @@ If you're adding Sorting to an existing model, it is recommended that you use `d
 
 Example assuming a model named "Category"::
 
+    .. code-block:: python
+
     def forwards(self, orm):
         for index, category in enumerate(orm.Category.objects.all()):
             category.order = index + 1
@@ -65,6 +69,8 @@ Django Admin
 
 To enable sorting in the admin, you need to inherit from ``SortableAdmin``::
 
+    .. code-block:: python
+
         from django.contrib import admin
         from myapp.models import MySortableClass
         from adminsortable.admin import SortableAdmin
@@ -76,6 +82,8 @@ To enable sorting in the admin, you need to inherit from ``SortableAdmin``::
 
 To enable sorting on TabularInline models, you need to inherit from SortableTabularInline::
 
+    .. code-block:: python
+
     from adminsortable.admin import SortableTabularInline
 
     class MySortableTabularInline(SortableTabularInline):
@@ -83,12 +91,16 @@ To enable sorting on TabularInline models, you need to inherit from SortableTabu
 
 To enable sorting on StackedInline models, you need to inherit from SortableStackedInline::
 
+    .. code-block:: python
+
     from adminsortable.admin import SortableStackedInline
 
     class MySortableStackedInline(SortableStackedInline):
         """Your inline options go here"""
 
 There are also generic equivalents that you can inherit from::
+
+    .. code-block:: python
 
     from adminsortable.admin import (SortableGenericTabularInline,
         SortableGenericStackedInline)
@@ -107,6 +119,8 @@ Overriding ``queryset()`` for an inline model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is a special case, which requires a few lines of extra code to properly determine the sortability of your model. Example::
+
+    .. code-block:: python
 
     # add this import to your admin.py
     from adminsortable.utils import get_is_sortable
@@ -136,6 +150,8 @@ Sorting subsets of objects
 It is also possible to sort a subset of objects in your model by adding a ``sorting_filters`` tuple. This works exactly the same as ``.filter()`` on a QuerySet, and is applied *after* ``get_queryset()`` on the admin class, allowing you to override the queryset as you would normally in admin but apply additional filters for sorting. The text "Change Order of" will appear before each filter in the Change List template, and the filter groups are displayed from left to right in the order listed. If no ``sorting_filters`` are specified, the text "Change Order" will be displayed for the link.
 
 An example of sorting subsets would be a "Board of Directors". In this use case, you have a list of "People" objects. Some of these people are on the Board of Directors and some not, and you need to sort them independently::
+
+    .. code-block:: python
 
     class Person(Sortable):
         class Meta(Sortable.Meta):
@@ -169,6 +185,8 @@ By default, adminsortable's change form and change list views inherit from Djang
     change_list_template_extends
 
 These attributes have default values of::
+
+    .. code-block:: python
 
     change_form_template_extends = 'admin/change_form.html'
     change_list_template_extends = 'admin/change_list.html'
