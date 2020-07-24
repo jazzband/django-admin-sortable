@@ -155,6 +155,8 @@ admin.site.register(Category, SortableAdmin)
 admin.site.register(Project, SortableAdmin)
 ```
 
+#### Sortable Model With Non-Sortable Parent
+
 Sometimes you might have a parent model that is not sortable, but has child models that are. In that case define your models and admin options as such:
 
 ```python
@@ -197,6 +199,60 @@ admin.site.register(Category, CategoryAdmin)
 ```
 
 The `NonSortableParentAdmin` class is necessary to wire up the additional URL patterns and JavaScript that Django Admin Sortable needs to make your models sortable. The child model does not have to be an inline model, it can be wired directly to Django admin and the objects will be grouped by the non-sortable foreign key when sorting.
+
+#### Sortable Many-to-Many Model
+
+It is also possible to make many-to-many relations sortable, but it requires an explicit many-to-many model.
+
+`models.py`:
+```python
+from django.db import models
+from adminsortable.models import SortableMixin
+from adminsortable.fields import SortableForeignKey
+
+class Image(models.Model):
+    ...
+
+class Gallery(models.Model):
+    class Meta:
+        verbose_name_plural = 'Galleries'
+    ...
+    images = models.ManyToManyField(
+        Image,
+        through_fields=('gallery', 'image'),
+        through='GalleryImageRelation',
+        verbose_name=_('Images')
+    )
+
+class GalleryImageRelation(SortableMixin):
+    """Many to many relation that allows users to sort images in galleries"""
+
+    class Meta:
+        ordering = ['image_order']
+
+    gallery = models.ForeignKey(Gallery, verbose_name=_("Gallery"))
+    image = SortableForeignKey(Image, verbose_name=_("Image"))
+    image_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+```
+
+`admin.py`:
+```python
+from django.contrib import admin
+from adminsortable.admin import (SortableAdmin, SortableTabularInline)
+from .models import (Image, Gallery, GalleryImageRelation)
+
+class GalleryImageRelationInlineAdmin(SortableTabularInline):
+    model = GalleryImageRelation
+    extra = 1
+
+class GalleryAdmin(NonSortableParentAdmin):
+    inlines = (GalleryImageRelationInlineAdmin,)
+
+admin.site.register(Image, admin.ModelAdmin)
+admin.site.register(Gallery, GalleryAdmin)
+```
+
+Any non-editable space in each rendered inline will let you drag and drop them into order.
 
 
 ### Backwards Compatibility

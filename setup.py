@@ -1,9 +1,7 @@
 from setuptools import setup, find_packages
 
-try:
-    README = open('README.rst').read()
-except:
-    README = None
+with open('README.rst') as readme_file:
+    README = readme_file.read()
 
 setup(
     author='Brandon Taylor',
@@ -22,7 +20,6 @@ setup(
     install_requires=['django'],
     license='APL',
     long_description=README,
-    long_description_content_type='text/markdown',
     name='django-admin-sortable',
     packages=find_packages(exclude=['sample_project']),
     url='https://github.com/iambrandontaylor/django-admin-sortable',
