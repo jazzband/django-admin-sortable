@@ -1,3 +1,6 @@
+## Looking for maintainers
+If you're interested in helping maintain and expand this library, please reach out to me. Due to other responsibilities and circumstances, I have basically no time to address issues for this codebase. I would greatly appreciate the help!
+
 # Django Admin Sortable
 
 [![PyPI version](https://img.shields.io/pypi/v/django-admin-sortable.svg)](https://pypi.python.org/pypi/django-admin-sortable)
