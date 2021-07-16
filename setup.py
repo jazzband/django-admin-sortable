@@ -12,7 +12,6 @@ setup(
                  'Intended Audience :: Developers',
                  'License :: OSI Approved :: Apache Software License',
                  'Operating System :: OS Independent',
-                 'Programming Language :: Python :: 2',
                  'Programming Language :: Python :: 3',
                  'Topic :: Utilities'],
     description='Drag and drop sorting for models and inline models in Django admin.',
