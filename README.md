@@ -85,11 +85,11 @@ Inlines may be drag-and-dropped into any order directly from the change form.
 To add "sortability" to a model, you need to inherit `SortableMixin` and at minimum, define:
 
 - The field which should be used for `Meta.ordering`, which must resolve to one of the integer fields defined in Django's ORM:
- - `PositiveIntegerField`
- - `IntegerField`
- - `PositiveSmallIntegerField`
- - `SmallIntegerField`
- - `BigIntegerField`
+    - `PositiveIntegerField`
+    - `IntegerField`
+    - `PositiveSmallIntegerField`
+    - `SmallIntegerField`
+    - `BigIntegerField`
 
 - `Meta.ordering` **must only contain one value**, otherwise, your objects will not be sorted correctly.
 - **IMPORTANT**: You must name the field you use for ordering something other than "order_field" as this name is reserved by the `SortableMixin` class.
