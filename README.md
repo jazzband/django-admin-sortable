@@ -91,8 +91,8 @@ To add "sortability" to a model, you need to inherit `SortableMixin` and at mini
     - `SmallIntegerField`
     - `BigIntegerField`
 
-- `Meta.ordering` **must only contain one value**, otherwise, your objects will not be sorted correctly.
-- **IMPORTANT**: You must name the field you use for ordering something other than "order_field" as this name is reserved by the `SortableMixin` class.
+- ⚠️ `Meta.ordering` **must only contain one value**, otherwise, your objects will not be sorted correctly.
+- ⚠️ **IMPORTANT**: You must name the field you use for ordering something other than "order_field" as this name is reserved by the `SortableMixin` class.
 - It is recommended that you set `editable=False` and `db_index=True` on the field defined in `Meta.ordering` for a seamless Django admin experience and faster lookups on the objects.
 
 Sample Model:
@@ -442,7 +442,7 @@ It is also possible to sort a subset of objects in your model by adding a `sorti
 #### Self-Referential SortableForeignKey
 You can specify a self-referential SortableForeignKey field, however the admin interface will currently show a model that is a grandchild at the same level as a child. I'm working to resolve this issue.
 
-##### Important!
+##### ⚠️ Important!
 django-admin-sortable 1.6.6 introduced a backwards-incompatible change for `sorting_filters`. Previously this attribute was defined as a dictionary, so you'll need to change your values over to the new tuple-based format.
 
 An example of sorting subsets would be a "Board of Directors". In this use case, you have a list of "People" objects. Some of these people are on the Board of Directors and some not, and you need to sort them independently.
