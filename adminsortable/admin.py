@@ -2,7 +2,6 @@ import json
 from urllib.parse import urlencode
 
 from django.conf import settings
-from django.conf.urls import re_path
 from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
 from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.views.main import IGNORED_PARAMS, PAGE_VAR
@@ -14,6 +13,7 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.defaultfilters import capfirst
+from django.urls import re_path
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
