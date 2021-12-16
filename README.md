@@ -22,7 +22,7 @@ Sorting inlines:
 ![sortable-inlines](http://res.cloudinary.com/alsoicode/image/upload/v1451237555/django-admin-sortable/sortable-inlines.jpg)
 
 ## Supported Django Versions
-For Django 3 use the latest version
+For Django 3 and 4 use the latest version
 
 For Django 1.8.x < 3.0, use 2.1.8.
 

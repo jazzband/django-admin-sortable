@@ -27,7 +27,7 @@ Sorting inlines:
 Supported Django Versions
 -------------------------
 
-For Django 3 use the latest version
+For Django 3 and 4 use the latest version
 
 For Django 1.8.x < 3.0, use 2.1.8.
 
