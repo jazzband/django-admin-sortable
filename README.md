@@ -22,7 +22,9 @@ Sorting inlines:
 ![sortable-inlines](http://res.cloudinary.com/alsoicode/image/upload/v1451237555/django-admin-sortable/sortable-inlines.jpg)
 
 ## Supported Django Versions
-For Django 3 and 4 use the latest version
+For Django 4 use the latest version
+
+For Django 3 use 2.2.4
 
 For Django 1.8.x < 3.0, use 2.1.8.
 
@@ -668,8 +670,8 @@ ordering on top of that just seemed a little much in my opinion.
 ### Status
 django-admin-sortable is currently used in production.
 
-### What's new in 2.2.3?
-- Updated inline sortable templates to fix FontAwesome icon visibility and be compatible with Django 2 & 3.
+### What's new in 2.3.0?
+- Django 4 compatibility
 
 ### Future
 - Better template support for foreign keys that are self referential. If someone would like to take on rendering recursive sortables, that would be super.

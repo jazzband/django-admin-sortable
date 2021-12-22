@@ -27,7 +27,9 @@ Sorting inlines:
 Supported Django Versions
 -------------------------
 
-For Django 3 and 4 use the latest version
+For Django 4 use the latest version
+
+For Django 3 use 2.2.4
 
 For Django 1.8.x < 3.0, use 2.1.8.
 
@@ -751,10 +753,10 @@ Status
 
 django-admin-sortable is currently used in production.
 
-What’s new in 2.2.3?
+What’s new in 2.3.0?
 ~~~~~~~~~~~~~~~~~~~~
 
--  Updated inline sortable templates to fix FontAwesome icon visibility and be compatible with Django 2 & 3.
+-  Django 4 compatibility
 
 Future
 ~~~~~~
