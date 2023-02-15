@@ -1,4 +1,3 @@
-import json
 from urllib.parse import urlencode
 
 from django.conf import settings
@@ -36,11 +35,17 @@ class SortableAdminBase(object):
 
     after_sorting_js_callback_name = None
 
+    sortable_ignored_params = ()
+
     def get_querystring_filters(self, request):
         filters = {}
 
         for k, v in request.GET.items():
-            if k not in IGNORED_PARAMS and k != PAGE_VAR:
+            if (
+                k not in IGNORED_PARAMS
+                and k != PAGE_VAR
+                and k not in self.sortable_ignored_params
+            ):
                 filters[k] = v
 
         return filters
