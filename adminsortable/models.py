@@ -89,7 +89,8 @@ class SortableMixin(models.Model):
 
     def save(self, *args, **kwargs):
         needs_default = (self._state.adding if VERSION >= (1, 8) else not self.pk)
-        if not getattr(self, self.order_field_name) and needs_default:
+        order_value = getattr(self, self.order_field_name)
+        if order_value is None and needs_default:
             try:
                 current_max = self.__class__.objects.aggregate(
                     models.Max(self.order_field_name))[self.order_field_name + '__max'] or 0
