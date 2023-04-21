@@ -40,7 +40,7 @@ class SortableAdminBase(object):
         filters = {}
 
         for k, v in request.GET.items():
-            if k not in IGNORED_PARAMS and k != PAGE_VAR:
+            if self.lookup_allowed(k, v):
                 filters[k] = v
 
         return filters
