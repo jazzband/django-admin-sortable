@@ -2,13 +2,14 @@ import json
 from urllib.parse import urlencode
 
 from django.conf import settings
-from django.contrib.admin import ModelAdmin, TabularInline, StackedInline
+from django.contrib.admin import (FieldListFilter, ListFilter, ModelAdmin,
+                                  SimpleListFilter, StackedInline, TabularInline)
 from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.views.main import IGNORED_PARAMS, PAGE_VAR
 from django.contrib.contenttypes.admin import (GenericStackedInline,
                                                GenericTabularInline)
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import FieldError, PermissionDenied
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -36,11 +37,43 @@ class SortableAdminBase(object):
 
     after_sorting_js_callback_name = None
 
+    def get_custom_list_filters(self, request):
+        custom_filters = []
+        if hasattr(self, 'get_list_filter'):
+            for list_filter in self.get_list_filter(request):
+                if callable(list_filter):
+                    try:
+                        if issubclass(list_filter, ListFilter) and not issubclass(list_filter, FieldListFilter):
+                            params = dict(request.GET.lists())
+                            custom_filters.append(
+                                list_filter(request, params, getattr(self, 'model', None), self)
+                            )
+                    except Exception:
+                        pass
+                elif isinstance(list_filter, ListFilter) and not isinstance(list_filter, FieldListFilter):
+                    custom_filters.append(list_filter)
+        return custom_filters
+
     def get_querystring_filters(self, request):
         filters = {}
+        ignored_params = set(IGNORED_PARAMS)
+        ignored_params.add(PAGE_VAR)
+
+        if hasattr(self, 'get_list_filter'):
+            for list_filter in self.get_list_filter(request):
+                param = getattr(list_filter, 'parameter_name', None)
+                if param:
+                    ignored_params.add(param)
+
+        for custom_filter in self.get_custom_list_filters(request):
+            try:
+                for param in custom_filter.expected_parameters():
+                    ignored_params.add(param)
+            except Exception:
+                pass
 
         for k, v in request.GET.items():
-            if k not in IGNORED_PARAMS and k != PAGE_VAR:
+            if k not in ignored_params:
                 filters[k] = v
 
         return filters
@@ -57,7 +90,19 @@ class SortableAdminBase(object):
 
         # Check if the filtered queryset contains more than 1 item
         # to enable sort link
-        queryset = self.get_queryset(request).filter(**filters)
+        try:
+            queryset = self.get_queryset(request).filter(**filters)
+        except FieldError:
+            queryset = self.get_queryset(request)
+
+        for custom_filter in self.get_custom_list_filters(request):
+            try:
+                filter_qs = custom_filter.queryset(request, queryset)
+                if filter_qs is not None:
+                    queryset = filter_qs
+            except Exception:
+                pass
+
         self.is_sortable = False
 
         if get_is_sortable(queryset):
@@ -149,7 +194,20 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
                 pass
 
         # Apply any sort filters to create a subset of sortable objects
-        return self.get_queryset(request).filter(**filters)
+        try:
+            queryset = self.get_queryset(request).filter(**filters)
+        except FieldError:
+            queryset = self.get_queryset(request)
+
+        for custom_filter in self.get_custom_list_filters(request):
+            try:
+                filter_qs = custom_filter.queryset(request, queryset)
+                if filter_qs is not None:
+                    queryset = filter_qs
+            except Exception:
+                pass
+
+        return queryset
 
     def sort_view(self, request):
         """
@@ -292,7 +350,10 @@ class SortableAdmin(SortableAdminBase, ModelAdmin):
             filters['pk__in'] = indexes
 
             # Lock rows that we might update
-            qs = klass.objects.select_for_update().filter(**filters)
+            try:
+                qs = klass.objects.select_for_update().filter(**filters)
+            except FieldError:
+                qs = klass.objects.select_for_update().filter(pk__in=indexes)
 
             with transaction.atomic():
                 objects_dict = {str(obj.pk): obj for obj in qs}
