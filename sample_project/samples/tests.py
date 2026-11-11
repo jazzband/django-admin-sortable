@@ -300,3 +300,79 @@ class SortableTestCase(TestCase):
     def test_save_non_auto_field_model(self):
         model = TestNonAutoFieldModel()
         model.save()
+
+    def test_adminsortable_with_simple_list_filter(self):
+        from django.contrib.admin import SimpleListFilter, site
+
+        class ApprovalSimpleListFilter(SimpleListFilter):
+            title = 'approval status'
+            parameter_name = 'approval_status'
+
+            def lookups(self, request, model_admin):
+                return (
+                    ('approved', 'Approved'),
+                    ('pending', 'Pending'),
+                )
+
+            def queryset(self, request, queryset):
+                if self.value() == 'approved':
+                    return queryset.filter(isApproved=True)
+                if self.value() == 'pending':
+                    return queryset.filter(isApproved=False)
+                return queryset
+
+        project_admin = site._registry[Project]
+        orig_list_filter = project_admin.list_filter
+        project_admin.list_filter = tuple(orig_list_filter) + (ApprovalSimpleListFilter,)
+
+        try:
+            category = self.create_category(title='Test Category')
+            p1 = Project.objects.create(
+                category=category, title='Project 1', isApproved=True, order=1
+            )
+            p2 = Project.objects.create(
+                category=category, title='Project 2', isApproved=True, order=2
+            )
+            p3 = Project.objects.create(
+                category=category, title='Project 3', isApproved=False, order=3
+            )
+
+            self.client.login(
+                username=self.user.username, password=self.user_raw_password
+            )
+
+            # 1. Test changelist view with SimpleListFilter matching multiple objects
+            response = self.client.get('/admin/samples/project/?approval_status=approved')
+            self.assertEqual(response.status_code, httplib.OK)
+            self.assertTrue(response.context['is_sortable'])
+
+            # 2. Test changelist view with SimpleListFilter matching only one object
+            response = self.client.get('/admin/samples/project/?approval_status=pending')
+            self.assertEqual(response.status_code, httplib.OK)
+            self.assertFalse(response.context['is_sortable'])
+
+            # 3. Test sort view with SimpleListFilter param
+            response = self.client.get('/admin/samples/project/sort/?approval_status=approved')
+            self.assertEqual(response.status_code, httplib.OK)
+            sorted_objects = list(response.context['objects'])
+            self.assertEqual(len(sorted_objects), 2)
+            self.assertIn(p1, sorted_objects)
+            self.assertIn(p2, sorted_objects)
+            self.assertNotIn(p3, sorted_objects)
+
+            # 4. Test sorting AJAX POST with SimpleListFilter param
+            response = self.client.post(
+                self.get_sorting_url(Project) + '?approval_status=approved',
+                data=self.get_category_indexes(p2, p1),
+                HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+            )
+            self.assertEqual(response.status_code, httplib.OK)
+            content = json.loads(response.content.decode(encoding='UTF-8'))
+            self.assertTrue(content.get('objects_sorted'))
+
+            p1.refresh_from_db()
+            p2.refresh_from_db()
+            self.assertEqual(p2.order, 1)
+            self.assertEqual(p1.order, 2)
+        finally:
+            project_admin.list_filter = orig_list_filter
